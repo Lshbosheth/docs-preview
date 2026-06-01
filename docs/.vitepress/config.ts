@@ -10,6 +10,12 @@ export default defineConfig({
     ],
     sidebar: [
       {
+        text: "English Daily",
+        items: [
+          { text: "2026-06-01", link: "/english/2026-06-01" }
+        ]
+      },
+      {
         text: "Preview Docs",
         items: [
           { text: "Ranran GSAP Migration", link: "/ranran-gsap-migration" },
