@@ -60,12 +60,20 @@ function speak() {
     <span class="pronounce__text">{{ displayText }}</span>
     <button
       class="pronounce__button"
+      :class="{ 'pronounce__button--speaking': isSpeaking }"
       type="button"
       :aria-label="`Play pronunciation: ${text}`"
+      :aria-pressed="isSpeaking"
       :title="`Play pronunciation: ${text}`"
       @click="speak"
     >
-      {{ isSpeaking ? "..." : "▶" }}
+      <span class="pronounce__pulse" aria-hidden="true"></span>
+      <span v-if="!isSpeaking" class="pronounce__play" aria-hidden="true"></span>
+      <span v-else class="pronounce__wave" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
     </button>
   </span>
 </template>
