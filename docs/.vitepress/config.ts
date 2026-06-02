@@ -12,6 +12,7 @@ export default defineConfig({
       {
         text: "English Daily",
         items: [
+          { text: "2026-06-02", link: "/english/2026-06-02" },
           { text: "2026-06-01", link: "/english/2026-06-01" }
         ]
       },
