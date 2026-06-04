@@ -3,8 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "tts:generate": "node scripts/generate-tts.mjs",
     "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
+    "docs:build": "npm run tts:generate && vitepress build docs",
     "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {

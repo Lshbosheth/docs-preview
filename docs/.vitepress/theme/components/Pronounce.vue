@@ -6,52 +6,56 @@ const props = withDefaults(
     text: string;
     label?: string;
     lang?: string;
+    voice?: string;
   }>(),
   {
     label: "",
-    lang: "en-US"
+    lang: "en-US",
+    voice: "default_en"
   }
 );
 
 const isSpeaking = ref(false);
+const audio = ref<HTMLAudioElement | null>(null);
 const displayText = computed(() => props.label || props.text);
 
-function pickVoice(voices: SpeechSynthesisVoice[]) {
-  return (
-    voices.find((voice) => voice.lang === props.lang) ||
-    voices.find((voice) => voice.lang.toLowerCase().startsWith("en")) ||
-    null
-  );
+async function ttsHash(text: string, lang: string, voice: string) {
+  const bytes = new TextEncoder().encode(`${lang}\n${voice}\n${text}`);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("")
+    .slice(0, 20);
 }
 
-function speak() {
-  if (typeof window === "undefined" || !("speechSynthesis" in window)) {
+async function speak() {
+  if (typeof window === "undefined") {
     return;
   }
 
-  window.speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(props.text);
-  utterance.lang = props.lang;
-  utterance.rate = 0.88;
-  utterance.pitch = 1;
-
-  const voice = pickVoice(window.speechSynthesis.getVoices());
-  if (voice) {
-    utterance.voice = voice;
+  if (audio.value) {
+    audio.value.pause();
+    audio.value.currentTime = 0;
   }
 
-  utterance.onstart = () => {
-    isSpeaking.value = true;
-  };
-  utterance.onend = () => {
+  const hash = await ttsHash(props.text, props.lang, props.voice);
+  const player = new Audio(`/audio/tts/${hash}.wav`);
+  audio.value = player;
+  isSpeaking.value = true;
+
+  player.onended = () => {
     isSpeaking.value = false;
   };
-  utterance.onerror = () => {
+  player.onerror = () => {
     isSpeaking.value = false;
   };
 
-  window.speechSynthesis.speak(utterance);
+  try {
+    await player.play();
+  } catch {
+    isSpeaking.value = false;
+  }
 }
 </script>
 
