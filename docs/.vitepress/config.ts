@@ -1,4 +1,55 @@
 import { defineConfig } from "vitepress";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+type SidebarItem = {
+  text: string;
+  link?: string;
+  collapsed?: boolean;
+  items?: SidebarItem[];
+};
+
+const configDir = path.dirname(fileURLToPath(import.meta.url));
+const docsDir = path.resolve(configDir, "..");
+const englishDir = path.join(docsDir, "english");
+
+function getEnglishDailyItems(): SidebarItem[] {
+  if (!fs.existsSync(englishDir)) {
+    return [];
+  }
+
+  const lessons = fs
+    .readdirSync(englishDir)
+    .filter((name) => /^\d{4}-\d{2}-\d{2}\.md$/.test(name))
+    .map((name) => name.replace(/\.md$/, ""))
+    .sort((a, b) => b.localeCompare(a));
+
+  const recentItems = lessons.slice(0, 3).map((date) => ({
+    text: date,
+    link: `/english/${date}`
+  }));
+
+  const olderGroups = new Map<string, SidebarItem[]>();
+
+  for (const date of lessons.slice(3)) {
+    const month = date.slice(0, 7);
+    const items = olderGroups.get(month) ?? [];
+    items.push({
+      text: date,
+      link: `/english/${date}`
+    });
+    olderGroups.set(month, items);
+  }
+
+  const olderItems = Array.from(olderGroups.entries()).map(([month, items]) => ({
+    text: month,
+    collapsed: true,
+    items
+  }));
+
+  return [...recentItems, ...olderItems];
+}
 
 export default defineConfig({
   title: "lshbosheth Docs",
@@ -11,12 +62,7 @@ export default defineConfig({
     sidebar: [
       {
         text: "English Daily",
-        items: [
-          { text: "2026-06-04", link: "/english/2026-06-04" },
-          { text: "2026-06-03", link: "/english/2026-06-03" },
-          { text: "2026-06-02", link: "/english/2026-06-02" },
-          { text: "2026-06-01", link: "/english/2026-06-01" }
-        ]
+        items: getEnglishDailyItems()
       },
       {
         text: "Preview Docs",
