@@ -57,7 +57,8 @@ export default defineConfig({
   cleanUrls: true,
   themeConfig: {
     nav: [
-      { text: "Home", link: "/" }
+      { text: "Home", link: "/" },
+      { text: "English Daily", link: "/english/2026-06-05" }
     ],
     sidebar: [
       {
