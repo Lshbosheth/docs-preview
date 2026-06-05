@@ -61,6 +61,12 @@ export default defineConfig({
     ],
     sidebar: [
       {
+        text: "Study",
+        items: [
+          { text: "Go 学习启动计划", link: "/study/go-learning-plan" }
+        ]
+      },
+      {
         text: "English Daily",
         items: getEnglishDailyItems()
       },
