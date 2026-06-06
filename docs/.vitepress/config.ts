@@ -58,7 +58,7 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: "Home", link: "/" },
-      { text: "English Daily", link: "/english/2026-06-05" }
+      { text: "English Daily", link: "/english/2026-06-06" }
     ],
     sidebar: [
       {
