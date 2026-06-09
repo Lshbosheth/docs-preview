@@ -1,17 +1,22 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 
+const defaultPrompt =
+  "Read the target text clearly for English learning.";
+
 const props = withDefaults(
   defineProps<{
     text: string;
     label?: string;
     lang?: string;
     voice?: string;
+    prompt?: string;
   }>(),
   {
     label: "",
     lang: "en-US",
-    voice: "default_en"
+    voice: "default_en",
+    prompt: defaultPrompt
   }
 );
 
@@ -19,8 +24,10 @@ const isSpeaking = ref(false);
 const audio = ref<HTMLAudioElement | null>(null);
 const displayText = computed(() => props.label || props.text);
 
-async function ttsHash(text: string, lang: string, voice: string) {
-  const bytes = new TextEncoder().encode(`${lang}\n${voice}\n${text}`);
+async function ttsHash(text: string, lang: string, voice: string, prompt: string) {
+  const hashInput =
+    prompt === defaultPrompt ? `${lang}\n${voice}\n${text}` : `${lang}\n${voice}\n${prompt}\n${text}`;
+  const bytes = new TextEncoder().encode(hashInput);
   const digest = await crypto.subtle.digest("SHA-256", bytes);
 
   return Array.from(new Uint8Array(digest))
@@ -39,7 +46,7 @@ async function speak() {
     audio.value.currentTime = 0;
   }
 
-  const hash = await ttsHash(props.text, props.lang, props.voice);
+  const hash = await ttsHash(props.text, props.lang, props.voice, props.prompt);
   const player = new Audio(`/audio/tts/${hash}.wav`);
   audio.value = player;
   isSpeaking.value = true;

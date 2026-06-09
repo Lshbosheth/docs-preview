@@ -7,6 +7,7 @@ const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const docsDir = path.join(rootDir, "docs");
 const audioDir = path.join(docsDir, "public", "audio", "tts");
 const endpoint = "https://api.xiaomimimo.com/v1/chat/completions";
+const defaultPrompt = "Read the target text clearly for English learning.";
 
 async function loadLocalEnv() {
   const envPath = path.join(rootDir, ".env.local");
@@ -26,10 +27,13 @@ async function loadLocalEnv() {
   }
 }
 
-function ttsHash(text, lang = "en-US", voice = "default_en") {
+function ttsHash(text, lang = "en-US", voice = "default_en", prompt = defaultPrompt) {
+  const hashInput =
+    prompt === defaultPrompt ? `${lang}\n${voice}\n${text}` : `${lang}\n${voice}\n${prompt}\n${text}`;
+
   return crypto
     .createHash("sha256")
-    .update(`${lang}\n${voice}\n${text}`)
+    .update(hashInput)
     .digest("hex")
     .slice(0, 20);
 }
@@ -79,12 +83,14 @@ function collectPronounceItems(markdown) {
 
     const langMatch = attrs.match(/\blang=(["'])(.*?)\1/);
     const voiceMatch = attrs.match(/\bvoice=(["'])(.*?)\1/);
+    const promptMatch = attrs.match(/\bprompt=(["'])(.*?)\1/);
     const text = decodeEntities(textMatch[2].trim());
     const lang = decodeEntities(langMatch?.[2] ?? "en-US");
     const voice = decodeEntities(voiceMatch?.[2] ?? "default_en");
-    const hash = ttsHash(text, lang, voice);
+    const prompt = decodeEntities(promptMatch?.[2] ?? defaultPrompt);
+    const hash = ttsHash(text, lang, voice, prompt);
 
-    items.set(hash, { hash, text, lang, voice });
+    items.set(hash, { hash, text, lang, voice, prompt });
   }
 
   return Array.from(items.values());
@@ -102,7 +108,7 @@ async function synthesize(item) {
       messages: [
         {
           role: "user",
-          content: "Read the target text clearly for English learning."
+          content: item.prompt
         },
         {
           role: "assistant",
