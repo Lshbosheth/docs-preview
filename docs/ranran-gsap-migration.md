@@ -1,6 +1,6 @@
-# ranran Chinese Page GSAP Migration Plan
+# Ranran 中文页 GSAP 迁移计划
 
-## Background
+## 背景
 
 Target repository:
 
@@ -19,7 +19,7 @@ The page theme is Chinese literary / classical style, including sections related
 
 Goal: modernize the animation layer with GSAP while preserving the original visual identity and static-page character.
 
-## Main Goal
+## 主要目标
 
 Replace old jQuery/wow/fullPage animation behavior with GSAP-based animation.
 
@@ -32,9 +32,9 @@ Keep the first migration small and reversible:
 3. Replace interaction animations in `china.js` with GSAP.
 4. Only remove `wow.js`, `animate.css`, or `jquery.fullPage` after equivalent GSAP behavior is verified.
 
-## Suggested Migration Phases
+## 建议迁移阶段
 
-### Phase 1: Audit Current Behavior
+### 阶段 1：梳理当前行为
 
 Inspect these files first:
 
@@ -52,7 +52,7 @@ Document the current behavior:
 - Which animations come from `animate.css` / `wow.js`.
 - Which behavior is controlled by `jquery.fullPage`.
 
-### Phase 2: Add GSAP
+### 阶段 2：接入 GSAP
 
 Use GSAP from npm if the project is converted to a small build setup.
 
@@ -70,7 +70,7 @@ Register plugins when needed:
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 ```
 
-### Phase 3: Replace Simple jQuery Effects First
+### 阶段 3：先替换简单的 jQuery 动效
 
 Replace old effects like:
 
@@ -97,7 +97,7 @@ gsap.fromTo(
 
 Prefer `autoAlpha` instead of manually mixing `display`, `visibility`, and `opacity`.
 
-### Phase 4: Organize Animation Code
+### 阶段 4：整理动画代码
 
 Refactor `china.js` into small functions.
 
@@ -133,7 +133,7 @@ document.querySelectorAll("[data-panel-target]").forEach((trigger) => {
 });
 ```
 
-### Phase 5: Replace wow.js / animate.css
+### 阶段 5：替换 wow.js / animate.css
 
 Use GSAP entrance animations instead of `wow.js`.
 
@@ -154,7 +154,7 @@ gsap.utils.toArray("[data-gsap-reveal]").forEach((el) => {
 });
 ```
 
-### Phase 6: Replace fullPage Behavior Carefully
+### 阶段 6：谨慎替换 fullPage 行为
 
 If the page should keep one-screen-per-section navigation, consider:
 
@@ -171,7 +171,7 @@ Suggested intermediate approach:
 3. Verify behavior.
 4. Then replace `jquery.fullPage` with GSAP scroll behavior if still desired.
 
-## Visual Direction
+## 视觉方向
 
 Keep the original Chinese-style atmosphere.
 
@@ -191,7 +191,7 @@ The goal is:
 - More maintainable.
 - Still classical and restrained.
 
-## Acceptance Criteria
+## 验收标准
 
 The migration is done when:
 
@@ -203,7 +203,7 @@ The migration is done when:
 6. No obvious layout overlap or broken image appears on desktop.
 7. If full-page scroll behavior is changed, section navigation remains smooth and predictable.
 
-## Verification
+## 验证
 
 After implementation:
 
@@ -214,7 +214,7 @@ After implementation:
 5. Verify the page at desktop width first.
 6. If mobile layout already existed, verify mobile width as a follow-up.
 
-## Notes for Codex
+## Codex 备注
 
 Keep the first pass conservative.
 
@@ -223,4 +223,3 @@ This is a 2016 static project with personal / nostalgic value. Preserve its orig
 Do not replace all CSS or redesign the page from scratch.
 
 Do not introduce a heavy frontend framework in the first migration pass.
-
