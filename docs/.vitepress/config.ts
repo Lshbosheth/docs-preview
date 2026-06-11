@@ -58,9 +58,16 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: "Home", link: "/" },
+      { text: "Shopping", link: "/shopping/ice-cup-recommendation" },
       { text: "English Daily", link: "/english/2026-06-10" }
     ],
     sidebar: [
+      {
+        text: "Shopping",
+        items: [
+          { text: "冰饮保温杯推荐", link: "/shopping/ice-cup-recommendation" }
+        ]
+      },
       {
         text: "Study",
         items: [
