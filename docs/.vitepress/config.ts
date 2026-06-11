@@ -58,7 +58,7 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: "首页", link: "/" },
-      { text: "每日英语", link: "/english/2026-06-10" }
+      { text: "每日英语", link: "/english/2026-06-11" }
     ],
     sidebar: [
       {
