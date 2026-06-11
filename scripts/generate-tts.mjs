@@ -7,7 +7,8 @@ const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const docsDir = path.join(rootDir, "docs");
 const audioDir = path.join(docsDir, "public", "audio", "tts");
 const endpoint = "https://api.xiaomimimo.com/v1/chat/completions";
-const defaultPrompt = "Read the target text clearly for English learning.";
+const defaultPrompt =
+  "Read the target text in a calm, steady, natural American English voice for English learning. Use a moderate pace, smooth intonation, and crisp but relaxed pronunciation. Avoid sudden pitch jumps, sharp high tones, dramatic delivery, exaggerated emotion, and robotic rhythm. Add short natural pauses between sentences.";
 
 async function loadLocalEnv() {
   const envPath = path.join(rootDir, ".env.local");

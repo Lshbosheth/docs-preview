@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 
 const defaultPrompt =
-  "Read the target text clearly for English learning.";
+  "Read the target text in a calm, steady, natural American English voice for English learning. Use a moderate pace, smooth intonation, and crisp but relaxed pronunciation. Avoid sudden pitch jumps, sharp high tones, dramatic delivery, exaggerated emotion, and robotic rhythm. Add short natural pauses between sentences.";
 
 const props = withDefaults(
   defineProps<{
