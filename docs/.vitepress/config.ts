@@ -75,7 +75,8 @@ export default defineConfig({
         text: "文档站",
         items: [
           { text: "Ranran GSAP 迁移计划", link: "/ranran-gsap-migration" },
-          { text: "Markdown 文档站方案", link: "/markdown-preview-site-plan" }
+          { text: "Markdown 文档站方案", link: "/markdown-preview-site-plan" },
+          { text: "文档站界面升级方案", link: "/docs-ui-refresh-plan" }
         ]
       }
     ]
