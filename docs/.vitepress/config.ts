@@ -59,7 +59,7 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: "首页", link: "/" },
-      { text: "每日英语", link: "/english/2026-06-17" },
+      { text: "每日英语", link: "/english/2026-06-18" },
       { text: "学习", link: "/study/go-learning-plan" }
     ],
     sidebar: [
