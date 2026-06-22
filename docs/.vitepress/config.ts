@@ -14,16 +14,20 @@ const configDir = path.dirname(fileURLToPath(import.meta.url));
 const docsDir = path.resolve(configDir, "..");
 const englishDir = path.join(docsDir, "english");
 
-function getEnglishDailyItems(): SidebarItem[] {
+function getEnglishLessonDates(): string[] {
   if (!fs.existsSync(englishDir)) {
     return [];
   }
 
-  const lessons = fs
+  return fs
     .readdirSync(englishDir)
     .filter((name) => /^\d{4}-\d{2}-\d{2}\.md$/.test(name))
     .map((name) => name.replace(/\.md$/, ""))
     .sort((a, b) => b.localeCompare(a));
+}
+
+function getEnglishDailyItems(): SidebarItem[] {
+  const lessons = getEnglishLessonDates();
 
   const recentItems = lessons.slice(0, 3).map((date) => ({
     text: date,
@@ -51,6 +55,8 @@ function getEnglishDailyItems(): SidebarItem[] {
   return [...recentItems, ...olderItems];
 }
 
+const latestEnglishLesson = getEnglishLessonDates()[0] ?? "2026-06-22";
+
 export default defineConfig({
   title: "lshbosheth 文档",
   description: "学习计划、技术英语、项目记录",
@@ -59,8 +65,9 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: "首页", link: "/" },
-      { text: "English Daily", link: "/english/2026-06-22" },
-      { text: "学习", link: "/study/go-learning-plan" }
+      { text: "English Daily", link: `/english/${latestEnglishLesson}` },
+      { text: "学习", link: "/study/go-learning-plan" },
+      { text: "记忆系统", link: "/memory/zvec-memory-plan" }
     ],
     sidebar: [
       {
@@ -79,6 +86,13 @@ export default defineConfig({
           { text: "Ranran GSAP 迁移计划", link: "/ranran-gsap-migration" },
           { text: "Markdown 文档站方案", link: "/markdown-preview-site-plan" },
           { text: "文档站界面升级方案", link: "/docs-ui-refresh-plan" }
+        ]
+      },
+      {
+        text: "记忆系统",
+        items: [
+          { text: "zvec 记忆检索改造方案", link: "/memory/zvec-memory-plan" },
+          { text: "阿里 text-embedding-v4 接入指南", link: "/memory/dashscope-embedding-v4-guide" }
         ]
       }
     ],
