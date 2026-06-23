@@ -91,6 +91,7 @@ export default defineConfig({
       {
         text: "记忆系统",
         items: [
+          { text: "RAG 常用技术路线和名词地图", link: "/memory/rag-learning-map" },
           { text: "zvec 记忆检索改造方案", link: "/memory/zvec-memory-plan" },
           { text: "阿里 text-embedding-v4 接入指南", link: "/memory/dashscope-embedding-v4-guide" }
         ]
