@@ -11,7 +11,7 @@ layout: home
 <p class="home-intro">这里放学习计划、技术英语、项目记录和长期可查的系统文档。页面保持轻、清楚、适合回头翻，不抢正文的风头。</p>
 
 <div class="home-actions">
-  <a class="home-action home-action--primary" href="/english/2026-06-22">打开每日英语</a>
+  <a class="home-action home-action--primary" href="/english/2026-06-23">打开每日英语</a>
   <a class="home-action" href="/memory/zvec-memory-plan">查看记忆系统</a>
   <a class="home-action" href="/study/go-learning-plan">学习计划</a>
 </div>
@@ -22,7 +22,7 @@ layout: home
 ## 常用入口
 
 <ul class="home-entry-list">
-  <li><a href="/english/2026-06-22"><span><strong>每日英语</strong><span>跟读、发音、技术英语材料的稳定入口。</span></span></a></li>
+  <li><a href="/english/2026-06-23"><span><strong>每日英语</strong><span>跟读、发音、技术英语材料的稳定入口。</span></span></a></li>
   <li><a href="/study/go-learning-plan"><span><strong>Go 学习启动计划</strong><span>学习节奏、目标和后续复盘的落点。</span></span></a></li>
   <li><a href="/markdown-preview-site-plan"><span><strong>Markdown 文档站方案</strong><span>文档站的基础方案和发布思路。</span></span></a></li>
 </ul>
