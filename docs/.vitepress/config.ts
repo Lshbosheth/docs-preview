@@ -55,7 +55,7 @@ function getEnglishDailyItems(): SidebarItem[] {
   return [...recentItems, ...olderItems];
 }
 
-const latestEnglishLesson = getEnglishLessonDates()[0] ?? "2026-06-22";
+const latestEnglishLesson = getEnglishLessonDates()[0] ?? "2026-06-24";
 
 export default defineConfig({
   title: "lshbosheth 文档",
