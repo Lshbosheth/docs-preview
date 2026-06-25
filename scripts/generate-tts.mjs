@@ -28,7 +28,7 @@ async function loadLocalEnv() {
   }
 }
 
-function ttsHash(text, lang = "en-US", voice = "default_en", prompt = defaultPrompt) {
+function ttsHash(text, lang = "en-US", voice = "Mia", prompt = defaultPrompt) {
   const hashInput =
     prompt === defaultPrompt ? `${lang}\n${voice}\n${text}` : `${lang}\n${voice}\n${prompt}\n${text}`;
 
@@ -87,7 +87,7 @@ function collectPronounceItems(markdown) {
     const promptMatch = attrs.match(/\bprompt=(["'])(.*?)\1/);
     const text = decodeEntities(textMatch[2].trim());
     const lang = decodeEntities(langMatch?.[2] ?? "en-US");
-    const voice = decodeEntities(voiceMatch?.[2] ?? "default_en");
+    const voice = decodeEntities(voiceMatch?.[2] ?? "Mia");
     const prompt = decodeEntities(promptMatch?.[2] ?? defaultPrompt);
     const hash = ttsHash(text, lang, voice, prompt);
 
@@ -105,7 +105,7 @@ async function synthesize(item) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      model: "mimo-v2-tts",
+      model: "mimo-v2.5-tts",
       messages: [
         {
           role: "user",

@@ -15,7 +15,7 @@ const props = withDefaults(
   {
     label: "",
     lang: "en-US",
-    voice: "default_en",
+    voice: "Mia",
     prompt: defaultPrompt
   }
 );
