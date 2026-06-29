@@ -90,6 +90,11 @@ Response Builder 只负责整理回复
 
 - [实施路线图](/wx-agent-bridge/implementation-roadmap)
 - [Day 1 启动任务清单](/wx-agent-bridge/day-1-bootstrap)
+- [Qwen Day 1 实施提示词](/wx-agent-bridge/qwen-day-1-implementation-prompt)
+- [Day 2 微信入口计划](/wx-agent-bridge/day-2-weixin-plan)
+- [Qwen Day 2 微信入口实施提示词](/wx-agent-bridge/qwen-day-2-implementation-prompt)
+- [Day 2.5 iLink 微信接入计划](/wx-agent-bridge/day-2-5-ilink-plan)
+- [Qwen Day 2.5 iLink 微信接入实施提示词](/wx-agent-bridge/qwen-day-2-5-ilink-implementation-prompt)
 - [模块设计](/wx-agent-bridge/module-design)
 - [开发任务 Backlog](/wx-agent-bridge/task-backlog)
 - [验收用例](/wx-agent-bridge/acceptance-tests)

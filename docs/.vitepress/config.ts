@@ -103,6 +103,11 @@ export default defineConfig({
           { text: "项目总览", link: "/wx-agent-bridge/" },
           { text: "实施路线图", link: "/wx-agent-bridge/implementation-roadmap" },
           { text: "Day 1 启动任务清单", link: "/wx-agent-bridge/day-1-bootstrap" },
+          { text: "Qwen Day 1 实施提示词", link: "/wx-agent-bridge/qwen-day-1-implementation-prompt" },
+          { text: "Day 2 微信入口计划", link: "/wx-agent-bridge/day-2-weixin-plan" },
+          { text: "Qwen Day 2 微信入口实施提示词", link: "/wx-agent-bridge/qwen-day-2-implementation-prompt" },
+          { text: "Day 2.5 iLink 微信接入计划", link: "/wx-agent-bridge/day-2-5-ilink-plan" },
+          { text: "Qwen Day 2.5 iLink 微信接入实施提示词", link: "/wx-agent-bridge/qwen-day-2-5-ilink-implementation-prompt" },
           { text: "模块设计", link: "/wx-agent-bridge/module-design" },
           { text: "开发任务 Backlog", link: "/wx-agent-bridge/task-backlog" },
           { text: "验收用例", link: "/wx-agent-bridge/acceptance-tests" }
