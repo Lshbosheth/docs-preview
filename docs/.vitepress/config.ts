@@ -67,7 +67,8 @@ export default defineConfig({
       { text: "首页", link: "/" },
       { text: "English Daily", link: `/english/${latestEnglishLesson}` },
       { text: "学习", link: "/study/go-learning-plan" },
-      { text: "记忆系统", link: "/memory/zvec-memory-plan" }
+      { text: "记忆系统", link: "/memory/zvec-memory-plan" },
+      { text: "Agent Bridge", link: "/wx-agent-bridge/" }
     ],
     sidebar: [
       {
@@ -94,6 +95,17 @@ export default defineConfig({
           { text: "RAG 常用技术路线和名词地图", link: "/memory/rag-learning-map" },
           { text: "zvec 记忆检索改造方案", link: "/memory/zvec-memory-plan" },
           { text: "阿里 text-embedding-v4 接入指南", link: "/memory/dashscope-embedding-v4-guide" }
+        ]
+      },
+      {
+        text: "微信 Agent Bridge",
+        items: [
+          { text: "项目总览", link: "/wx-agent-bridge/" },
+          { text: "实施路线图", link: "/wx-agent-bridge/implementation-roadmap" },
+          { text: "Day 1 启动任务清单", link: "/wx-agent-bridge/day-1-bootstrap" },
+          { text: "模块设计", link: "/wx-agent-bridge/module-design" },
+          { text: "开发任务 Backlog", link: "/wx-agent-bridge/task-backlog" },
+          { text: "验收用例", link: "/wx-agent-bridge/acceptance-tests" }
         ]
       }
     ],
