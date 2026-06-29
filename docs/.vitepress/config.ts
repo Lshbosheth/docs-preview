@@ -102,31 +102,115 @@ export default defineConfig({
         items: [
           { text: "项目总览", link: "/wx-agent-bridge/" },
           { text: "实施路线图", link: "/wx-agent-bridge/implementation-roadmap" },
-          { text: "Day 1 启动任务清单", link: "/wx-agent-bridge/day-1-bootstrap" },
-          { text: "Qwen Day 1 实施提示词", link: "/wx-agent-bridge/qwen-day-1-implementation-prompt" },
-          { text: "Day 2 微信入口计划", link: "/wx-agent-bridge/day-2-weixin-plan" },
-          { text: "Qwen Day 2 微信入口实施提示词", link: "/wx-agent-bridge/qwen-day-2-implementation-prompt" },
-          { text: "Day 2.5 iLink 微信接入计划", link: "/wx-agent-bridge/day-2-5-ilink-plan" },
-          { text: "Qwen Day 2.5 iLink 微信接入实施提示词", link: "/wx-agent-bridge/qwen-day-2-5-ilink-implementation-prompt" },
-          { text: "Day 2.6 iLink 长轮询改造计划", link: "/wx-agent-bridge/day-2-6-ilink-long-poll-plan" },
-          { text: "Qwen Day 2.6 iLink 长轮询改造实施提示词", link: "/wx-agent-bridge/qwen-day-2-6-ilink-long-poll-implementation-prompt" },
-          { text: "Day 2.7 iLink 扫码登录计划", link: "/wx-agent-bridge/day-2-7-ilink-qr-login-plan" },
-          { text: "Qwen Day 2.7 iLink 扫码登录实施提示词", link: "/wx-agent-bridge/qwen-day-2-7-ilink-qr-login-implementation-prompt" },
-          { text: "Day 2.8 iLink 发送接口修正计划", link: "/wx-agent-bridge/day-2-8-ilink-send-fix-plan" },
-          { text: "Qwen Day 2.8 iLink 发送接口修正实施提示词", link: "/wx-agent-bridge/qwen-day-2-8-ilink-send-fix-implementation-prompt" },
-          { text: "Day 2.9 iLink SDK 接入修正计划", link: "/wx-agent-bridge/day-2-9-ilink-sdk-plan" },
-          { text: "Qwen Day 2.9 iLink SDK 接入实施提示词", link: "/wx-agent-bridge/qwen-day-2-9-ilink-sdk-implementation-prompt" },
-          { text: "Day 3 模型 Provider 和 Chat Layer 计划", link: "/wx-agent-bridge/day-3-model-provider-plan" },
-          { text: "Qwen Day 3 模型 Provider 和 Chat Layer 实施提示词", link: "/wx-agent-bridge/qwen-day-3-model-provider-implementation-prompt" },
-          { text: "Day 4 Planner 和 TaskSchema 计划", link: "/wx-agent-bridge/day-4-planner-task-schema-plan" },
-          { text: "Qwen Day 4 Planner 和 TaskSchema 实施提示词", link: "/wx-agent-bridge/qwen-day-4-planner-task-schema-implementation-prompt" },
-          { text: "Day 5 SchemaValidator 和 Guard 计划", link: "/wx-agent-bridge/day-5-validator-guard-plan" },
-          { text: "Qwen Day 5 SchemaValidator 和 Guard 实施提示词", link: "/wx-agent-bridge/qwen-day-5-validator-guard-implementation-prompt" },
-          { text: "Day 6 Executor 和 ResponseBuilder 计划", link: "/wx-agent-bridge/day-6-executor-response-plan" },
-          { text: "Qwen Day 6 Executor 和 ResponseBuilder 实施提示词", link: "/wx-agent-bridge/qwen-day-6-executor-response-implementation-prompt" },
-          { text: "模块设计", link: "/wx-agent-bridge/module-design" },
-          { text: "开发任务 Backlog", link: "/wx-agent-bridge/task-backlog" },
-          { text: "验收用例", link: "/wx-agent-bridge/acceptance-tests" }
+          {
+            text: "Day 1 启动骨架",
+            collapsed: true,
+            items: [
+              { text: "计划", link: "/wx-agent-bridge/day-1-bootstrap" },
+              { text: "Qwen 提示词", link: "/wx-agent-bridge/qwen-day-1-implementation-prompt" }
+            ]
+          },
+          {
+            text: "Day 2 微信入口",
+            collapsed: false,
+            items: [
+              {
+                text: "2.0 基础入口",
+                collapsed: true,
+                items: [
+                  { text: "计划", link: "/wx-agent-bridge/day-2-weixin-plan" },
+                  { text: "Qwen 提示词", link: "/wx-agent-bridge/qwen-day-2-implementation-prompt" }
+                ]
+              },
+              {
+                text: "2.5 iLink 接入",
+                collapsed: true,
+                items: [
+                  { text: "计划", link: "/wx-agent-bridge/day-2-5-ilink-plan" },
+                  { text: "Qwen 提示词", link: "/wx-agent-bridge/qwen-day-2-5-ilink-implementation-prompt" }
+                ]
+              },
+              {
+                text: "2.6 长轮询",
+                collapsed: true,
+                items: [
+                  { text: "计划", link: "/wx-agent-bridge/day-2-6-ilink-long-poll-plan" },
+                  { text: "Qwen 提示词", link: "/wx-agent-bridge/qwen-day-2-6-ilink-long-poll-implementation-prompt" }
+                ]
+              },
+              {
+                text: "2.7 扫码登录",
+                collapsed: true,
+                items: [
+                  { text: "计划", link: "/wx-agent-bridge/day-2-7-ilink-qr-login-plan" },
+                  { text: "Qwen 提示词", link: "/wx-agent-bridge/qwen-day-2-7-ilink-qr-login-implementation-prompt" }
+                ]
+              },
+              {
+                text: "2.8 发送修正",
+                collapsed: true,
+                items: [
+                  { text: "计划", link: "/wx-agent-bridge/day-2-8-ilink-send-fix-plan" },
+                  { text: "Qwen 提示词", link: "/wx-agent-bridge/qwen-day-2-8-ilink-send-fix-implementation-prompt" }
+                ]
+              },
+              {
+                text: "2.9 SDK 接入修正",
+                collapsed: false,
+                items: [
+                  { text: "计划", link: "/wx-agent-bridge/day-2-9-ilink-sdk-plan" },
+                  { text: "Qwen 提示词", link: "/wx-agent-bridge/qwen-day-2-9-ilink-sdk-implementation-prompt" }
+                ]
+              }
+            ]
+          },
+          {
+            text: "Day 3-6 核心能力",
+            collapsed: true,
+            items: [
+              {
+                text: "Day 3 模型和聊天层",
+                collapsed: true,
+                items: [
+                  { text: "计划", link: "/wx-agent-bridge/day-3-model-provider-plan" },
+                  { text: "Qwen 提示词", link: "/wx-agent-bridge/qwen-day-3-model-provider-implementation-prompt" }
+                ]
+              },
+              {
+                text: "Day 4 Planner 和 TaskSchema",
+                collapsed: true,
+                items: [
+                  { text: "计划", link: "/wx-agent-bridge/day-4-planner-task-schema-plan" },
+                  { text: "Qwen 提示词", link: "/wx-agent-bridge/qwen-day-4-planner-task-schema-implementation-prompt" }
+                ]
+              },
+              {
+                text: "Day 5 Validator 和 Guard",
+                collapsed: true,
+                items: [
+                  { text: "计划", link: "/wx-agent-bridge/day-5-validator-guard-plan" },
+                  { text: "Qwen 提示词", link: "/wx-agent-bridge/qwen-day-5-validator-guard-implementation-prompt" }
+                ]
+              },
+              {
+                text: "Day 6 Executor 和 Response",
+                collapsed: true,
+                items: [
+                  { text: "计划", link: "/wx-agent-bridge/day-6-executor-response-plan" },
+                  { text: "Qwen 提示词", link: "/wx-agent-bridge/qwen-day-6-executor-response-implementation-prompt" }
+                ]
+              }
+            ]
+          },
+          {
+            text: "参考资料",
+            collapsed: true,
+            items: [
+              { text: "模块设计", link: "/wx-agent-bridge/module-design" },
+              { text: "开发任务 Backlog", link: "/wx-agent-bridge/task-backlog" },
+              { text: "验收用例", link: "/wx-agent-bridge/acceptance-tests" }
+            ]
+          }
         ]
       }
     ],

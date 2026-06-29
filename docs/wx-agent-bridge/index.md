@@ -88,29 +88,34 @@ Response Builder 只负责整理回复
 
 ## 文档入口
 
+### 总览
+
 - [实施路线图](/wx-agent-bridge/implementation-roadmap)
-- [Day 1 启动任务清单](/wx-agent-bridge/day-1-bootstrap)
-- [Qwen Day 1 实施提示词](/wx-agent-bridge/qwen-day-1-implementation-prompt)
-- [Day 2 微信入口计划](/wx-agent-bridge/day-2-weixin-plan)
-- [Qwen Day 2 微信入口实施提示词](/wx-agent-bridge/qwen-day-2-implementation-prompt)
-- [Day 2.5 iLink 微信接入计划](/wx-agent-bridge/day-2-5-ilink-plan)
-- [Qwen Day 2.5 iLink 微信接入实施提示词](/wx-agent-bridge/qwen-day-2-5-ilink-implementation-prompt)
-- [Day 2.6 iLink 长轮询改造计划](/wx-agent-bridge/day-2-6-ilink-long-poll-plan)
-- [Qwen Day 2.6 iLink 长轮询改造实施提示词](/wx-agent-bridge/qwen-day-2-6-ilink-long-poll-implementation-prompt)
-- [Day 2.7 iLink 扫码登录计划](/wx-agent-bridge/day-2-7-ilink-qr-login-plan)
-- [Qwen Day 2.7 iLink 扫码登录实施提示词](/wx-agent-bridge/qwen-day-2-7-ilink-qr-login-implementation-prompt)
-- [Day 2.8 iLink 发送接口修正计划](/wx-agent-bridge/day-2-8-ilink-send-fix-plan)
-- [Qwen Day 2.8 iLink 发送接口修正实施提示词](/wx-agent-bridge/qwen-day-2-8-ilink-send-fix-implementation-prompt)
-- [Day 2.9 iLink SDK 接入修正计划](/wx-agent-bridge/day-2-9-ilink-sdk-plan)
-- [Qwen Day 2.9 iLink SDK 接入实施提示词](/wx-agent-bridge/qwen-day-2-9-ilink-sdk-implementation-prompt)
-- [Day 3 模型 Provider 和 Chat Layer 计划](/wx-agent-bridge/day-3-model-provider-plan)
-- [Qwen Day 3 模型 Provider 和 Chat Layer 实施提示词](/wx-agent-bridge/qwen-day-3-model-provider-implementation-prompt)
-- [Day 4 Planner 和 TaskSchema 计划](/wx-agent-bridge/day-4-planner-task-schema-plan)
-- [Qwen Day 4 Planner 和 TaskSchema 实施提示词](/wx-agent-bridge/qwen-day-4-planner-task-schema-implementation-prompt)
-- [Day 5 SchemaValidator 和 Guard 计划](/wx-agent-bridge/day-5-validator-guard-plan)
-- [Qwen Day 5 SchemaValidator 和 Guard 实施提示词](/wx-agent-bridge/qwen-day-5-validator-guard-implementation-prompt)
-- [Day 6 Executor 和 ResponseBuilder 计划](/wx-agent-bridge/day-6-executor-response-plan)
-- [Qwen Day 6 Executor 和 ResponseBuilder 实施提示词](/wx-agent-bridge/qwen-day-6-executor-response-implementation-prompt)
 - [模块设计](/wx-agent-bridge/module-design)
 - [开发任务 Backlog](/wx-agent-bridge/task-backlog)
 - [验收用例](/wx-agent-bridge/acceptance-tests)
+
+### Day 1 启动骨架
+
+- [计划](/wx-agent-bridge/day-1-bootstrap)
+- [Qwen 提示词](/wx-agent-bridge/qwen-day-1-implementation-prompt)
+
+### Day 2 微信入口
+
+| 阶段 | 计划 | Qwen 提示词 |
+| --- | --- | --- |
+| 2.0 基础入口 | [计划](/wx-agent-bridge/day-2-weixin-plan) | [Qwen](/wx-agent-bridge/qwen-day-2-implementation-prompt) |
+| 2.5 iLink 接入 | [计划](/wx-agent-bridge/day-2-5-ilink-plan) | [Qwen](/wx-agent-bridge/qwen-day-2-5-ilink-implementation-prompt) |
+| 2.6 长轮询 | [计划](/wx-agent-bridge/day-2-6-ilink-long-poll-plan) | [Qwen](/wx-agent-bridge/qwen-day-2-6-ilink-long-poll-implementation-prompt) |
+| 2.7 扫码登录 | [计划](/wx-agent-bridge/day-2-7-ilink-qr-login-plan) | [Qwen](/wx-agent-bridge/qwen-day-2-7-ilink-qr-login-implementation-prompt) |
+| 2.8 发送修正 | [计划](/wx-agent-bridge/day-2-8-ilink-send-fix-plan) | [Qwen](/wx-agent-bridge/qwen-day-2-8-ilink-send-fix-implementation-prompt) |
+| 2.9 SDK 接入修正 | [计划](/wx-agent-bridge/day-2-9-ilink-sdk-plan) | [Qwen](/wx-agent-bridge/qwen-day-2-9-ilink-sdk-implementation-prompt) |
+
+### Day 3-6 核心能力
+
+| 阶段 | 计划 | Qwen 提示词 |
+| --- | --- | --- |
+| Day 3 模型 Provider 和 Chat Layer | [计划](/wx-agent-bridge/day-3-model-provider-plan) | [Qwen](/wx-agent-bridge/qwen-day-3-model-provider-implementation-prompt) |
+| Day 4 Planner 和 TaskSchema | [计划](/wx-agent-bridge/day-4-planner-task-schema-plan) | [Qwen](/wx-agent-bridge/qwen-day-4-planner-task-schema-implementation-prompt) |
+| Day 5 SchemaValidator 和 Guard | [计划](/wx-agent-bridge/day-5-validator-guard-plan) | [Qwen](/wx-agent-bridge/qwen-day-5-validator-guard-implementation-prompt) |
+| Day 6 Executor 和 ResponseBuilder | [计划](/wx-agent-bridge/day-6-executor-response-plan) | [Qwen](/wx-agent-bridge/qwen-day-6-executor-response-implementation-prompt) |
