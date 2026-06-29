@@ -101,6 +101,8 @@ Response Builder 只负责整理回复
 - [Qwen Day 2.7 iLink 扫码登录实施提示词](/wx-agent-bridge/qwen-day-2-7-ilink-qr-login-implementation-prompt)
 - [Day 2.8 iLink 发送接口修正计划](/wx-agent-bridge/day-2-8-ilink-send-fix-plan)
 - [Qwen Day 2.8 iLink 发送接口修正实施提示词](/wx-agent-bridge/qwen-day-2-8-ilink-send-fix-implementation-prompt)
+- [Day 2.9 iLink SDK 接入修正计划](/wx-agent-bridge/day-2-9-ilink-sdk-plan)
+- [Qwen Day 2.9 iLink SDK 接入实施提示词](/wx-agent-bridge/qwen-day-2-9-ilink-sdk-implementation-prompt)
 - [Day 3 模型 Provider 和 Chat Layer 计划](/wx-agent-bridge/day-3-model-provider-plan)
 - [Qwen Day 3 模型 Provider 和 Chat Layer 实施提示词](/wx-agent-bridge/qwen-day-3-model-provider-implementation-prompt)
 - [Day 4 Planner 和 TaskSchema 计划](/wx-agent-bridge/day-4-planner-task-schema-plan)
