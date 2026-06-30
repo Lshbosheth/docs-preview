@@ -68,6 +68,7 @@ export default defineConfig({
       { text: "English Daily", link: `/english/${latestEnglishLesson}` },
       { text: "学习", link: "/study/go-learning-plan" },
       { text: "记忆系统", link: "/memory/zvec-memory-plan" },
+      { text: "Personal Context", link: "/personal-context-layer/" },
       { text: "Agent Bridge", link: "/wx-agent-bridge/" }
     ],
     sidebar: [
@@ -98,10 +99,15 @@ export default defineConfig({
         ]
       },
       {
+        text: "Personal Context Layer",
+        items: [
+          { text: "方向设计", link: "/personal-context-layer/" }
+        ]
+      },
+      {
         text: "微信 Agent Bridge",
         items: [
           { text: "项目总览", link: "/wx-agent-bridge/" },
-          { text: "方向修正", link: "/wx-agent-bridge/personal-context-layer-redesign" },
           { text: "实施路线图", link: "/wx-agent-bridge/implementation-roadmap" },
           {
             text: "Day 1 启动骨架",

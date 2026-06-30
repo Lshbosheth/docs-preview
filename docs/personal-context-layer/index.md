@@ -1,4 +1,4 @@
-# 微信 Agent Bridge 方向修正：Personal Context Layer
+# Personal Context Layer 方向设计
 
 ## 背景
 

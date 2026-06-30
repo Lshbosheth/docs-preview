@@ -90,7 +90,6 @@ Response Builder 只负责整理回复
 
 ### 总览
 
-- [方向修正：Personal Context Layer](/wx-agent-bridge/personal-context-layer-redesign)
 - [实施路线图](/wx-agent-bridge/implementation-roadmap)
 - [模块设计](/wx-agent-bridge/module-design)
 - [开发任务 Backlog](/wx-agent-bridge/task-backlog)
