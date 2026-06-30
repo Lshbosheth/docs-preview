@@ -111,6 +111,8 @@ Response Builder 只负责整理回复
 | 2.8 发送修正 | [计划](/wx-agent-bridge/day-2-8-ilink-send-fix-plan) | [Qwen](/wx-agent-bridge/qwen-day-2-8-ilink-send-fix-implementation-prompt) |
 | 2.9 SDK 接入修正 | [计划](/wx-agent-bridge/day-2-9-ilink-sdk-plan) | [Qwen](/wx-agent-bridge/qwen-day-2-9-ilink-sdk-implementation-prompt) |
 
+- [Day 2.9 SDK 二维码绑定测试清单](/wx-agent-bridge/day-2-9-sdk-qr-binding-test)
+
 ### Day 3-6 核心能力
 
 | 阶段 | 计划 | Qwen 提示词 |
@@ -119,3 +121,32 @@ Response Builder 只负责整理回复
 | Day 4 Planner 和 TaskSchema | [计划](/wx-agent-bridge/day-4-planner-task-schema-plan) | [Qwen](/wx-agent-bridge/qwen-day-4-planner-task-schema-implementation-prompt) |
 | Day 5 SchemaValidator 和 Guard | [计划](/wx-agent-bridge/day-5-validator-guard-plan) | [Qwen](/wx-agent-bridge/qwen-day-5-validator-guard-implementation-prompt) |
 | Day 6 Executor 和 ResponseBuilder | [计划](/wx-agent-bridge/day-6-executor-response-plan) | [Qwen](/wx-agent-bridge/qwen-day-6-executor-response-implementation-prompt) |
+
+### Day 7 管理后台
+
+| 阶段 | 计划 | Qwen 提示词 |
+| --- | --- | --- |
+| Day 7 管理后台 MVP | [计划](/wx-agent-bridge/day-7-admin-console-plan) | [Qwen](/wx-agent-bridge/qwen-day-7-admin-console-implementation-prompt) |
+
+### Day 8 记忆系统
+
+- [聊天记忆系统设计](/wx-agent-bridge/day-8-chat-memory-system-design)
+- [Agent 工具权限设计](/wx-agent-bridge/day-8-agent-tool-permission-design)
+
+| 阶段 | 计划 | Qwen 提示词 |
+| --- | --- | --- |
+| Day 8.1 聊天记录和会话上下文 | [计划](/wx-agent-bridge/day-8-1-session-context-plan) | [Qwen](/wx-agent-bridge/qwen-day-8-1-session-context-implementation-prompt) |
+
+### Day 9 管理后台配置中心
+
+| 阶段 | 计划 | Qwen 提示词 |
+| --- | --- | --- |
+| Day 9 配置中心 | [计划](/wx-agent-bridge/day-9-admin-config-center-plan) | [Qwen](/wx-agent-bridge/qwen-day-9-admin-config-center-implementation-prompt) |
+| Day 9.1 配置中心收尾 | - | [Qwen](/wx-agent-bridge/qwen-day-9-1-admin-config-center-finish-prompt) |
+
+### Day 10-11 Agent Runtime 和权限
+
+| 阶段 | Qwen 提示词 |
+| --- | --- |
+| Day 10 Agent Runtime + 工具权限 MVP | [Qwen](/wx-agent-bridge/qwen-day-10-agent-runtime-tool-permission-mvp-prompt) |
+| Day 11 长期记忆接入工具权限策略 | [Qwen](/wx-agent-bridge/qwen-day-11-memory-permission-integration-prompt) |

@@ -159,7 +159,8 @@ export default defineConfig({
                 collapsed: false,
                 items: [
                   { text: "计划", link: "/wx-agent-bridge/day-2-9-ilink-sdk-plan" },
-                  { text: "Qwen 提示词", link: "/wx-agent-bridge/qwen-day-2-9-ilink-sdk-implementation-prompt" }
+                  { text: "Qwen 提示词", link: "/wx-agent-bridge/qwen-day-2-9-ilink-sdk-implementation-prompt" },
+                  { text: "二维码绑定测试清单", link: "/wx-agent-bridge/day-2-9-sdk-qr-binding-test" }
                 ]
               }
             ]
@@ -200,6 +201,41 @@ export default defineConfig({
                   { text: "Qwen 提示词", link: "/wx-agent-bridge/qwen-day-6-executor-response-implementation-prompt" }
                 ]
               }
+            ]
+          },
+          {
+            text: "Day 7 管理后台",
+            collapsed: false,
+            items: [
+              { text: "计划", link: "/wx-agent-bridge/day-7-admin-console-plan" },
+              { text: "Qwen 提示词", link: "/wx-agent-bridge/qwen-day-7-admin-console-implementation-prompt" }
+            ]
+          },
+          {
+            text: "Day 8 记忆系统",
+            collapsed: false,
+            items: [
+              { text: "聊天记忆系统设计", link: "/wx-agent-bridge/day-8-chat-memory-system-design" },
+              { text: "Agent 工具权限设计", link: "/wx-agent-bridge/day-8-agent-tool-permission-design" },
+              { text: "8.1 会话上下文计划", link: "/wx-agent-bridge/day-8-1-session-context-plan" },
+              { text: "8.1 Qwen 提示词", link: "/wx-agent-bridge/qwen-day-8-1-session-context-implementation-prompt" }
+            ]
+          },
+          {
+            text: "Day 9 配置中心",
+            collapsed: false,
+            items: [
+              { text: "计划", link: "/wx-agent-bridge/day-9-admin-config-center-plan" },
+              { text: "Qwen 提示词", link: "/wx-agent-bridge/qwen-day-9-admin-config-center-implementation-prompt" },
+              { text: "9.1 收尾 Qwen", link: "/wx-agent-bridge/qwen-day-9-1-admin-config-center-finish-prompt" }
+            ]
+          },
+          {
+            text: "Day 10-11 Agent Runtime",
+            collapsed: false,
+            items: [
+              { text: "Day 10 工具权限 MVP", link: "/wx-agent-bridge/qwen-day-10-agent-runtime-tool-permission-mvp-prompt" },
+              { text: "Day 11 记忆接入权限", link: "/wx-agent-bridge/qwen-day-11-memory-permission-integration-prompt" }
             ]
           },
           {
