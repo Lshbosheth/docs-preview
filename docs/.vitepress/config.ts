@@ -101,13 +101,21 @@ export default defineConfig({
       {
         text: "Personal Context Layer",
         items: [
-          { text: "方向设计", link: "/personal-context-layer/" }
+          { text: "总览", link: "/personal-context-layer/" },
+          { text: "定位修正 V2", link: "/personal-context-layer/positioning-v2-personal-context-layer" },
+          { text: "实施路线图", link: "/personal-context-layer/implementation-roadmap" },
+          { text: "MVP 范围", link: "/personal-context-layer/mvp-scope" },
+          { text: "Agent Handoff 协议", link: "/personal-context-layer/handoff-protocol" },
+          { text: "上下文披露策略", link: "/personal-context-layer/context-disclosure-policy" },
+          { text: "Handoff 权限边界", link: "/personal-context-layer/handoff-permission-policy" },
+          { text: "旧文档迁移说明", link: "/personal-context-layer/legacy-docs-migration" }
         ]
       },
       {
         text: "微信 Agent Bridge",
         items: [
           { text: "项目总览", link: "/wx-agent-bridge/" },
+          { text: "代码学习导览", link: "/wx-agent-bridge/code-learning-map" },
           { text: "实施路线图", link: "/wx-agent-bridge/implementation-roadmap" },
           {
             text: "Day 1 启动骨架",
@@ -238,11 +246,11 @@ export default defineConfig({
             ]
           },
           {
-            text: "Day 10-11 Agent Runtime",
-            collapsed: false,
+            text: "Day 10-11 Agent Runtime（Deprecated）",
+            collapsed: true,
             items: [
-              { text: "Day 10 工具权限 MVP", link: "/wx-agent-bridge/qwen-day-10-agent-runtime-tool-permission-mvp-prompt" },
-              { text: "Day 11 记忆接入权限", link: "/wx-agent-bridge/qwen-day-11-memory-permission-integration-prompt" }
+              { text: "Day 10 工具权限 MVP（Deprecated）", link: "/wx-agent-bridge/qwen-day-10-agent-runtime-tool-permission-mvp-prompt" },
+              { text: "Day 11 记忆接入权限（Deprecated）", link: "/wx-agent-bridge/qwen-day-11-memory-permission-integration-prompt" }
             ]
           },
           {

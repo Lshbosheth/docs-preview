@@ -12,7 +12,7 @@ layout: home
 
 <div class="home-actions">
   <a class="home-action home-action--primary" href="/english/2026-06-24">打开每日英语</a>
-  <a class="home-action" href="/wx-agent-bridge/">Agent Bridge</a>
+  <a class="home-action" href="/personal-context-layer/">Personal Context</a>
   <a class="home-action" href="/memory/zvec-memory-plan">查看记忆系统</a>
   <a class="home-action" href="/study/go-learning-plan">学习计划</a>
 </div>
@@ -25,7 +25,8 @@ layout: home
 <ul class="home-entry-list">
   <li><a href="/english/2026-06-24"><span><strong>每日英语</strong><span>跟读、发音、技术英语材料的稳定入口。</span></span></a></li>
   <li><a href="/study/go-learning-plan"><span><strong>Go 学习启动计划</strong><span>学习节奏、目标和后续复盘的落点。</span></span></a></li>
-  <li><a href="/wx-agent-bridge/"><span><strong>微信 AI Agent Bridge</strong><span>从项目总览、Day 1 清单到开发 Backlog 的落地文档。</span></span></a></li>
+  <li><a href="/personal-context-layer/"><span><strong>Personal Context Layer</strong><span>微信入口、个人上下文、Agent Handoff 的新主线。</span></span></a></li>
+  <li><a href="/wx-agent-bridge/"><span><strong>微信 Agent Bridge 历史文档</strong><span>早期 Day 1-11 计划、实现提示词和降级说明。</span></span></a></li>
   <li><a href="/markdown-preview-site-plan"><span><strong>Markdown 文档站方案</strong><span>文档站的基础方案和发布思路。</span></span></a></li>
 </ul>
 
