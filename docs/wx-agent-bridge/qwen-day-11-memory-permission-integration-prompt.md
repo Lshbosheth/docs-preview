@@ -1,5 +1,16 @@
 # Qwen 实施提示词：Day 11 长期记忆接入工具权限策略
 
+> Deprecated: 这份提示词已经从当前主线移出。  
+> 新定位下，长期记忆不再用于影响 Bridge 内部工具权限，而是用于构建 Context Package，并通过 Context Disclosure Policy 控制哪些上下文可以交给外部 Agent。
+>
+> 新主线见：
+>
+> - `docs/personal-context-layer/context-disclosure-policy.md`
+> - `docs/personal-context-layer/handoff-protocol.md`
+> - `docs/personal-context-layer/handoff-permission-policy.md`
+>
+> 本文仅作为历史参考，不再作为下一阶段实施入口。
+
 请基于已有 `wx-agent-bridge` 项目继续开发 Day 11：长期记忆接入工具权限策略。
 
 ## 先读文档
@@ -255,4 +266,3 @@ decision
 ```
 
 这一步只让“项目级权限偏好”进入权限决策链。
-

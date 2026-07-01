@@ -1,5 +1,17 @@
 # Qwen 实施提示词：Day 10 Agent Runtime + 工具权限 MVP
 
+> Deprecated: 这份提示词已经从当前主线移出。  
+> `wx-agent-bridge` 新定位是 Personal Context Layer，不再继续优先自研完整 Agent Runtime / Tool Runtime。
+>
+> 新主线见：
+>
+> - `docs/personal-context-layer/index.md`
+> - `docs/personal-context-layer/implementation-roadmap.md`
+> - `docs/personal-context-layer/handoff-protocol.md`
+> - `docs/personal-context-layer/handoff-permission-policy.md`
+>
+> 本文仅作为历史参考，不再作为下一阶段实施入口。
+
 请基于已有 `wx-agent-bridge` 项目继续开发 Day 10：Agent Runtime + 工具权限 MVP。
 
 ## 先读文档
@@ -323,4 +335,3 @@ git push
 ```
 
 这一步只打通工具系统的骨架和只读权限。
-
