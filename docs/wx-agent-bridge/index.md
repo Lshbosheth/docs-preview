@@ -9,6 +9,7 @@
 > - [实施路线图](/personal-context-layer/implementation-roadmap)
 > - [Agent Handoff 协议](/personal-context-layer/handoff-protocol)
 > - [MVP 范围](/personal-context-layer/mvp-scope)
+> - [wx-agent-bridge 代码学习导览](/wx-agent-bridge/code-learning-map)
 
 ## 项目目标
 
