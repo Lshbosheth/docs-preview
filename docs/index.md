@@ -11,7 +11,7 @@ layout: home
 <p class="home-intro">这里放学习计划、技术英语、项目记录和长期可查的系统文档。页面保持轻、清楚、适合回头翻，不抢正文的风头。</p>
 
 <div class="home-actions">
-  <a class="home-action home-action--primary" href="/english/2026-06-24">打开每日英语</a>
+  <a class="home-action home-action--primary" href="/english/2026-07-05">打开每日英语</a>
   <a class="home-action" href="/personal-context-layer/">Personal Context</a>
   <a class="home-action" href="/memory/zvec-memory-plan">查看记忆系统</a>
   <a class="home-action" href="/study/go-learning-plan">学习计划</a>
@@ -23,7 +23,7 @@ layout: home
 ## 常用入口
 
 <ul class="home-entry-list">
-  <li><a href="/english/2026-06-24"><span><strong>每日英语</strong><span>跟读、发音、技术英语材料的稳定入口。</span></span></a></li>
+  <li><a href="/english/2026-07-05"><span><strong>每日英语</strong><span>跟读、发音、技术英语材料的稳定入口。</span></span></a></li>
   <li><a href="/study/go-learning-plan"><span><strong>Go 学习启动计划</strong><span>学习节奏、目标和后续复盘的落点。</span></span></a></li>
   <li><a href="/personal-context-layer/"><span><strong>Personal Context Layer</strong><span>微信入口、个人上下文、Agent Handoff 的新主线。</span></span></a></li>
   <li><a href="/wx-agent-bridge/"><span><strong>微信 Agent Bridge 历史文档</strong><span>早期 Day 1-11 计划、实现提示词和降级说明。</span></span></a></li>
