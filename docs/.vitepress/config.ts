@@ -75,6 +75,7 @@ export default defineConfig({
       {
         text: "学习",
         items: [
+          { text: "React 低代码组件配置页设计", link: "/study/low-code-component-config-page-design" },
           { text: "Go 学习启动计划", link: "/study/go-learning-plan" }
         ]
       },
