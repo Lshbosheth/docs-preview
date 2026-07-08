@@ -70,15 +70,34 @@ function getAiAgentLessonDates(): string[] {
     .sort((a, b) => b.localeCompare(a));
 }
 
+function getMarkdownTitle(filePath: string, fallback: string): string {
+  if (!fs.existsSync(filePath)) {
+    return fallback;
+  }
+
+  const content = fs.readFileSync(filePath, "utf8");
+  const frontmatterTitle = content.match(/^---\r?\n[\s\S]*?\ntitle:\s*["']?(.+?)["']?\r?\n[\s\S]*?\n---/);
+  if (frontmatterTitle?.[1]) {
+    return frontmatterTitle[1].trim();
+  }
+
+  const h1Title = content.match(/^#\s+(.+)$/m);
+  return h1Title?.[1]?.trim() ?? fallback;
+}
+
 function getAiAgentDailyItems(): SidebarItem[] {
   const lessons = getAiAgentLessonDates();
 
   return [
     { text: "总览", link: "/ai-agent/" },
-    ...lessons.map((date) => ({
-      text: date,
-      link: `/ai-agent/${date}`
-    }))
+    ...lessons.map((date) => {
+      const title = getMarkdownTitle(path.join(aiAgentDir, `${date}.md`), date);
+
+      return {
+        text: title,
+        link: `/ai-agent/${date}`
+      };
+    })
   ];
 }
 
