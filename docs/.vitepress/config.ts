@@ -13,6 +13,7 @@ type SidebarItem = {
 const configDir = path.dirname(fileURLToPath(import.meta.url));
 const docsDir = path.resolve(configDir, "..");
 const englishDir = path.join(docsDir, "english");
+const aiAgentDir = path.join(docsDir, "ai-agent");
 
 function getEnglishLessonDates(): string[] {
   if (!fs.existsSync(englishDir)) {
@@ -57,6 +58,32 @@ function getEnglishDailyItems(): SidebarItem[] {
 
 const latestEnglishLesson = getEnglishLessonDates()[0] ?? "2026-07-05";
 
+function getAiAgentLessonDates(): string[] {
+  if (!fs.existsSync(aiAgentDir)) {
+    return [];
+  }
+
+  return fs
+    .readdirSync(aiAgentDir)
+    .filter((name) => /^\d{4}-\d{2}-\d{2}\.md$/.test(name))
+    .map((name) => name.replace(/\.md$/, ""))
+    .sort((a, b) => b.localeCompare(a));
+}
+
+function getAiAgentDailyItems(): SidebarItem[] {
+  const lessons = getAiAgentLessonDates();
+
+  return [
+    { text: "总览", link: "/ai-agent/" },
+    ...lessons.map((date) => ({
+      text: date,
+      link: `/ai-agent/${date}`
+    }))
+  ];
+}
+
+const latestAiAgentLesson = getAiAgentLessonDates()[0] ?? "";
+
 export default defineConfig({
   title: "lshbosheth 文档",
   description: "学习计划、技术英语、项目记录",
@@ -66,6 +93,7 @@ export default defineConfig({
     nav: [
       { text: "首页", link: "/" },
       { text: "English Daily", link: `/english/${latestEnglishLesson}` },
+      { text: "AI Agent Daily", link: latestAiAgentLesson ? `/ai-agent/${latestAiAgentLesson}` : "/ai-agent/" },
       { text: "学习", link: "/study/go-learning-plan" },
       { text: "记忆系统", link: "/memory/zvec-memory-plan" },
       { text: "Personal Context", link: "/personal-context-layer/" },
@@ -82,6 +110,10 @@ export default defineConfig({
       {
         text: "English Daily",
         items: getEnglishDailyItems()
+      },
+      {
+        text: "AI Agent Daily",
+        items: getAiAgentDailyItems()
       },
       {
         text: "文档站",
