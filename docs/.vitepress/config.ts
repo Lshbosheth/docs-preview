@@ -115,7 +115,6 @@ export default defineConfig({
       { text: "AI Agent Daily", link: latestAiAgentLesson ? `/ai-agent/${latestAiAgentLesson}` : "/ai-agent/" },
       { text: "学习", link: "/study/go-learning-plan" },
       { text: "记忆系统", link: "/memory/zvec-memory-plan" },
-      { text: "Personal Context", link: "/personal-context-layer/" },
       { text: "Agent Bridge", link: "/wx-agent-bridge/" }
     ],
     sidebar: [
@@ -148,19 +147,6 @@ export default defineConfig({
           { text: "RAG 常用技术路线和名词地图", link: "/memory/rag-learning-map" },
           { text: "zvec 记忆检索改造方案", link: "/memory/zvec-memory-plan" },
           { text: "阿里 text-embedding-v4 接入指南", link: "/memory/dashscope-embedding-v4-guide" }
-        ]
-      },
-      {
-        text: "Personal Context Layer",
-        items: [
-          { text: "总览", link: "/personal-context-layer/" },
-          { text: "定位修正 V2", link: "/personal-context-layer/positioning-v2-personal-context-layer" },
-          { text: "实施路线图", link: "/personal-context-layer/implementation-roadmap" },
-          { text: "MVP 范围", link: "/personal-context-layer/mvp-scope" },
-          { text: "Agent Handoff 协议", link: "/personal-context-layer/handoff-protocol" },
-          { text: "上下文披露策略", link: "/personal-context-layer/context-disclosure-policy" },
-          { text: "Handoff 权限边界", link: "/personal-context-layer/handoff-permission-policy" },
-          { text: "旧文档迁移说明", link: "/personal-context-layer/legacy-docs-migration" }
         ]
       },
       {
