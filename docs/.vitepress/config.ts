@@ -27,11 +27,45 @@ function getEnglishLessonDates(): string[] {
     .sort((a, b) => b.localeCompare(a));
 }
 
+function stripMarkdown(value: string): string {
+  return value
+    .replace(/<Pronounce\s+text=["']([^"']+)["'][^>]*\/?\s*>/g, "$1")
+    .replace(/<[^>]+>/g, "")
+    .replace(/[`*_>#-]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getEnglishLessonTitle(date: string): string {
+  const filePath = path.join(englishDir, `${date}.md`);
+  if (!fs.existsSync(filePath)) {
+    return "技术英语练习";
+  }
+
+  const content = fs.readFileSync(filePath, "utf8");
+  const frontmatterTitle = content.match(/^---\r?\n[\s\S]*?\ntitle:\s*["']?(.+?)["']?\r?\n[\s\S]*?\n---/);
+  if (frontmatterTitle?.[1]) {
+    return frontmatterTitle[1].trim();
+  }
+
+  const goalSection = content.match(/##\s+今日目标\s*\r?\n+([\s\S]*?)(?=\r?\n##\s|\r?\n来源类型：|$)/);
+  const goalParagraph = goalSection?.[1]
+    ?.split(/\r?\n\s*\r?\n/)
+    .map(stripMarkdown)
+    .find(Boolean);
+
+  if (goalParagraph) {
+    return goalParagraph.length > 34 ? `${goalParagraph.slice(0, 34)}…` : goalParagraph;
+  }
+
+  return "技术英语练习";
+}
+
 function getEnglishDailyItems(): SidebarItem[] {
   const lessons = getEnglishLessonDates();
 
   const recentItems = lessons.slice(0, 3).map((date) => ({
-    text: date,
+    text: getEnglishLessonTitle(date),
     link: `/english/${date}`
   }));
 
@@ -41,7 +75,7 @@ function getEnglishDailyItems(): SidebarItem[] {
     const month = date.slice(0, 7);
     const items = olderGroups.get(month) ?? [];
     items.push({
-      text: date,
+      text: getEnglishLessonTitle(date),
       link: `/english/${date}`
     });
     olderGroups.set(month, items);

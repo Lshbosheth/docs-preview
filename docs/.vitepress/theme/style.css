@@ -145,9 +145,28 @@
   font-size: 0.78em;
   font-weight: 500;
   color: var(--vp-c-text-3);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0;
   padding: 0.4em 0;
+}
+
+.VPSidebar .VPSidebarItem .link.sidebar-link--dated {
+  position: relative;
+  padding-top: 1.45rem;
+  padding-right: 0.7em;
+  line-height: 1.45;
+}
+
+.VPSidebar .VPSidebarItem .link.sidebar-link--dated::after {
+  content: attr(data-sidebar-date);
+  position: absolute;
+  top: 0.3rem;
+  right: 0.7rem;
+  color: var(--vp-c-text-3);
+  font-size: 0.68rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.02em;
 }
 
 .VPSidebar .VPSidebarItem .link {
@@ -284,7 +303,7 @@
   font-size: 0.84rem;
   font-weight: 700;
   color: var(--vp-c-text-3);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0;
   margin-bottom: 0.7em;
   margin-top: 2.2em;
