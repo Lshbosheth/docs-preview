@@ -1,0 +1,5 @@
+[
+  {"title": "字典练习", "content": "把姓名和年龄存成字典并遍历。"},
+  {"title": "列表推导", "content": "用 [x*2 for x in nums] 生成新列表。"},
+  {"title": "装饰器", "content": "用 @wrapper 在不改函数体的情况下加日志。"}
+]

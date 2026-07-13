@@ -156,6 +156,28 @@ export default defineConfig({
         items: [
           { text: "Python × AI Agent 15 天计划", link: "/study/python-agent-learning-plan" },
           { text: "Python × DeepSeek Agent 课程设计", link: "/study/python-agent-course-design" },
+          {
+            text: "Python × DeepSeek Agent 实战课",
+            collapsed: false,
+            items: [
+              { text: "课程首页", link: "/study/python-agent-course/" },
+              { text: "Day 1 终端输入与学习记录", link: "/study/python-agent-course/day-01-cli-input" },
+              { text: "Day 2 把用户输入变成消息字典", link: "/study/python-agent-course/day-02-message-dict" },
+              { text: "Day 3 分类一条用户消息", link: "/study/python-agent-course/day-03-message-classifier" },
+              { text: "Day 4 把分类逻辑封装成函数", link: "/study/python-agent-course/day-04-functions" },
+              { text: "Day 5 把单文件变成小项目", link: "/study/python-agent-course/day-05-project-setup" },
+              { text: "Day 6 把对话保存成 JSON", link: "/study/python-agent-course/day-06-json-storage" },
+              { text: "Day 7 第一次调用 DeepSeek", link: "/study/python-agent-course/day-07-deepseek-api" },
+              { text: "Day 8 用类封装模型客户端", link: "/study/python-agent-course/day-08-client-class" },
+              { text: "Day 9 类型标注与结构化任务", link: "/study/python-agent-course/day-09-types-pydantic" },
+              { text: "Day 10 让 API 调用可恢复", link: "/study/python-agent-course/day-10-errors-logging" },
+              { text: "Day 11 用 LangChain 表达模型与消息", link: "/study/python-agent-course/day-11-langchain-chat" },
+              { text: "Day 12 Prompt 与结构化输出", link: "/study/python-agent-course/day-12-structured-output" },
+              { text: "Day 13 让模型选择工具", link: "/study/python-agent-course/day-13-tool-calling" },
+              { text: "Day 14 用 LangGraph 串起流程", link: "/study/python-agent-course/day-14-langgraph-basics" },
+              { text: "Day 15 条件路由与会话状态", link: "/study/python-agent-course/day-15-state-checkpoint" }
+            ]
+          },
           { text: "React 低代码组件配置页设计", link: "/study/low-code-component-config-page-design" },
           { text: "Go 学习启动计划", link: "/study/go-learning-plan" }
         ]
