@@ -113,13 +113,14 @@ export default defineConfig({
       { text: "首页", link: "/" },
       { text: "English Daily", link: `/english/${latestEnglishLesson}` },
       { text: "AI Agent Daily", link: latestAiAgentLesson ? `/ai-agent/${latestAiAgentLesson}` : "/ai-agent/" },
-      { text: "学习", link: "/study/go-learning-plan" },
+      { text: "学习", link: "/study/python-agent-learning-plan" },
       { text: "记忆系统", link: "/memory/zvec-memory-plan" }
     ],
     sidebar: [
       {
         text: "学习",
         items: [
+          { text: "Python × AI Agent 15 天计划", link: "/study/python-agent-learning-plan" },
           { text: "React 低代码组件配置页设计", link: "/study/low-code-component-config-page-design" },
           { text: "Go 学习启动计划", link: "/study/go-learning-plan" }
         ]
