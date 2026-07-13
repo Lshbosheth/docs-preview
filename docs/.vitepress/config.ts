@@ -155,6 +155,7 @@ export default defineConfig({
         text: "学习",
         items: [
           { text: "Python × AI Agent 15 天计划", link: "/study/python-agent-learning-plan" },
+          { text: "Python × DeepSeek Agent 课程设计", link: "/study/python-agent-course-design" },
           { text: "React 低代码组件配置页设计", link: "/study/low-code-component-config-page-design" },
           { text: "Go 学习启动计划", link: "/study/go-learning-plan" }
         ]

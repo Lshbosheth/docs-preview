@@ -4,6 +4,8 @@ title: Python × AI Agent 15 天学习计划
 
 # Python × AI Agent 15 天学习计划
 
+> 配套的详细课程施工说明见：[Python × DeepSeek Agent 实战课程设计](/study/python-agent-course-design)。它定义了连续项目、DeepSeek 接入节点、15 章内容结构和交给内容生成模型的执行指令。
+
 这份计划的目标不是系统学完整门 Python，而是尽快获得阅读、运行和修改 LangChain、LangGraph 示例的能力。
 
 已有前端开发基础，所以不再花大量时间重复变量、流程控制等通用编程概念。学习方式以“看懂差异、亲手运行、立即用进 Agent”为主。
