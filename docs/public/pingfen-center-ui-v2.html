@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>评分中心 - UI原型线框图 v2</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+<style>
+  body { font-family: 'Microsoft YaHei','PingFang SC',sans-serif; margin: 0; }
+  /* Tailwind v2 missing utilities */
+  .gap-1 { gap: 0.25rem; }
+  .gap-1\.5 { gap: 0.375rem; }
+  .gap-2 { gap: 0.5rem; }
+  .gap-3 { gap: 0.75rem; }
+  .gap-4 { gap: 1rem; }
+  .gap-6 { gap: 1.5rem; }
+  .space-y-2 > * + * { margin-top: 0.5rem; }
+  .space-y-3 > * + * { margin-top: 0.75rem; }
+  .space-y-4 > * + * { margin-top: 1rem; }
+  .focus-within\:border-blue-500:focus-within { border-color: #3b82f6; }
+  .hover\:bg-blue-50:hover { background-color: #eff6ff; }
+  .hover\:bg-blue-100:hover { background-color: #dbeafe; }
+  .hover\:bg-gray-50:hover { background-color: #f9fafb; }
+  .hover\:bg-blue-700:hover { background-color: #1d4ed8; }
+  .hover\:bg-green-700:hover { background-color: #15803d; }
+  .hover\:bg-red-50:hover { background-color: #fef2f2; }
+  .hover\:bg-red-100:hover { background-color: #fee2e2; }
+  .hover\:border-blue-500:hover { border-color: #3b82f6; }
+  .hover\:text-blue-600:hover { color: #2563eb; }
+  .hover\:text-gray-700:hover { color: #374151; }
+  .hover\:text-red-600:hover { color: #dc2626; }
+  .transition { transition: all 0.15s ease; }
+  .select-none { user-select: none; }
+  .border-b-2 { border-bottom-width: 2px; }
+  .border-transparent { border-color: transparent; }
+  .min-h-screen { min-height: 100vh; }
+  .flex-1 { flex: 1 1 0%; }
+  .flex-wrap { flex-wrap: wrap; }
+  .items-start { align-items: flex-start; }
+  .grid { display: grid; }
+  .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .overflow-x-auto { overflow-x: auto; }
+  .whitespace-nowrap { white-space: nowrap; }
+  .cursor-pointer { cursor: pointer; }
+  .leading-tight { line-height: 1.25; }
+  .font-semibold { font-weight: 600; }
+  .tracking-wide { letter-spacing: 0.025em; }
+  input[type="number"]::-webkit-inner-spin-button { opacity: 1; }
+  .delete-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 18px; height: 18px; border-radius: 50%;
+    font-size: 11px; line-height: 1; cursor: pointer;
+    color: #9ca3af; border: 1px solid #d1d5db; background: #fff;
+    transition: all 0.15s ease;
+  }
+  .delete-btn:hover { color: #dc2626; border-color: #fca5a5; background: #fef2f2; }
+  .add-tag-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 10px; border: 1px dashed #93c5fd; border-radius: 4px;
+    font-size: 12px; color: #2563eb; background: #eff6ff;
+    cursor: pointer; transition: all 0.15s ease;
+  }
+  .add-tag-btn:hover { border-color: #3b82f6; background: #dbeafe; }
+  .tag-category-header {
+    font-size: 12px; font-weight: 600; color: #374151;
+    padding: 4px 0; border-bottom: 1px solid #e5e7eb; margin-bottom: 6px;
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+/* ========== Shared Components ========== */
+const Btn = ({ children, type = "default", size = "md", onClick, style = {}, disabled = false }) => {
+  const base = "inline-flex items-center justify-center rounded transition cursor-pointer select-none";
+  const sizes = { sm: "px-2 py-1 text-xs", md: "px-3 py-2 text-sm", lg: "px-4 py-2 text-base" };
+  const types = {
+    primary: "bg-blue-600 text-white hover:bg-blue-700",
+    default: "bg-white border border-gray-300 text-gray-700 hover:border-blue-500 hover:text-blue-600",
+    danger: "bg-white border border-red-300 text-red-500 hover:bg-red-50",
+    ghost: "bg-transparent text-blue-600 hover:bg-blue-50",
+    success: "bg-green-600 text-white hover:bg-green-700",
+  };
+  return <button className={`${base} ${sizes[size]} ${types[type]}`} onClick={onClick} style={style} disabled={disabled}>{children}</button>;
+};
+
+const Tag = ({ children, color = "blue", onClose }) => {
+  const colors = {
+    blue: "bg-blue-100 text-blue-700 border-blue-200",
+    green: "bg-green-100 text-green-700 border-green-200",
+    gray: "bg-gray-100 text-gray-500 border-gray-200",
+    orange: "bg-yellow-100 text-yellow-700 border-yellow-200",
+    red: "bg-red-50 text-red-700 border-red-200",
+    purple: "bg-purple-100 text-purple-700 border-purple-200",
+  };
+  return (
+    <span className={`inline-flex items-center px-2 py-1 rounded text-xs border ${colors[color] || colors.blue}`} style={{gap:4}}>
+      <span>{children}</span>
+      {onClose && <span className="delete-btn" onClick={onClose} title="移除">&times;</span>}
+    </span>
+  );
+};
+
+const RemovableRow = ({ children, onRemove }) => (
+  <tr className="border-t border-gray-100 hover:bg-blue-50 transition">
+    {children}
+    <td className="px-2 py-2 text-center">
+      <span className="delete-btn" onClick={onRemove} title="删除此条件">&times;</span>
+    </td>
+  </tr>
+);
+
+const Card = ({ title, extra, children }) => (
+  <div className="bg-white rounded-lg border border-gray-200">
+    {title && <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+      <span className="font-semibold text-sm text-gray-800">{title}</span>{extra}
+    </div>}
+    <div className="p-4">{children}</div>
+  </div>
+);
+
+const Input = ({ value, onChange, placeholder, style = {} }) => (
+  <div className="flex items-center border border-gray-300 rounded px-2 py-2 text-sm focus-within:border-blue-500" style={style}>
+    <input className="outline-none flex-1 bg-transparent" value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} />
+  </div>
+);
+
+const Select = ({ value, options, onChange, style = {} }) => (
+  <select className="border border-gray-300 rounded px-2 py-2 text-sm outline-none focus:border-blue-500 bg-white" value={value} onChange={e => onChange(e.target.value)} style={style}>
+    {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+  </select>
+);
+
+/* ========== 场景列表 ========== */
+const SceneListPage = ({ onNavigate }) => {
+  const scenes = [
+    { id: 1, name: "套餐升档", type: "升档", status: "已启用", dims: 5, updated: "2026-07-14", creator: "赵佳" },
+    { id: 2, name: "宽带新装", type: "宽带", status: "草稿", dims: 5, updated: "2026-07-14", creator: "赵佳" },
+    { id: 3, name: "合约续约", type: "合约", status: "未配置", dims: 0, updated: "-", creator: "-" },
+  ];
+  return (
+    <Card title="评分场景管理" extra={<Btn type="primary" onClick={() => onNavigate("create")}>+ 新建场景</Btn>}>
+      <div className="mb-3 flex items-center" style={{gap:12}}>
+        <Select value="" options={[{value:"",label:"全部状态"},{value:"enabled",label:"已启用"},{value:"draft",label:"草稿"}]} onChange={()=>{}} />
+        <Input placeholder="搜索场景名称" value="" onChange={()=>{}} style={{width:220}} />
+      </div>
+      <table className="w-full text-sm">
+        <thead><tr className="bg-gray-50 text-gray-500 text-xs">
+          <th className="text-left px-3 py-2 font-medium">场景名称</th>
+          <th className="text-left px-3 py-2 font-medium">场景类型</th>
+          <th className="text-left px-3 py-2 font-medium">评分维度</th>
+          <th className="text-left px-3 py-2 font-medium">状态</th>
+          <th className="text-left px-3 py-2 font-medium">更新时间</th>
+          <th className="text-left px-3 py-2 font-medium">创建人</th>
+          <th className="text-left px-3 py-2 font-medium">操作</th>
+        </tr></thead>
+        <tbody>
+          {scenes.map(s => (
+            <tr key={s.id} className="border-t border-gray-100 hover:bg-blue-50 transition">
+              <td className="px-3 py-3 font-medium text-gray-800">{s.name}</td>
+              <td className="px-3 py-3"><Tag color={s.type==="升档"?"blue":s.type==="宽带"?"green":"orange"}>{s.type}</Tag></td>
+              <td className="px-3 py-3 text-gray-600">{s.dims > 0 ? `${s.dims} 个维度` : "-"}</td>
+              <td className="px-3 py-3"><Tag color={s.status==="已启用"?"green":s.status==="草稿"?"blue":"gray"}>{s.status}</Tag></td>
+              <td className="px-3 py-3 text-gray-500">{s.updated}</td>
+              <td className="px-3 py-3 text-gray-500">{s.creator}</td>
+              <td className="px-3 py-3">
+                <div className="flex" style={{gap:8}}>
+                  <Btn type="ghost" size="sm" onClick={() => onNavigate("config")}>配置</Btn>
+                  <Btn type="ghost" size="sm">编辑</Btn>
+                  {s.status !== "已启用" && <Btn type="ghost" size="sm" style={{color:"#52c41a"}}>启用</Btn>}
+                  {s.status === "已启用" && <Btn type="ghost" size="sm" style={{color:"#faad14"}}>停用</Btn>}
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className="mt-3 text-xs text-gray-400">共 3 个场景</div>
+    </Card>
+  );
+};
+
+/* ========== 新建场景 (4-step wizard) ========== */
+const CreateScenePage = ({ onNavigate }) => {
+  const [step, setStep] = useState(0);
+  const [sceneName, setSceneName] = useState("套餐升档");
+
+  // Tag categories organized by parent category
+  const tagCategories = [
+    {
+      category: "流量使用类",
+      tags: [
+        { name: "近3月流量饱和度", checked: true },
+        { name: "近6月流量超套次数", checked: true },
+        { name: "当月流量饱和度", checked: true },
+        { name: "上月流量饱和度", checked: false },
+      ]
+    },
+    {
+      category: "消费能力类",
+      tags: [
+        { name: "上月ARPU", checked: true },
+        { name: "近3个月ARPU", checked: true },
+      ]
+    },
+    {
+      category: "权益状态类",
+      tags: [
+        { name: "套内免费宽带权益状态", checked: true },
+      ]
+    },
+  ];
+
+  const dims = [
+    { name: "升级倾向分", weight: 50, source: "转化率评分表", desc: "从统一转化率评分表中按场景读取" },
+    { name: "流量焦虑分", weight: 20, source: "标签规则", desc: "根据客户标签组合查表打分" },
+    { name: "资费承受分", weight: 15, source: "标签规则", desc: "根据ARPU标签查表打分" },
+    { name: "策略命中分", weight: 10, source: "加减分规则", desc: "白名单加分、黑名单扣分等" },
+    { name: "运营调节分", weight: 5, source: "手动调节", desc: "运营后台配置加减分" },
+  ];
+  const totalW = dims.reduce((s,d) => s+d.weight, 0);
+  const steps = ["基本信息","评分公式","维度规则","确认"];
+
+  return (
+    <Card title={<span className="flex items-center" style={{gap:8}}><Btn type="ghost" size="sm" onClick={() => onNavigate("list")}>&larr; 返回</Btn>新建评分场景</span>}>
+      {/* Step indicator */}
+      <div className="flex items-center mb-6">
+        {steps.map((s,i) => (
+          <div key={i} className="flex items-center flex-1">
+            <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${i<=step?"bg-blue-600 text-white":"bg-gray-200 text-gray-500"}`}>{i+1}</div>
+            <span className={`ml-2 text-sm ${i<=step?"text-blue-600 font-medium":"text-gray-400"}`}>{s}</span>
+            {i<steps.length-1 && <div className={`flex-1 mx-3 ${i<step?"bg-blue-600":"bg-gray-200"}`} style={{height:2}} />}
+          </div>
+        ))}
+      </div>
+
+      {/* Step 0: Basic Info */}
+      {step===0 && (
+        <div className="space-y-4" style={{maxWidth:600}}>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">场景名称 *</label>
+            <Input value={sceneName} onChange={setSceneName} placeholder="例如：套餐升档、宽带新装" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">场景类型 *</label>
+            <Select value="upgrade" onChange={()=>{}} options={[{value:"upgrade",label:"套餐升档"},{value:"broadband",label:"宽带新装"},{value:"contract",label:"合约续约"}]} />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">关联客户画像标签</label>
+            <div className="border border-gray-200 rounded p-3 bg-gray-50">
+              <p className="text-xs text-gray-500 mb-3">从客户画像中心选择参与本场景评分的标签。选中的标签将作为转化率评分表的分组维度。</p>
+              <div className="space-y-3">
+                {tagCategories.map((cat, ci) => (
+                  <div key={ci}>
+                    <div className="tag-category-header">{cat.category}</div>
+                    <div className="flex flex-wrap" style={{gap:8}}>
+                      {cat.tags.map((tag, ti) => (
+                        <label key={ti} className="inline-flex items-center px-2 py-1 rounded text-xs border cursor-pointer transition"
+                          style={{
+                            background: tag.checked ? "#eff6ff" : "#fff",
+                            borderColor: tag.checked ? "#93c5fd" : "#d1d5db",
+                            color: tag.checked ? "#1d4ed8" : "#6b7280",
+                            gap: 4
+                          }}>
+                          <input type="checkbox" defaultChecked={tag.checked} style={{margin:0}} />
+                          <span>{tag.name}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-3 text-xs text-blue-600">
+                已选择 <b>6</b> 个标签，分属 <b>3</b> 个类别
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Step 1: Scoring Formula */}
+      {step===1 && (
+        <div>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+            <p className="text-sm text-blue-800 font-medium mb-1">评分公式</p>
+            <p className="text-sm text-blue-700">
+              总分 = {dims.map((d,i) => (
+                <span key={i}>{i>0&&" + "}<b>{d.name}</b>{" × "+d.weight+"%"}</span>
+              ))}
+            </p>
+            <p className={`text-xs mt-2 ${totalW===100?"text-green-600":"text-red-500 font-medium"}`}>
+              权重合计：{totalW+"%"}{totalW!==100&&" （需等于100%）"}
+            </p>
+          </div>
+          <table className="w-full text-sm">
+            <thead><tr className="bg-gray-50 text-gray-500 text-xs">
+              <th className="text-left px-3 py-2">#</th><th className="text-left px-3 py-2">维度名称</th>
+              <th className="text-left px-3 py-2">权重(%)</th><th className="text-left px-3 py-2">数据来源</th>
+              <th className="text-left px-3 py-2">说明</th>
+            </tr></thead>
+            <tbody>
+              {dims.map((d,i) => (
+                <tr key={i} className="border-t border-gray-100">
+                  <td className="px-3 py-2 text-gray-400">{i+1}</td>
+                  <td className="px-3 py-2 font-medium">{d.name}</td>
+                  <td className="px-3 py-2"><input className="w-16 border border-gray-300 rounded px-2 py-1 text-center text-sm" defaultValue={d.weight} readOnly /></td>
+                  <td className="px-3 py-2"><Tag color={d.source.includes("转化")?"blue":"green"}>{d.source}</Tag></td>
+                  <td className="px-3 py-2 text-gray-500 text-xs">{d.desc}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Step 2: Dimension Rules */}
+      {step===2 && (
+        <div>
+          <p className="text-sm text-gray-600 mb-4">为每个评分维度配置具体的评分规则。倾向分维度从统一转化率评分表读取，其他维度配置标签规则。</p>
+          <div className="space-y-3">
+            {dims.map((d,i) => (
+              <div key={i} className="border border-gray-200 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center" style={{gap:8}}>
+                    <span className="w-6 h-6 rounded bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">{i+1}</span>
+                    <span className="font-medium text-sm">{d.name}</span>
+                    <Tag color={d.source.includes("转化")?"blue":"green"}>{d.source}</Tag>
+                    <span className="text-xs text-gray-400">权重 {d.weight+"%"}</span>
+                  </div>
+                  <Btn type="primary" size="sm">配置规则</Btn>
+                </div>
+                {d.source.includes("转化") ? (
+                  <div className="bg-gray-50 rounded p-3 text-xs text-gray-600">
+                    <p className="mb-1">该维度从<b>统一转化率评分表</b>中读取本场景（{sceneName}）的数据。</p>
+                    <p>平滑转化率 = (客群办理量 + K × 全局转化率) / (客群客户数 + K)</p>
+                    <p className="mt-1">标准化：倾向分 = (该客群平滑转化率 / 本场景最高平滑转化率) × 100</p>
+                    <div className="mt-2 flex items-center" style={{gap:12}}>
+                      <span>K值参数：</span>
+                      <input className="w-16 border border-gray-300 rounded px-2 py-1 text-center" defaultValue="100" />
+                      <span className="text-gray-400">（建议值：50-200）</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-gray-50 rounded p-3 text-xs text-gray-500">
+                    点击"配置规则"进入标签评分表配置，支持选择客户画像标签并设置各标签值对应的分值。
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Step 3: Confirm */}
+      {step===3 && (
+        <div style={{maxWidth:500}}>
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+            <p className="text-sm text-green-800 font-medium">场景配置确认</p>
+          </div>
+          <div className="space-y-3 text-sm">
+            <div className="flex"><span className="text-gray-500" style={{width:80}}>场景名称：</span><span className="font-medium">{sceneName}</span></div>
+            <div className="flex"><span className="text-gray-500" style={{width:80}}>评分维度：</span><span>{dims.length+" 个维度"}</span></div>
+            <div className="flex"><span className="text-gray-500" style={{width:80}}>权重合计：</span><span className={totalW===100?"text-green-600":"text-red-500"}>{totalW+"%"}</span></div>
+            <div className="flex items-start"><span className="text-gray-500" style={{width:80}}>评分公式：</span>
+              <span className="text-xs">{dims.map((d,i)=>`${d.name}×${d.weight}%`).join(" + ")}</span>
+            </div>
+            <div className="flex items-start"><span className="text-gray-500" style={{width:80}}>关联标签：</span>
+              <div className="flex flex-wrap" style={{gap:4}}>
+                {["近3月流量饱和度","近6月流量超套次数","当月流量饱和度","上月ARPU","近3个月ARPU","套内免费宽带权益状态"].map(t => (
+                  <Tag key={t} color="blue">{t}</Tag>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Navigation buttons */}
+      <div className="flex justify-between mt-6 pt-4 border-t border-gray-100">
+        <Btn onClick={() => step>0?setStep(step-1):onNavigate("list")}>{step===0?"取消":"上一步"}</Btn>
+        {step<3 ? <Btn type="primary" onClick={() => setStep(step+1)}>下一步 &rarr;</Btn>
+          : <Btn type="success" onClick={() => onNavigate("list")}>保存并创建</Btn>}
+      </div>
+    </Card>
+  );
+};
+
+/* ========== 场景配置详情 (5 tabs) ========== */
+const SceneConfigPage = ({ onNavigate }) => {
+  const [activeTab, setActiveTab] = useState("tendency");
+  const tabs = [
+    {key:"tendency", label:"升级倾向分", weight:"50%"},
+    {key:"anxiety", label:"流量焦虑分", weight:"20%"},
+    {key:"afford", label:"资费承受分", weight:"15%"},
+    {key:"strategy", label:"策略命中分", weight:"10%"},
+    {key:"operation", label:"运营调节分", weight:"5%"},
+  ];
+
+  return (
+    <div className="space-y-4">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center" style={{gap:12}}>
+          <Btn type="ghost" size="sm" onClick={() => onNavigate("list")}>&larr; 返回</Btn>
+          <h3 className="text-lg font-bold text-gray-800">套餐升档</h3>
+          <Tag color="green">已启用</Tag>
+          <span className="text-xs text-gray-400">总分 = 升级倾向分×50% + 流量焦虑分×20% + 资费承受分×15% + 策略命中分×10% + 运营调节分×5%</span>
+        </div>
+        <div className="flex" style={{gap:8}}>
+          <Btn type="default" size="sm">修改公式</Btn>
+          <Btn type="primary" size="sm">保存配置</Btn>
+        </div>
+      </div>
+
+      {/* Tab bar */}
+      <div className="flex border-b border-gray-200 overflow-x-auto">
+        {tabs.map(t => (
+          <button key={t.key} onClick={() => setActiveTab(t.key)}
+            className={`px-4 py-3 text-sm font-medium border-b-2 transition whitespace-nowrap ${activeTab===t.key?"border-blue-600 text-blue-600":"border-transparent text-gray-500 hover:text-gray-700"}`}>
+            {t.label} <span className="text-xs text-gray-400 ml-1">{t.weight}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* ===== Tab: 升级倾向分 (Tendency Score) ===== */}
+      {activeTab==="tendency" && (
+        <Card title="升级倾向分 — 统一转化率评分表"
+          extra={<div className="flex items-center" style={{gap:8}}>
+            <span className="text-xs text-gray-500">K值：</span>
+            <input className="w-14 border border-gray-300 rounded px-2 py-1 text-xs text-center" defaultValue="100" />
+            <Btn type="default" size="sm">应用K值</Btn>
+            <Btn type="primary" size="sm">重新计算</Btn>
+          </div>}>
+          {/* Explanation box */}
+          <div className="bg-yellow-50 border border-yellow-200 rounded p-3 mb-4 text-xs text-yellow-800">
+            <b>数据说明：</b>本表根据新建场景时选择的所有标签，按各标签值的组合自动分组统计。同一张表支持多个场景（通过scene_id区分），每个场景独立计算平滑转化率和归一化评分。
+          </div>
+
+          {/* Filter controls */}
+          <div className="flex items-center mb-3" style={{gap:12}}>
+            <span className="text-xs text-gray-500">场景筛选：</span>
+            <Select value="upgrade" onChange={()=>{}} options={[{value:"all",label:"全部场景"},{value:"upgrade",label:"套餐升档"},{value:"broadband",label:"宽带新装"},{value:"contract",label:"合约续约"}]} />
+            <span className="text-xs text-gray-500">数据周期：</span>
+            <Select value="30" onChange={()=>{}} options={[{value:"7",label:"近7天"},{value:"30",label:"近30天"},{value:"60",label:"近60天"},{value:"90",label:"近90天"}]} />
+            <span className="text-xs text-gray-400 ml-2">最近更新时间：2026-07-14 08:00</span>
+          </div>
+
+          {/* Full-width table with all 6 tag columns */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs" style={{minWidth:1200}}>
+              <thead>
+                <tr className="bg-gray-50 text-gray-500">
+                  <th className="text-left px-2 py-2 font-medium whitespace-nowrap">场景</th>
+                  <th className="text-left px-2 py-2 font-medium whitespace-nowrap">近3月流量饱和度</th>
+                  <th className="text-left px-2 py-2 font-medium whitespace-nowrap">近6月超套次数</th>
+                  <th className="text-left px-2 py-2 font-medium whitespace-nowrap">当月流量饱和度</th>
+                  <th className="text-left px-2 py-2 font-medium whitespace-nowrap">上月ARPU</th>
+                  <th className="text-left px-2 py-2 font-medium whitespace-nowrap">近3月ARPU</th>
+                  <th className="text-left px-2 py-2 font-medium whitespace-nowrap">套内免费宽带权益状态</th>
+                  <th className="text-right px-2 py-2 font-medium whitespace-nowrap">客户数</th>
+                  <th className="text-right px-2 py-2 font-medium whitespace-nowrap">推荐量</th>
+                  <th className="text-right px-2 py-2 font-medium whitespace-nowrap">办理量</th>
+                  <th className="text-right px-2 py-2 font-medium whitespace-nowrap">平滑转化率</th>
+                  <th className="text-right px-2 py-2 font-medium whitespace-nowrap">评分</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  {scene:"升档", sat3m:"高饱和", over6m:"超套≥3次", satCur:">70%", arpuLast:"49-99元", arpu3m:"49-99元", bb:"未领取", count:"1,551", rec:"1,480", done:200, smooth:"12.87%", score:100},
+                  {scene:"升档", sat3m:"中饱和", over6m:"超套1次", satCur:"≤70%", arpuLast:"99-199元", arpu3m:"99-199元", bb:"未领取", count:"1,701", rec:"1,650", done:209, smooth:"12.29%", score:95.5},
+                  {scene:"升档", sat3m:"0流量", over6m:"无超套", satCur:"≤70%", arpuLast:"0-49元", arpu3m:"0-49元", bb:"无权益", count:"187", rec:"180", done:23, smooth:"12.33%", score:95.8},
+                  {scene:"升档", sat3m:"低饱和", over6m:"无超套", satCur:"≤70%", arpuLast:"0-49元", arpu3m:"0-49元", bb:"未领取", count:"1,441", rec:"1,400", done:175, smooth:"12.16%", score:94.5},
+                  {scene:"宽带", sat3m:"高饱和", over6m:"超套2次", satCur:">70%", arpuLast:"99-199元", arpu3m:"99-199元", bb:"未领取", count:"892", rec:"850", done:95, smooth:"10.55%", score:100},
+                  {scene:"宽带", sat3m:"中饱和", over6m:"超套1次", satCur:"≤70%", arpuLast:"49-99元", arpu3m:"49-99元", bb:"已领取", count:"1,203", rec:"1,150", done:120, smooth:"10.02%", score:95.0},
+                  {scene:"宽带", sat3m:"低饱和", over6m:"无超套", satCur:"≤70%", arpuLast:"0-49元", arpu3m:"0-49元", bb:"无权益", count:"560", rec:"540", done:55, smooth:"9.72%", score:92.1},
+                ].map((r,i) => (
+                  <tr key={i} className="border-t border-gray-100 hover:bg-blue-50 transition">
+                    <td className="px-2 py-2"><Tag color={r.scene==="升档"?"blue":"green"}>{r.scene}</Tag></td>
+                    <td className="px-2 py-2 text-gray-700">{r.sat3m}</td>
+                    <td className="px-2 py-2 text-gray-700">{r.over6m}</td>
+                    <td className="px-2 py-2 text-gray-700">{r.satCur}</td>
+                    <td className="px-2 py-2 text-gray-700">{r.arpuLast}</td>
+                    <td className="px-2 py-2 text-gray-700">{r.arpu3m}</td>
+                    <td className="px-2 py-2"><Tag color={r.bb==="未领取"?"orange":r.bb==="已领取"?"green":"gray"}>{r.bb}</Tag></td>
+                    <td className="px-2 py-2 text-right text-gray-600">{r.count}</td>
+                    <td className="px-2 py-2 text-right text-gray-600">{r.rec}</td>
+                    <td className="px-2 py-2 text-right text-gray-600">{r.done}</td>
+                    <td className="px-2 py-2 text-right font-medium">{r.smooth}</td>
+                    <td className="px-2 py-2 text-right"><span className={`font-bold ${r.score>=98?"text-red-600":r.score>=95?"text-yellow-600":"text-gray-600"}`}>{r.score}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-3 text-xs text-gray-400">
+            全局转化率：12.4% (607/4880) · K值：100 · 标准化基准：12.87%（升档场景最高平滑转化率） · 宽带基准：10.55%
+          </p>
+        </Card>
+      )}
+
+      {/* ===== Tab: 流量焦虑分 (Traffic Anxiety Score) ===== */}
+      {activeTab==="anxiety" && (
+        <Card title="流量焦虑分 — 标签评分规则配置">
+          <div className="bg-blue-50 border border-blue-200 rounded p-3 mb-4 text-xs text-blue-800">
+            <b>评分公式：</b>流量焦虑分 = 近3月流量饱和度子分×40% + 近6月超套次数子分×40% + 当月流量饱和度子分×20%
+          </div>
+
+          {/* 子项一: 近3月流量饱和度 */}
+          <div className="border border-gray-200 rounded-lg p-4 mb-3">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center" style={{gap:8}}>
+                <span className="w-6 h-6 rounded bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">1</span>
+                <span className="font-medium text-sm">子项一：近3月流量饱和度</span>
+                <span className="text-xs text-gray-400">权重</span>
+                <input className="w-12 border border-gray-300 rounded px-1 py-1 text-xs text-center" defaultValue="40" />%
+              </div>
+              <Tag>近3月流量饱和度</Tag>
+            </div>
+            <table className="w-full text-sm">
+              <thead><tr className="bg-gray-50 text-xs text-gray-500">
+                <th className="text-left px-3 py-2">标签值</th>
+                <th className="text-left px-3 py-2">范围</th>
+                <th className="text-center px-3 py-2">子分</th>
+                <th className="text-left px-3 py-2">说明</th>
+              </tr></thead>
+              <tbody>
+                {[
+                  {v:"高饱和", r:"50%-100%", s:100, d:"流量用了大半"},
+                  {v:"中饱和", r:"10%-50%", s:60, d:"有一定使用量"},
+                  {v:"低饱和", r:"0%-10%", s:20, d:"流量基本用不完"},
+                  {v:"0流量", r:"=0%", s:30, d:"可能不用流量"},
+                ].map((r,i)=>(
+                  <tr key={i} className="border-t border-gray-100">
+                    <td className="px-3 py-2 font-medium">{r.v}</td>
+                    <td className="px-3 py-2 text-gray-600 text-xs">{r.r}</td>
+                    <td className="px-3 py-2 text-center"><input className="w-14 border border-gray-300 rounded px-2 py-1 text-center text-sm" defaultValue={r.s} /></td>
+                    <td className="px-3 py-2 text-xs text-gray-500">{r.d}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* 子项二: 近6月超套次数 */}
+          <div className="border border-gray-200 rounded-lg p-4 mb-3">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center" style={{gap:8}}>
+                <span className="w-6 h-6 rounded bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">2</span>
+                <span className="font-medium text-sm">子项二：近6月超套次数</span>
+                <span className="text-xs text-gray-400">权重</span>
+                <input className="w-12 border border-gray-300 rounded px-1 py-1 text-xs text-center" defaultValue="40" />%
+              </div>
+              <Tag>近6月流量超套次数</Tag>
+            </div>
+            <table className="w-full text-sm">
+              <thead><tr className="bg-gray-50 text-xs text-gray-500">
+                <th className="text-left px-3 py-2">标签值</th>
+                <th className="text-center px-3 py-2">子分</th>
+                <th className="text-left px-3 py-2">说明</th>
+              </tr></thead>
+              <tbody>
+                {[
+                  {v:"超套≥3次", s:100, d:"反复超套，痛点明确"},
+                  {v:"超套2次", s:80, d:"多次超套"},
+                  {v:"超套1次", s:60, d:"偶尔超套"},
+                  {v:"当月超套", s:50, d:"仅当月超套"},
+                  {v:"无超套", s:0, d:"无流量焦虑"},
+                ].map((r,i)=>(
+                  <tr key={i} className="border-t border-gray-100">
+                    <td className="px-3 py-2 font-medium">{r.v}</td>
+                    <td className="px-3 py-2 text-center"><input className="w-14 border border-gray-300 rounded px-2 py-1 text-center text-sm" defaultValue={r.s} /></td>
+                    <td className="px-3 py-2 text-xs text-gray-500">{r.d}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* 子项三: 当月流量饱和度 */}
+          <div className="border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center" style={{gap:8}}>
+                <span className="w-6 h-6 rounded bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">3</span>
+                <span className="font-medium text-sm">子项三：当月流量饱和度</span>
+                <span className="text-xs text-gray-400">权重</span>
+                <input className="w-12 border border-gray-300 rounded px-1 py-1 text-xs text-center" defaultValue="20" />%
+              </div>
+              <Tag>当月流量饱和度</Tag>
+            </div>
+            <table className="w-full text-sm">
+              <thead><tr className="bg-gray-50 text-xs text-gray-500">
+                <th className="text-left px-3 py-2">标签值</th>
+                <th className="text-left px-3 py-2">范围</th>
+                <th className="text-center px-3 py-2">子分</th>
+                <th className="text-left px-3 py-2">说明</th>
+              </tr></thead>
+              <tbody>
+                {[
+                  {v:"饱和度>70%", r:"大于70%", s:100, d:"当月流量已用大部分，有升档需求"},
+                  {v:"饱和度≤70%", r:"小于等于70%", s:40, d:"当月流量尚充裕"},
+                ].map((r,i)=>(
+                  <tr key={i} className="border-t border-gray-100">
+                    <td className="px-3 py-2 font-medium">{r.v}</td>
+                    <td className="px-3 py-2 text-gray-600 text-xs">{r.r}</td>
+                    <td className="px-3 py-2 text-center"><input className="w-14 border border-gray-300 rounded px-2 py-1 text-center text-sm" defaultValue={r.s} /></td>
+                    <td className="px-3 py-2 text-xs text-gray-500">{r.d}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
+
+      {/* ===== Tab: 资费承受分 (Price Affordability Score) ===== */}
+      {activeTab==="afford" && (
+        <Card title="资费承受分 — 标签评分规则配置">
+          <div className="bg-blue-50 border border-blue-200 rounded p-3 mb-4 text-xs text-blue-800">
+            <b>评分公式：</b>资费承受分 = 消费能力子分×50% + 升档可行性子分×50%
+          </div>
+
+          {/* 子项一: 消费能力分 */}
+          <div className="border border-gray-200 rounded-lg p-4 mb-3">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center" style={{gap:8}}>
+                <span className="w-6 h-6 rounded bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">1</span>
+                <span className="font-medium text-sm">子项一：消费能力分</span>
+                <span className="text-xs text-gray-400">权重</span>
+                <input className="w-12 border border-gray-300 rounded px-1 py-1 text-xs text-center" defaultValue="50" />%
+              </div>
+              <Tag>近3个月ARPU</Tag>
+            </div>
+            <p className="text-xs text-gray-500 mb-2">数据来源：近3个月ARPU 标签</p>
+            <table className="w-full text-sm">
+              <thead><tr className="bg-gray-50 text-xs text-gray-500">
+                <th className="text-left px-3 py-2">ARPU档位</th>
+                <th className="text-center px-3 py-2">子分</th>
+                <th className="text-left px-3 py-2">说明</th>
+              </tr></thead>
+              <tbody>
+                {[
+                  {v:"199元以上", s:90, d:"高消费，支付能力强"},
+                  {v:"99-199元", s:80, d:"中高消费"},
+                  {v:"49-99元", s:60, d:"中等消费"},
+                  {v:"0-49元", s:30, d:"低消费，承受力弱"},
+                ].map((r,i)=>(
+                  <tr key={i} className="border-t border-gray-100">
+                    <td className="px-3 py-2 font-medium">{r.v}</td>
+                    <td className="px-3 py-2 text-center"><input className="w-14 border border-gray-300 rounded px-2 py-1 text-center text-sm" defaultValue={r.s} /></td>
+                    <td className="px-3 py-2 text-xs text-gray-500">{r.d}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* 子项二: 升档可行性分 */}
+          <div className="border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center" style={{gap:8}}>
+                <span className="w-6 h-6 rounded bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">2</span>
+                <span className="font-medium text-sm">子项二：升档可行性分</span>
+                <span className="text-xs text-gray-400">权重</span>
+                <input className="w-12 border border-gray-300 rounded px-1 py-1 text-xs text-center" defaultValue="50" />%
+              </div>
+              <Tag>上月ARPU</Tag>
+            </div>
+            <p className="text-xs text-gray-500 mb-2">数据来源：上月ARPU 标签</p>
+            <table className="w-full text-sm">
+              <thead><tr className="bg-gray-50 text-xs text-gray-500">
+                <th className="text-left px-3 py-2">ARPU档位</th>
+                <th className="text-center px-3 py-2">子分</th>
+                <th className="text-left px-3 py-2">说明</th>
+              </tr></thead>
+              <tbody>
+                {[
+                  {v:"49-99元", s:100, d:"中档用户，升档空间最大"},
+                  {v:"99-199元", s:90, d:"中高档用户，仍有升档可能"},
+                  {v:"0-49元", s:50, d:"低档用户，升档意愿待验证"},
+                  {v:"199元以上", s:40, d:"高档用户，升档空间有限"},
+                ].map((r,i)=>(
+                  <tr key={i} className="border-t border-gray-100">
+                    <td className="px-3 py-2 font-medium">{r.v}</td>
+                    <td className="px-3 py-2 text-center"><input className="w-14 border border-gray-300 rounded px-2 py-1 text-center text-sm" defaultValue={r.s} /></td>
+                    <td className="px-3 py-2 text-xs text-gray-500">{r.d}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
+
+      {/* ===== Tab: 策略命中分 (Strategy Hit Score) ===== */}
+      {activeTab==="strategy" && (
+        <Card title="策略命中分 — 加减分规则配置">
+          <div className="bg-blue-50 border border-blue-200 rounded p-3 mb-4 text-xs text-blue-800">
+            基础分=50。最终 = max(0, min(100, 50+加分-扣分))
+          </div>
+
+          <div className="grid grid-cols-2" style={{gap:16}}>
+            {/* 加分项 */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-sm font-medium text-green-700">加分项</h4>
+              </div>
+              <table className="w-full text-sm">
+                <thead><tr className="bg-green-50 text-xs text-gray-500">
+                  <th className="text-left px-3 py-2">条件</th>
+                  <th className="text-center px-3 py-2" style={{width:60}}>加分</th>
+                  <th className="text-center px-3 py-2" style={{width:36}}>操作</th>
+                </tr></thead>
+                <tbody>
+                  {[
+                    {c:"白名单用户", s:"+30"},
+                    {c:"命中当期重点活动", s:"+20"},
+                    {c:"有实时触发事件", s:"+10"},
+                  ].map((r,i)=>(
+                    <tr key={i} className="border-t border-gray-100 hover:bg-blue-50 transition">
+                      <td className="px-3 py-2">{r.c}</td>
+                      <td className="px-3 py-2 text-center text-green-600 font-medium">{r.s}</td>
+                      <td className="px-3 py-2 text-center">
+                        <span className="delete-btn" title="删除此条件">&times;</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div className="mt-2">
+                <button className="add-tag-btn">+ 从画像中心添加标签</button>
+              </div>
+            </div>
+
+            {/* 扣分项 */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-sm font-medium text-red-600">扣分项</h4>
+              </div>
+              <table className="w-full text-sm">
+                <thead><tr className="bg-red-50 text-xs text-gray-500">
+                  <th className="text-left px-3 py-2">条件</th>
+                  <th className="text-center px-3 py-2" style={{width:60}}>扣分</th>
+                  <th className="text-center px-3 py-2" style={{width:36}}>操作</th>
+                </tr></thead>
+                <tbody>
+                  {[
+                    {c:"近期拒绝同类营销", s:"-30"},
+                    {c:"投诉敏感客户", s:"-20"},
+                    {c:"免打扰标记", s:"-20"},
+                    {c:"黑名单用户", s:"-50"},
+                  ].map((r,i)=>(
+                    <tr key={i} className="border-t border-gray-100 hover:bg-blue-50 transition">
+                      <td className="px-3 py-2">{r.c}</td>
+                      <td className="px-3 py-2 text-center text-red-600 font-medium">{r.s}</td>
+                      <td className="px-3 py-2 text-center">
+                        <span className="delete-btn" title="删除此条件">&times;</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div className="mt-2">
+                <button className="add-tag-btn">+ 从画像中心添加标签</button>
+              </div>
+            </div>
+          </div>
+
+          {/* 硬拦截规则 */}
+          <div className="mt-4 border-t border-gray-100 pt-3">
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-sm font-medium text-red-700">硬拦截规则（直接拦截不推荐）</h4>
+            </div>
+            <table className="w-full text-sm">
+              <thead><tr className="bg-red-50 text-xs text-gray-500">
+                <th className="text-left px-3 py-2">拦截条件</th>
+                <th className="text-left px-3 py-2">说明</th>
+                <th className="text-center px-3 py-2" style={{width:36}}>操作</th>
+              </tr></thead>
+              <tbody>
+                {[
+                  {c:"黑名单用户", d:"命中黑名单标签，直接拦截"},
+                  {c:"免打扰标记", d:"用户已标记免打扰"},
+                  {c:"近7天有投诉记录", d:"近期投诉敏感客户"},
+                ].map((r,i)=>(
+                  <tr key={i} className="border-t border-gray-100 hover:bg-red-50 transition">
+                    <td className="px-3 py-2 font-medium text-red-700">{r.c}</td>
+                    <td className="px-3 py-2 text-xs text-gray-500">{r.d}</td>
+                    <td className="px-3 py-2 text-center">
+                      <span className="delete-btn" title="删除此拦截条件">&times;</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="mt-2">
+              <button className="add-tag-btn" style={{borderColor:"#fca5a5",color:"#dc2626",background:"#fef2f2"}}>+ 添加拦截条件</button>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* ===== Tab: 运营调节分 (Operation Adjustment Score) ===== */}
+      {activeTab==="operation" && (
+        <Card title="运营调节分 — 手动调节配置">
+          <div className="bg-blue-50 border border-blue-200 rounded p-3 mb-4 text-xs text-blue-800">
+            基础分=50。运营调节分 = max(0, min(100, 50+调节项之和))。权重仅5%。
+          </div>
+          <table className="w-full text-sm">
+            <thead><tr className="bg-gray-50 text-xs text-gray-500">
+              <th className="text-left px-3 py-2">调节类型</th>
+              <th className="text-left px-3 py-2">分值范围</th>
+              <th className="text-left px-3 py-2">触发条件</th>
+              <th className="text-left px-3 py-2">使用场景</th>
+            </tr></thead>
+            <tbody>
+              {[
+                {t:"业务优先级加分", r:"+10~+30", c:"标记为重点推广", d:"省公司主推活动"},
+                {t:"酬金导向加分", r:"+10~+20", c:"酬金高于阈值", d:"高酬金活动优先"},
+                {t:"限时活动加分", r:"+10~+20", c:"剩余<7天", d:"即将到期活动"},
+                {t:"配额控制扣分", r:"-10~-30", c:"推荐量已达标", d:"避免过度推荐"},
+              ].map((r,i) => (
+                <tr key={i} className="border-t border-gray-100">
+                  <td className="px-3 py-2 font-medium">{r.t}</td>
+                  <td className="px-3 py-2"><span className={r.r.startsWith("+")?"text-green-600":"text-red-600"}>{r.r}</span></td>
+                  <td className="px-3 py-2 text-xs text-gray-600">{r.c}</td>
+                  <td className="px-3 py-2 text-xs text-gray-500">{r.d}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </Card>
+      )}
+    </div>
+  );
+};
+
+/* ========== Main App ========== */
+function App() {
+  const [page, setPage] = useState("list");
+  return (
+    <div className="min-h-screen bg-gray-100 p-6" style={{fontFamily:"'Microsoft YaHei','PingFang SC',sans-serif"}}>
+      <div style={{maxWidth:1200,margin:"0 auto"}}>
+        {/* Top navigation bar */}
+        <div className="mb-4 flex items-center" style={{gap:12}}>
+          <span className="text-lg font-bold text-gray-800">评分中心</span>
+          <span className="text-xs text-gray-400">提示灵精准营销推荐体系 · UI原型线框图 v2</span>
+          <div className="flex ml-auto" style={{gap:4}}>
+            {[["list","场景列表"],["create","新建场景"],["config","场景配置详情"]].map(([k,l]) => (
+              <button key={k} onClick={() => setPage(k)}
+                className={`px-3 py-1 rounded text-xs transition ${page===k?"bg-blue-600 text-white":"bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"}`}>
+                {l}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {page==="list" && <SceneListPage onNavigate={setPage} />}
+        {page==="create" && <CreateScenePage onNavigate={setPage} />}
+        {page==="config" && <SceneConfigPage onNavigate={setPage} />}
+
+        <div className="mt-6 text-center text-xs text-gray-400">评分中心 UI 原型 v2 · 用于指导开发 · 2026年7月</div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById("root"));
+</script>
+</body>
+</html>
