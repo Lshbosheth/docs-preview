@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>提示灵 - 精准营销推荐（优化版）</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<style>
+  :root {
+    --primary: #2D6BFF;
+    --primary-d: #0B4FE0;
+    --primary-soft: #EEF3FF;
+    --ink: #1f2733;
+    --ink-2: #5b6675;
+    --ink-3: #97a1b0;
+    --line: #eef0f4;
+    --bg: #f3f5f9;
+    --score: #F5455C;
+    --ok: #1FA463;
+    --warn: #E0922B;
+    --radius: 14px;
+    --shadow: 0 10px 40px rgba(20, 40, 80, 0.12);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+    background: radial-gradient(1200px 600px at 50% -10%, #ffffff, var(--bg));
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 24px 16px;
+  }
+
+  .viewport { width: 100%; max-width: 1180px; }
+  .widget {
+    width: 100%;
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #eef1f6;
+  }
+
+  /* 顶部条 */
+  .top-strip {
+    background: linear-gradient(120deg, var(--primary-d) 0%, var(--primary) 60%, #5B8DEF 100%);
+    padding: 10px 18px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .brand { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+  .brand .icon { font-size: 17px; filter: drop-shadow(0 1px 2px rgba(0,0,0,.2)); }
+  .brand h1 { font-size: 15px; font-weight: 700; color: #fff; letter-spacing: .5px; }
+  .sep { width: 1px; height: 20px; background: rgba(255,255,255,0.22); flex-shrink: 0; }
+  .cust { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .cust .av {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: rgba(255,255,255,0.22); display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 11px; font-weight: 700;
+  }
+  .cust .nm { font-size: 13px; color: #fff; font-weight: 600; }
+  .cust .ph { font-size: 11px; color: rgba(255,255,255,0.65); }
+  .tags { display: flex; gap: 6px; flex: 1; flex-wrap: wrap; min-width: 0; }
+  .tags .t {
+    font-size: 10px; padding: 2px 8px; border-radius: 999px;
+    background: rgba(255,255,255,0.14); color: rgba(255,255,255,0.9); white-space: nowrap;
+  }
+  .total-score { display: flex; align-items: baseline; gap: 5px; flex-shrink: 0; margin-left: auto; }
+  .total-score .num { font-size: 30px; font-weight: 800; color: #fff; line-height: 1; letter-spacing: -0.5px; }
+  .total-score .unit { font-size: 10px; color: rgba(255,255,255,0.7); }
+  .total-score .lv {
+    font-size: 10px; padding: 2px 8px; border-radius: 999px;
+    background: rgba(255,255,255,0.22); color: #fff; font-weight: 600; margin-left: 6px;
+  }
+
+  /* 主体：横向四栏，正常网页端横向排版（桌面自适应，不滚动不纵向堆叠） */
+  .body { display: flex; }
+
+  .col { display: flex; flex-direction: column; gap: 10px; padding: 16px; }
+  .col + .col { border-left: 1px solid var(--line); }
+  .col-score { flex: 0 1 200px; min-width: 170px; }
+  .col-script { flex: 2 1 340px; min-width: 280px; }
+  .col-other { flex: 0 1 250px; min-width: 210px; }
+  .col-app { flex: 0 1 250px; min-width: 210px; }
+
+  .sec-title { font-size: 11px; color: var(--ink-3); font-weight: 700; display: flex; align-items: center; gap: 5px; letter-spacing: .3px; }
+  .sec-title .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); }
+
+  .main-scene { display: flex; align-items: center; gap: 8px; }
+  .main-scene .badge {
+    font-size: 10px; padding: 2px 8px; border-radius: 6px; color: #fff; font-weight: 600;
+    background: linear-gradient(135deg, var(--primary), var(--primary-d));
+  }
+  .main-scene .name { font-size: 15px; font-weight: 700; }
+  .score-row { display: flex; align-items: baseline; gap: 5px; }
+  .score-row .big { font-size: 38px; font-weight: 800; color: var(--score); line-height: 1; letter-spacing: -1px; }
+  .score-row .sm { font-size: 11px; color: var(--ink-3); }
+  .dims { display: flex; flex-direction: column; gap: 7px; }
+  .dim { display: flex; align-items: center; gap: 8px; }
+  .dim .d-name { font-size: 11px; color: var(--ink-2); width: 56px; flex-shrink: 0; text-align: right; }
+  .dim .d-bar { flex: 1; height: 6px; background: #eef1f6; border-radius: 4px; overflow: hidden; }
+  .dim .d-bar .fill { height: 100%; border-radius: 4px; transition: width .4s ease; }
+  .dim .d-val { font-size: 11px; font-weight: 700; color: var(--ink-2); width: 24px; text-align: right; flex-shrink: 0; }
+  .reason-row { display: flex; gap: 5px; flex-wrap: wrap; }
+  .reason-row .r { font-size: 10px; padding: 2px 7px; border-radius: 6px; }
+  .reason-row .r.blue { background: var(--primary-soft); color: var(--primary); }
+  .reason-row .r.orange { background: #FFF4E5; color: #C9760A; }
+  .reason-row .r.green { background: #EAF8EF; color: var(--ok); }
+
+  .script-box {
+    background: linear-gradient(180deg, #F7F9FF, #F2F6FF);
+    border-left: 3px solid var(--primary);
+    padding: 11px 14px; border-radius: 8px; font-size: 14px; line-height: 1.7; color: #2b3543;
+  }
+  .act-label { font-size: 11px; color: var(--ink-3); font-weight: 700; display: flex; align-items: center; gap: 5px; }
+  .act-list { display: flex; gap: 10px; flex: 1; align-items: stretch; }
+  .act-item {
+    display: flex; align-items: center; gap: 9px; padding: 9px 12px;
+    background: #F4F9FF; border: 1px solid #E2EEFF; border-radius: 10px;
+    cursor: pointer; transition: transform .12s, box-shadow .12s, background .12s; flex: 1;
+  }
+  .act-item:hover { background: #E9F2FF; box-shadow: 0 4px 14px rgba(45,107,255,0.12); transform: translateY(-1px); }
+  .act-item:active { transform: translateY(0); }
+  .act-item .a-icon { font-size: 18px; flex-shrink: 0; }
+  .act-item .a-info { min-width: 0; flex: 1; }
+  .act-item .a-name { font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .act-item .a-desc { font-size: 10px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .act-item .a-go { color: #c2ccda; font-size: 15px; flex-shrink: 0; transition: transform .12s; }
+  .act-item:hover .a-go { transform: translateX(2px); color: var(--primary); }
+
+  .other-hint { font-size: 10px; color: var(--ink-3); font-weight: 400; }
+  .other-scene {
+    display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+    background: #FAFBFC; border: 1px solid transparent; border-radius: 10px;
+    cursor: pointer; transition: background .12s, border-color .12s, transform .12s;
+  }
+  .other-scene:hover { background: var(--primary-soft); border-color: #D6E4FF; transform: translateX(2px); }
+  .other-scene:active { transform: translateX(0); }
+  .other-scene .o-badge { font-size: 9px; padding: 2px 7px; border-radius: 6px; font-weight: 700; flex-shrink: 0; }
+  .other-scene .o-badge.gb { background: #E8F7EE; color: var(--ok); }
+  .other-scene .o-badge.ct { background: #FFF4E5; color: var(--warn); }
+  .other-scene .o-badge.up { background: var(--primary-soft); color: var(--primary); }
+  .other-scene .o-name { font-size: 13px; font-weight: 600; flex: 1; }
+  .other-scene .o-bars { display: flex; gap: 2px; width: 46px; flex-shrink: 0; align-items: center; }
+  .other-scene .o-bars .seg { height: 4px; border-radius: 2px; }
+  .other-scene .o-score { font-size: 17px; font-weight: 800; flex-shrink: 0; }
+  .other-scene .o-score.medium { color: var(--warn); }
+  .other-scene .o-score.weak { color: var(--ink-3); }
+  .other-scene .o-score.strong { color: var(--score); }
+
+  .actions { display: flex; gap: 8px; margin-top: auto; }
+  .abtn {
+    padding: 9px 12px; border-radius: 9px; font-size: 12px; font-weight: 600;
+    cursor: pointer; border: 1.5px solid transparent; transition: all .12s;
+    text-align: center; flex: 1;
+  }
+  .abtn.primary { background: linear-gradient(135deg, var(--primary), var(--primary-d)); color: #fff; }
+  .abtn.primary:hover { filter: brightness(1.06); box-shadow: 0 6px 16px rgba(45,107,255,0.25); }
+  .abtn.primary.copied { background: linear-gradient(135deg, #2BB673, #1FA463); }
+  .abtn.ghost { background: #fff; color: var(--ink-2); border-color: #E8EBF0; }
+  .abtn.ghost:hover { border-color: #d3d9e2; color: var(--ink); }
+
+  /* APP 使用排名 Top5 */
+  .app-list { display: flex; flex-direction: column; gap: 7px; flex: 1; }
+  .app-item {
+    display: flex; align-items: center; gap: 9px; padding: 7px 9px;
+    background: #FAFBFC; border-radius: 10px; cursor: pointer;
+    transition: background .12s, transform .12s;
+  }
+  .app-item:hover { background: var(--primary-soft); transform: translateX(2px); }
+  .app-item:active { transform: translateX(0); }
+  .app-rank {
+    width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; color: #fff;
+  }
+  .app-rank.r1 { background: #F5A623; }
+  .app-rank.r2 { background: #9AA7B5; }
+  .app-rank.r3 { background: #CD7F32; }
+  .app-rank.r4, .app-rank.r5 { background: #B8C0CC; }
+  .app-ico { font-size: 16px; flex-shrink: 0; }
+  .app-name { flex: 1; min-width: 0; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.4); backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 16px; }
+  .modal-box { background: #fff; border-radius: 16px; padding: 22px; width: 100%; max-width: 360px; box-shadow: 0 20px 60px rgba(20,40,80,0.25); animation: pop .18s ease; }
+  @keyframes pop { from { transform: scale(.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .modal-box h3 { font-size: 15px; font-weight: 700; margin-bottom: 14px; text-align: center; }
+  .modal-box .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .modal-box .opt { padding: 10px 12px; border: 1.5px solid #EEF0F4; border-radius: 10px; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all .12s; }
+  .modal-box .opt:hover { border-color: var(--primary); background: #F8FAFF; }
+  .modal-box .cancel { margin-top: 12px; width: 100%; padding: 10px; border: none; background: #F4F5F7; border-radius: 10px; font-size: 12px; color: var(--ink-2); cursor: pointer; transition: background .12s; }
+  .modal-box .cancel:hover { background: #ECEEF2; }
+
+  .toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20,28,45,0.86); color: #fff; padding: 10px 22px; border-radius: 10px; font-size: 13px; z-index: 300; pointer-events: none; animation: fadeInOut 1.6s ease-in-out forwards; }
+  @keyframes fadeInOut { 0% { opacity: 0; transform: translate(-50%, -42%); } 12% { opacity: 1; transform: translate(-50%, -50%); } 75% { opacity: 1; } 100% { opacity: 0; } }
+
+  @media (max-width: 520px) { body { padding: 12px 8px; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+const LEVEL_LABEL = { strong: "强推荐", medium: "中度推荐", weak: "弱推荐" };
+
+const scenarios = [
+  {
+    id: "up", name: "超套升档", badge: "主推", bc: "up",
+    score: 92.5, level: "strong",
+    dims: [
+      { n: "倾向分", v: 95, c: "#1A6EFF" },
+      { n: "流量焦虑", v: 91, c: "#5B8DEF" },
+      { n: "资费接受", v: 88, c: "#7EC8E3" },
+      { n: "策略命中", v: 95, c: "#F5872B" },
+      { n: "运营调节", v: 80, c: "#A0D995" },
+    ],
+    reasons: [
+      { t: "近3月高饱和", c: "blue" },
+      { t: "超套>2次", c: "orange" },
+      { t: "宽带未领", c: "green" },
+    ],
+    script: "您好！您流量常超套，升档仅多19元享20G+免费宽带，超划算！",
+    acts: [
+      { n: "春季升档立减30元", d: "升档99元以上，首年每月减30", i: "💫" },
+      { n: "流量包买1送3", d: "订10GB连送4月", i: "📦" },
+    ],
+  },
+  {
+    id: "bb", name: "宽带新装", badge: "宽带", bc: "gb",
+    score: 78.3, level: "medium",
+    dims: [
+      { n: "倾向分", v: 82, c: "#2B9348" },
+      { n: "流量焦虑", v: 65, c: "#52B788" },
+      { n: "资费接受", v: 78, c: "#74C69D" },
+      { n: "策略命中", v: 90, c: "#F5872B" },
+      { n: "运营调节", v: 70, c: "#A0D995" },
+    ],
+    script: "您套餐含免费宽带未领，0元装200M光纤上门！",
+    acts: [{ n: "免费宽带激活", d: "0元安装上门", i: "🌐" }],
+  },
+  {
+    id: "ct", name: "合约续约", badge: "续约", bc: "ct",
+    score: 63.2, level: "weak",
+    dims: [
+      { n: "倾向分", v: 65, c: "#D48806" },
+      { n: "流量焦虑", v: 58, c: "#E5A63B" },
+      { n: "资费接受", v: 70, c: "#F0C060" },
+      { n: "策略命中", v: 62, c: "#F5872B" },
+      { n: "运营调节", v: 68, c: "#A0D995" },
+    ],
+    script: "合约快到期，续约保优惠价+赠月流量包！",
+    acts: [{ n: "续约专属礼包", d: "续12月赠月流量", i: "🎁" }],
+  },
+];
+
+const apps = [
+  { name: "抖音", ico: "🎬" },
+  { name: "微信", ico: "💬" },
+  { name: "哔哩哔哩", ico: "📺" },
+  { name: "王者荣耀", ico: "🎮" },
+  { name: "腾讯视频", ico: "📺" },
+];
+
+function App() {
+  const [activeId, setActiveId] = useState(scenarios[0].id);
+  const [showReject, setShowReject] = useState(false);
+  const [copied, setCopied] = useState("");
+  const [toast, setToast] = useState(null);
+
+  const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(null), 1500); };
+  const doCopy = (id, text) => {
+    if (navigator.clipboard) { navigator.clipboard.writeText(text).catch(() => {}); }
+    setCopied(id); showToast("话术已复制"); setTimeout(() => setCopied(""), 1500);
+  };
+
+  const main = scenarios.find(s => s.id === activeId);
+  const others = scenarios.filter(s => s.id !== activeId);
+
+  return (
+    <div className="viewport">
+      <div className="widget">
+        {/* 顶部条 */}
+        <div className="top-strip">
+          <div className="brand"><span className="icon">{"💡"}</span><h1>{"提示灵"}</h1></div>
+          <div className="sep" />
+          <div className="cust">
+            <div className="av">{"王"}</div>
+            <span className="nm">{"王女士"}</span>
+            <span className="ph">138****6789</span>
+          </div>
+          <div className="sep" />
+          <div className="tags">
+            <span className="t">{"高流量饱和"}</span>
+            <span className="t">{"超套2次"}</span>
+            <span className="t">{"ARPU 89元"}</span>
+            <span className="t">{"宽带未领"}</span>
+          </div>
+          <div className="total-score">
+            <span className="num">{main.score}</span>
+            <span className="unit">{"分"}</span>
+            <span className="lv">{LEVEL_LABEL[main.level]}</span>
+          </div>
+        </div>
+
+        {/* 主体：横向四栏 */}
+        <div className="body">
+          {/* 左：评分 */}
+          <div className="col col-score">
+            <div className="sec-title"><span className="dot" />{"主推场景评分"}</div>
+            <div className="main-scene">
+              <span className="badge">{main.badge}</span>
+              <span className="name">{main.name}</span>
+            </div>
+            <div className="score-row">
+              <span className="big">{main.score}</span>
+              <span className="sm">{"分"}</span>
+            </div>
+            <div className="dims">
+              {main.dims.map((d, i) => (
+                <div className="dim" key={i}>
+                  <span className="d-name">{d.n}</span>
+                  <div className="d-bar"><div className="fill" style={{ width: d.v + '%', background: d.c }} /></div>
+                  <span className="d-val">{d.v}</span>
+                </div>
+              ))}
+            </div>
+            <div className="reason-row">
+              {main.reasons.map((r, i) => <span className={`r ${r.c}`} key={i}>{r.t}</span>)}
+            </div>
+          </div>
+
+          {/* 中：话术 + 活动 */}
+          <div className="col col-script">
+            <div className="sec-title"><span className="dot" />{"引导话术"}</div>
+            <div className="script-box">{main.script}</div>
+            <div className="act-label">{"🎯 适配活动"}</div>
+            <div className="act-list">
+              {main.acts.map((a, i) => (
+                <div className="act-item" key={i} onClick={() => showToast(`已选活动：${a.n}`)}>
+                  <span className="a-icon">{a.i}</span>
+                  <div className="a-info">
+                    <div className="a-name">{a.n}</div>
+                    <div className="a-desc">{a.d}</div>
+                  </div>
+                  <span className="a-go">{"›"}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 右一：其他场景 + 操作 */}
+          <div className="col col-other">
+            <div className="sec-title"><span className="dot" />{"其他匹配场景"} <span className="other-hint">（点击切换）</span></div>
+            {others.map(s => (
+              <div className="other-scene" key={s.id} onClick={() => setActiveId(s.id)}>
+                <span className={`o-badge ${s.bc}`}>{s.badge}</span>
+                <span className="o-name">{s.name}</span>
+                <div className="o-bars">{s.dims.map((d,i) => <div key={i} className="seg" style={{ flex: d.v, background: d.c }} />)}</div>
+                <span className={`o-score ${s.level}`}>{s.score}</span>
+              </div>
+            ))}
+            <div className="actions">
+              <button className={`abtn primary ${copied === "main" ? "copied" : ""}`} onClick={() => doCopy("main", main.script)}>
+                {copied === "main" ? "✓ 已复制" : "📋 复制话术"}
+              </button>
+              <button className="abtn ghost" onClick={() => setShowReject(true)}>{"拒绝"}</button>
+            </div>
+          </div>
+
+          {/* 右二：当月流量使用 Top5 */}
+          <div className="col col-app">
+            <div className="sec-title"><span className="dot" />{"当月流量使用 Top5"}</div>
+            <div className="app-list">
+              {apps.map((a, i) => (
+                <div className="app-item" key={i} onClick={() => showToast(`查看 APP：${a.name}`)}>
+                  <span className={`app-rank r${i + 1}`}>{i + 1}</span>
+                  <span className="app-ico">{a.ico}</span>
+                  <div className="app-name">{a.name}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {showReject && (
+        <div className="modal-overlay" onClick={() => setShowReject(false)}>
+          <div className="modal-box" onClick={e => e.stopPropagation()}>
+            <h3>{"请选择拒绝原因"}</h3>
+            <div className="opts">
+              {[
+                { i: "💰", t: "价格高" },
+                { i: "🙅", t: "不需要" },
+                { i: "✅", t: "已办理" },
+                { i: "⏰", t: "赶时间" },
+                { i: "⚠️", t: "IOP客群不准" },
+              ].map((r, i) => (
+                <div className="opt" key={i} onClick={() => { setShowReject(false); showToast(`已记录：${r.t}`); }}>
+                  <span>{r.i}</span><span>{r.t}</span>
+                </div>
+              ))}
+            </div>
+            <button className="cancel" onClick={() => setShowReject(false)}>{"取消"}</button>
+          </div>
+        </div>
+      )}
+      {toast && <div className="toast">{toast}</div>}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
