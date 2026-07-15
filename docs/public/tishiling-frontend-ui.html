@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>提示灵 - 精准营销推荐</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; }
+  body { font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif; background: #1B2838; color: #1a1a1a; }
+
+  .viewport { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; background: #1B2838; }
+
+  /* 宽版窄高 — 横向条状布局 */
+  .widget { width: 1080px; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.25); overflow: hidden; display: flex; flex-direction: column; }
+
+  /* ===== 顶部条：品牌 + 客户 + 综合分 ===== */
+  .top-strip { background: linear-gradient(135deg, #0B3D91 0%, #1A6EFF 70%, #3B8BFF 100%); padding: 8px 16px; display: flex; align-items: center; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .brand .icon { font-size: 16px; }
+  .brand h1 { font-size: 15px; font-weight: 700; color: #fff; letter-spacing: 1px; }
+  .sep { width: 1px; height: 18px; background: rgba(255,255,255,0.2); flex-shrink: 0; }
+  .cust { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .cust .av { width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: 600; }
+  .cust .nm { font-size: 13px; color: #fff; font-weight: 600; }
+  .cust .ph { font-size: 11px; color: rgba(255,255,255,0.6); }
+  .tags { display: flex; gap: 4px; flex: 1; }
+  .tags .t { font-size: 9px; padding: 1px 6px; border-radius: 8px; background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.8); white-space: nowrap; }
+  .total-score { display: flex; align-items: baseline; gap: 4px; flex-shrink: 0; margin-left: auto; }
+  .total-score .num { font-size: 28px; font-weight: 800; color: #fff; line-height: 1; }
+  .total-score .unit { font-size: 10px; color: rgba(255,255,255,0.6); }
+  .total-score .lv { font-size: 10px; padding: 1px 7px; border-radius: 8px; background: rgba(255,255,255,0.2); color: #fff; font-weight: 600; margin-left: 4px; }
+
+  /* ===== 主体区域：横向三块 ===== */
+  .body { display: flex; flex: 1; min-height: 0; }
+
+  /* 左：主推场景评分 + 维度 */
+  .col-score { width: 195px; flex-shrink: 0; padding: 10px 12px; border-right: 1px solid #F0F0F0; display: flex; flex-direction: column; gap: 6px; }
+  .main-scene { display: flex; align-items: center; gap: 6px; }
+  .main-scene .badge { font-size: 9px; padding: 1px 6px; border-radius: 4px; background: linear-gradient(135deg, #1A6EFF, #0050DB); color: #fff; font-weight: 600; }
+  .main-scene .name { font-size: 14px; font-weight: 700; }
+  .score-row { display: flex; align-items: baseline; gap: 4px; }
+  .score-row .big { font-size: 34px; font-weight: 800; color: #E8383E; line-height: 1; }
+  .score-row .sm { font-size: 10px; color: #999; }
+  .dims { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+  .dim { display: flex; align-items: center; gap: 5px; }
+  .dim .d-name { font-size: 10px; color: #888; width: 52px; flex-shrink: 0; text-align: right; }
+  .dim .d-bar { flex: 1; height: 4px; background: #F0F2F5; border-radius: 2px; overflow: hidden; }
+  .dim .d-bar .fill { height: 100%; border-radius: 2px; }
+  .dim .d-val { font-size: 10px; font-weight: 600; color: #555; width: 22px; text-align: right; flex-shrink: 0; }
+  .reason-row { display: flex; gap: 3px; flex-wrap: wrap; }
+  .reason-row .r { font-size: 9px; padding: 1px 5px; border-radius: 3px; }
+  .reason-row .r.blue { background: #F0F5FF; color: #1A6EFF; }
+  .reason-row .r.orange { background: #FFF7E6; color: #D48806; }
+  .reason-row .r.green { background: #F0FFF0; color: #2B9348; }
+
+  /* 中：话术 + 活动 */
+  .col-script { flex: 1; padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .script-label { font-size: 10px; color: #999; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+  .script-box { background: #F8FAFF; border-left: 3px solid #1A6EFF; padding: 7px 10px; border-radius: 4px; font-size: 13px; line-height: 1.7; color: #333; flex-shrink: 0; }
+  .act-label { font-size: 10px; color: #999; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+  .act-list { display: flex; gap: 6px; flex: 1; align-items: flex-start; }
+  .act-item { display: flex; align-items: center; gap: 6px; padding: 5px 10px; background: #F0F8FF; border: 1px solid #E0EEFF; border-radius: 6px; cursor: pointer; transition: all 0.12s; flex: 1; }
+  .act-item:hover { background: #E5F1FF; border-color: #B8D8FF; }
+  .act-item .a-icon { font-size: 14px; flex-shrink: 0; }
+  .act-item .a-info { min-width: 0; flex: 1; }
+  .act-item .a-name { font-size: 11px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .act-item .a-desc { font-size: 9px; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .act-item .a-go { color: #ccc; font-size: 13px; flex-shrink: 0; }
+
+  /* 右：其他场景 + 操作 */
+  .col-other { width: 255px; flex-shrink: 0; padding: 10px 12px; border-left: 1px solid #F0F0F0; display: flex; flex-direction: column; gap: 5px; }
+  .other-title { font-size: 10px; color: #999; font-weight: 600; }
+  .other-scene { display: flex; align-items: center; gap: 6px; padding: 5px 8px; background: #FAFBFC; border-radius: 6px; cursor: pointer; transition: background 0.12s; }
+  .other-scene:hover { background: #F0F5FF; }
+  .other-scene .o-badge { font-size: 8px; padding: 1px 5px; border-radius: 3px; font-weight: 600; flex-shrink: 0; }
+  .other-scene .o-badge.gb { background: #E6F7E6; color: #2B9348; }
+  .other-scene .o-badge.ct { background: #FFF7E6; color: #D48806; }
+  .other-scene .o-name { font-size: 12px; font-weight: 600; flex: 1; }
+  .other-scene .o-score { font-size: 16px; font-weight: 800; flex-shrink: 0; }
+  .other-scene .o-score.medium { color: #F5872B; }
+  .other-scene .o-score.weak { color: #999; }
+  .other-scene .o-bars { display: flex; gap: 1px; width: 40px; flex-shrink: 0; }
+  .other-scene .o-bars .seg { height: 3px; border-radius: 1px; }
+
+  /* 底部操作条 */
+  .actions { display: flex; gap: 6px; margin-top: auto; }
+  .abtn { padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; border: 1.5px solid; transition: all 0.12s; text-align: center; flex: 1; }
+  .abtn.primary { background: linear-gradient(135deg, #1A6EFF, #0050DB); color: #fff; border-color: transparent; }
+  .abtn.primary:hover { filter: brightness(1.1); }
+  .abtn.primary.copied { background: linear-gradient(135deg, #52C41A, #389E0D); }
+  .abtn.ghost { background: #fff; color: #999; border-color: #E8E8E8; }
+  .abtn.ghost:hover { border-color: #ccc; color: #666; }
+
+  /* Modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; z-index: 200; }
+  .modal-box { background: #fff; border-radius: 12px; padding: 20px; width: 340px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
+  .modal-box h3 { font-size: 14px; font-weight: 700; margin-bottom: 12px; text-align: center; }
+  .modal-box .opts { display: flex; flex-wrap: wrap; gap: 6px; }
+  .modal-box .opt { padding: 8px 12px; border: 1.5px solid #F0F0F0; border-radius: 6px; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px; flex: 1; min-width: 120px; }
+  .modal-box .opt:hover { border-color: #1A6EFF; background: #F8FAFF; }
+  .modal-box .cancel { margin-top: 10px; width: 100%; padding: 8px; border: none; background: #F5F5F5; border-radius: 6px; font-size: 12px; color: #999; cursor: pointer; }
+
+  .toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.78); color: #fff; padding: 8px 20px; border-radius: 6px; font-size: 13px; z-index: 300; pointer-events: none; animation: fadeInOut 1.5s ease-in-out forwards; }
+  @keyframes fadeInOut { 0% { opacity: 0; } 12% { opacity: 1; } 75% { opacity: 1; } 100% { opacity: 0; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+const scenarios = [
+  {
+    id: "up", name: "\u8d85\u5957\u5347\u6863", badge: "\u4e3b\u63a8", badgeStyle: { background: "linear-gradient(135deg,#1A6EFF,#0050DB)", color: "#fff" },
+    score: 92.5, level: "strong",
+    dims: [
+      { n: "\u503e\u5411\u5206", v: 95, c: "#1A6EFF" },
+      { n: "\u6d41\u91cf\u7126\u8651", v: 91, c: "#5B8DEF" },
+      { n: "\u8d44\u8d39\u627f\u53d7", v: 88, c: "#7EC8E3" },
+      { n: "\u7b56\u7565\u547d\u4e2d", v: 95, c: "#F5872B" },
+      { n: "\u8fd0\u8425\u8c03\u8282", v: 80, c: "#A0D995" },
+    ],
+    reasons: [
+      { t: "\u8fd13\u6708\u9ad8\u9971\u548c", c: "blue" },
+      { t: "\u8d85\u5957\u22652\u6b21", c: "orange" },
+      { t: "\u5bbd\u5e26\u672a\u9886", c: "green" },
+    ],
+    script: "\u60a8\u597d\uff01\u60a8\u6d41\u91cf\u5e38\u8d85\u5957\uff0c\u5347\u6863\u4ec5\u591a19\u5143\u4eab20G+\u514d\u8d39\u5bbd\u5e26\uff0c\u8d85\u5212\u7b97\uff01",
+    acts: [
+      { n: "\u6625\u5b63\u5347\u6863\u7acb\u51cf30\u5143", d: "\u5347\u686399\u5143\u4ee5\u4e0a\uff0c\u9996\u5e74\u6bcf\u6708\u51cf30", i: "\ud83c\udfab" },
+      { n: "\u6d41\u91cf\u5305\u4e701\u90013", d: "\u8ba210GB\u8fde\u90014\u6708", i: "\ud83d\udce6" },
+    ],
+  },
+  {
+    id: "bb", name: "\u5bbd\u5e26\u65b0\u88c5", badge: "\u5bbd\u5e26", bc: "gb",
+    score: 78.3, level: "medium",
+    dims: [
+      { n: "\u503e\u5411\u5206", v: 82, c: "#2B9348" },
+      { n: "\u6d41\u91cf\u7126\u8651", v: 65, c: "#52B788" },
+      { n: "\u8d44\u8d39\u627f\u53d7", v: 78, c: "#74C69D" },
+      { n: "\u7b56\u7565\u547d\u4e2d", v: 90, c: "#F5872B" },
+      { n: "\u8fd0\u8425\u8c03\u8282", v: 70, c: "#A0D995" },
+    ],
+    script: "\u60a8\u5957\u9910\u542b\u514d\u8d39\u5bbd\u5e26\u672a\u9886\uff0c0\u5143\u88c5200M\u5149\u7ea4\u4e0a\u95e8\uff01",
+    acts: [{ n: "\u514d\u8d39\u5bbd\u5e26\u6fc0\u6d3b", d: "0\u5143\u5b89\u88c5\u4e0a\u95e8", i: "\ud83c\udf10" }],
+  },
+  {
+    id: "ct", name: "\u5408\u7ea6\u7eed\u7ea6", badge: "\u7eed\u7ea6", bc: "ct",
+    score: 63.2, level: "weak",
+    dims: [
+      { n: "\u503e\u5411\u5206", v: 65, c: "#D48806" },
+      { n: "\u6d41\u91cf\u7126\u8651", v: 58, c: "#E5A63B" },
+      { n: "\u8d44\u8d39\u627f\u53d7", v: 70, c: "#F0C060" },
+      { n: "\u7b56\u7565\u547d\u4e2d", v: 62, c: "#F5872B" },
+      { n: "\u8fd0\u8425\u8c03\u8282", v: 68, c: "#A0D995" },
+    ],
+    script: "\u5408\u7ea6\u5feb\u5230\u671f\uff0c\u7eed\u7ea6\u4fdd\u4f18\u60e0\u4ef7+\u8d603\u6708\u6d41\u91cf\u5305\uff01",
+    acts: [{ n: "\u7eed\u7ea6\u4e13\u5c5e\u793c\u5305", d: "\u7eed12\u6708\u8d603\u6708\u6d41\u91cf", i: "\ud83c\udf81" }],
+  },
+];
+
+function App() {
+  const [showReject, setShowReject] = useState(false);
+  const [copied, setCopied] = useState("");
+  const [toast, setToast] = useState(null);
+
+  const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(null), 1500); };
+  const doCopy = (id, text) => { setCopied(id); showToast("\u8bdd\u672f\u5df2\u590d\u5236"); setTimeout(() => setCopied(""), 1500); };
+
+  const main = scenarios[0];
+  const others = scenarios.slice(1);
+
+  return (
+    <div className="viewport">
+      <div className="widget">
+        {/* 顶部条 */}
+        <div className="top-strip">
+          <div className="brand"><span className="icon">{"\ud83d\udca1"}</span><h1>{"\u63d0\u793a\u7075"}</h1></div>
+          <div className="sep" />
+          <div className="cust">
+            <div className="av">{"\u738b"}</div>
+            <span className="nm">{"\u738b\u5973\u58eb"}</span>
+            <span className="ph">138****6789</span>
+          </div>
+          <div className="sep" />
+          <div className="tags">
+            <span className="t">{"\u9ad8\u6d41\u91cf\u9971\u548c"}</span>
+            <span className="t">{"\u8d85\u59572\u6b21"}</span>
+            <span className="t">ARPU 89\u5143</span>
+            <span className="t">{"\u5bbd\u5e26\u672a\u9886"}</span>
+          </div>
+          <div className="total-score">
+            <span className="num">92.5</span>
+            <span className="unit">{"\u5206"}</span>
+            <span className="lv">{"\u5f3a\u63a8\u8350"}</span>
+          </div>
+        </div>
+
+        {/* 主体 */}
+        <div className="body">
+          {/* 左：评分 */}
+          <div className="col-score">
+            <div className="main-scene">
+              <span className="badge" style={main.badgeStyle}>{main.badge}</span>
+              <span className="name">{main.name}</span>
+            </div>
+            <div className="score-row">
+              <span className="big">{main.score}</span>
+              <span className="sm">{"\u5206"}</span>
+            </div>
+            <div className="dims">
+              {main.dims.map((d, i) => (
+                <div className="dim" key={i}>
+                  <span className="d-name">{d.n}</span>
+                  <div className="d-bar"><div className="fill" style={{ width: d.v + '%', background: d.c }} /></div>
+                  <span className="d-val">{d.v}</span>
+                </div>
+              ))}
+            </div>
+            <div className="reason-row">
+              {main.reasons.map((r, i) => <span className={`r ${r.c}`} key={i}>{r.t}</span>)}
+            </div>
+          </div>
+
+          {/* 中：话术 + 活动 */}
+          <div className="col-script">
+            <div className="script-label">{"\ud83d\udcac \u5f15\u5bfc\u8bdd\u672f"}</div>
+            <div className="script-box">{main.script}</div>
+            <div className="act-label">{"\ud83c\udfaf \u9002\u914d\u6d3b\u52a8"}</div>
+            <div className="act-list">
+              {main.acts.map((a, i) => (
+                <div className="act-item" key={i}>
+                  <span className="a-icon">{a.i}</span>
+                  <div className="a-info">
+                    <div className="a-name">{a.n}</div>
+                    <div className="a-desc">{a.d}</div>
+                  </div>
+                  <span className="a-go">{"\u203a"}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 右：其他场景 + 操作 */}
+          <div className="col-other">
+            <div className="other-title">{"\u5176\u4ed6\u5339\u914d\u573a\u666f"}</div>
+            {others.map(s => (
+              <div className="other-scene" key={s.id}>
+                <span className={`o-badge ${s.bc}`}>{s.badge}</span>
+                <span className="o-name">{s.name}</span>
+                <div className="o-bars">{s.dims.map((d,i) => <div key={i} className="seg" style={{ flex: d.v, background: d.c }} />)}</div>
+                <span className={`o-score ${s.level === "medium" ? "medium" : "weak"}`}>{s.score}</span>
+              </div>
+            ))}
+            <div className="actions">
+              <button className={`abtn primary ${copied === "main" ? "copied" : ""}`} onClick={() => doCopy("main", main.script)}>
+                {copied === "main" ? "\u2713 \u5df2\u590d\u5236" : "\ud83d\udccb \u590d\u5236\u8bdd\u672f"}
+              </button>
+              <button className="abtn ghost" onClick={() => setShowReject(true)}>{"\u62d2\u7edd"}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {showReject && (
+        <div className="modal-overlay" onClick={() => setShowReject(false)}>
+          <div className="modal-box" onClick={e => e.stopPropagation()}>
+            <h3>{"\u8bf7\u9009\u62e9\u62d2\u7edd\u539f\u56e0"}</h3>
+            <div className="opts">
+              {[
+                { i: "\ud83d\udcb0", t: "\u4ef7\u683c\u9ad8" },
+                { i: "\ud83d\ude45", t: "\u4e0d\u9700\u8981" },
+                { i: "\u2705", t: "\u5df2\u529e\u7406" },
+                { i: "\u23f0", t: "\u8d76\u65f6\u95f4" },
+                { i: "\u26a0\ufe0f", t: "IOP\u5ba2\u7fa4\u4e0d\u51c6" },
+              ].map((r, i) => (
+                <div className="opt" key={i} onClick={() => { setShowReject(false); showToast(`\u5df2\u8bb0\u5f55\uff1a${r.t}`); }}>
+                  <span>{r.i}</span><span>{r.t}</span>
+                </div>
+              ))}
+            </div>
+            <button className="cancel" onClick={() => setShowReject(false)}>{"\u53d6\u6d88"}</button>
+          </div>
+        </div>
+      )}
+      {toast && <div className="toast">{toast}</div>}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
