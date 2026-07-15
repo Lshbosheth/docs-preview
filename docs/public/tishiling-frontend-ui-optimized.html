@@ -87,7 +87,7 @@
   .col-score { flex: 0 1 200px; min-width: 170px; }
   .col-script { flex: 2 1 340px; min-width: 280px; }
   .col-other { flex: 0 1 250px; min-width: 210px; }
-  .col-app { flex: 0 1 250px; min-width: 210px; }
+  .col-app { flex: 0 1 320px; min-width: 280px; }
 
   .sec-title { font-size: 11px; color: var(--ink-3); font-weight: 700; display: flex; align-items: center; gap: 5px; letter-spacing: .3px; }
   .sec-title .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); }
@@ -166,10 +166,14 @@
   .abtn.ghost { background: #fff; color: var(--ink-2); border-color: #E8EBF0; }
   .abtn.ghost:hover { border-color: #d3d9e2; color: var(--ink); }
 
-  /* APP 使用排名 Top5 */
-  .app-list { display: flex; flex-direction: column; gap: 7px; flex: 1; }
+  /* APP 流量使用 Top5（上月 / 上上月 左右并排） */
+  .app-cols { display: flex; gap: 12px; flex: 1; min-width: 0; }
+  .app-sub { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  .sub-title { font-size: 11px; font-weight: 700; color: var(--ink-2); display: flex; align-items: center; gap: 6px; }
+  .sub-title::before { content: ""; width: 3px; height: 11px; border-radius: 2px; background: var(--primary); }
+  .app-list { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
   .app-item {
-    display: flex; align-items: center; gap: 9px; padding: 7px 9px;
+    display: flex; align-items: center; gap: 7px; padding: 6px 8px;
     background: #FAFBFC; border-radius: 10px; cursor: pointer;
     transition: background .12s, transform .12s;
   }
@@ -185,7 +189,7 @@
   .app-rank.r3 { background: #CD7F32; }
   .app-rank.r4, .app-rank.r5 { background: #B8C0CC; }
   .app-ico { font-size: 16px; flex-shrink: 0; }
-  .app-name { flex: 1; min-width: 0; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .app-name { flex: 1; min-width: 0; font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* Modal */
   .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.4); backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 16px; }
@@ -261,12 +265,19 @@ const scenarios = [
   },
 ];
 
-const apps = [
+const appsLast = [
   { name: "抖音", ico: "🎬" },
   { name: "微信", ico: "💬" },
   { name: "哔哩哔哩", ico: "📺" },
   { name: "王者荣耀", ico: "🎮" },
   { name: "腾讯视频", ico: "📺" },
+];
+const appsPrev = [
+  { name: "微信", ico: "💬" },
+  { name: "抖音", ico: "🎬" },
+  { name: "淘宝", ico: "🛒" },
+  { name: "王者荣耀", ico: "🎮" },
+  { name: "小红书", ico: "📕" },
 ];
 
 function App() {
@@ -375,17 +386,36 @@ function App() {
             </div>
           </div>
 
-          {/* 右二：当月流量使用 Top5 */}
+          {/* 右二：流量使用 Top5（上月 / 上上月 左右并排） */}
           <div className="col col-app">
-            <div className="sec-title"><span className="dot" />{"当月流量使用 Top5"}</div>
-            <div className="app-list">
-              {apps.map((a, i) => (
-                <div className="app-item" key={i} onClick={() => showToast(`查看 APP：${a.name}`)}>
-                  <span className={`app-rank r${i + 1}`}>{i + 1}</span>
-                  <span className="app-ico">{a.ico}</span>
-                  <div className="app-name">{a.name}</div>
+            <div className="sec-title"><span className="dot" />{"流量使用 Top5"}</div>
+
+            <div className="app-cols">
+              <div className="app-sub">
+                <div className="sub-title">{"上月"}</div>
+                <div className="app-list">
+                  {appsLast.map((a, i) => (
+                    <div className="app-item" key={i} onClick={() => showToast(`查看 APP：${a.name}`)}>
+                      <span className={`app-rank r${i + 1}`}>{i + 1}</span>
+                      <span className="app-ico">{a.ico}</span>
+                      <div className="app-name">{a.name}</div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              <div className="app-sub">
+                <div className="sub-title">{"上上月"}</div>
+                <div className="app-list">
+                  {appsPrev.map((a, i) => (
+                    <div className="app-item" key={i} onClick={() => showToast(`查看 APP：${a.name}`)}>
+                      <span className={`app-rank r${i + 1}`}>{i + 1}</span>
+                      <span className="app-ico">{a.ico}</span>
+                      <div className="app-name">{a.name}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
