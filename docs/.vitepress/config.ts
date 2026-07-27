@@ -180,6 +180,25 @@ export default defineConfig({
           },
           { text: "React 低代码组件配置页设计", link: "/study/low-code-component-config-page-design" },
           { text: "React 学习路线", link: "/study/react-learning-roadmap" },
+          {
+            text: "React 低代码配置页实战课",
+            collapsed: false,
+            items: [
+              { text: "课程首页", link: "/study/react-lowcode-course/" },
+              { text: "Day 1 项目搭建 + 写死卡片", link: "/study/react-lowcode-course/day-01-setup" },
+              { text: "Day 2 组件拆分 + props 传递", link: "/study/react-lowcode-course/day-02-components-props" },
+              { text: "Day 3 useState 入门：用 config 驱动预览", link: "/study/react-lowcode-course/day-03-config-state" },
+              { text: "Day 4 受控表单：修改标题实时更新", link: "/study/react-lowcode-course/day-04-controlled-form" },
+              { text: "Day 5 数组操作：字段列表增删改", link: "/study/react-lowcode-course/day-05-field-list" },
+              { text: "Day 6 条件渲染 + 显隐控制", link: "/study/react-lowcode-course/day-06-conditional-render" },
+              { text: "Day 7 样式配置：动态 className + CSS 变量", link: "/study/react-lowcode-course/day-07-style-config" },
+              { text: "Day 8 操作按钮配置", link: "/study/react-lowcode-course/day-08-action-buttons" },
+              { text: "Day 9 JSON 预览：useMemo + 格式化输出", link: "/study/react-lowcode-course/day-09-json-viewer" },
+              { text: "Day 10 自定义 Hook：提取复用逻辑", link: "/study/react-lowcode-course/day-10-custom-hook" },
+              { text: "Day 11 useCallback + React.memo 性能优化", link: "/study/react-lowcode-course/day-11-memo-callback" },
+              { text: "Day 12 代码整理 + 最终验收", link: "/study/react-lowcode-course/day-12-final-review" }
+            ]
+          },
           { text: "Go 学习启动计划", link: "/study/go-learning-plan" }
         ]
       },
