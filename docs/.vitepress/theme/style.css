@@ -569,23 +569,34 @@ html.immersive-mode .VPLocalNav {
 }
 
 html.immersive-mode .VPContent {
+  padding: 0 !important;
+}
+
+html.immersive-mode .VPDoc {
   padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: max(5%, 48px) !important;
+  padding-right: max(5%, 48px) !important;
 }
 
 html.immersive-mode .VPDoc .container {
   max-width: 100% !important;
-  padding-left: 24px !important;
-  padding-right: 24px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+html.immersive-mode .VPDoc .aside {
+  max-width: 224px !important;
 }
 
 html.immersive-mode .VPDoc .content-container {
-  max-width: 940px;
-  margin: 0 auto;
+  max-width: none !important;
+  margin: 0 !important;
 }
 
 html.immersive-mode .VPDoc .content {
-  padding-top: 2.4rem;
-  padding-bottom: 4rem;
+  max-width: none !important;
+  padding: 2.4rem 0 4rem !important;
   font-size: 1.45rem;
   line-height: 1.95;
 }
@@ -615,9 +626,14 @@ html.immersive-mode .VPDoc .content h3 {
     display: none;
   }
 
-  html.immersive-mode .VPDoc .container {
+  html.immersive-mode .VPDoc {
     padding-left: 16px !important;
     padding-right: 16px !important;
+  }
+
+  html.immersive-mode .VPDoc .container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 }
 
