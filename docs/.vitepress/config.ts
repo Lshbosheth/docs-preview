@@ -179,6 +179,7 @@ export default defineConfig({
             ]
           },
           { text: "React 低代码组件配置页设计", link: "/study/low-code-component-config-page-design" },
+          { text: "React 学习路线", link: "/study/react-learning-roadmap" },
           { text: "Go 学习启动计划", link: "/study/go-learning-plan" }
         ]
       },
