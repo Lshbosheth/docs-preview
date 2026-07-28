@@ -586,8 +586,9 @@ html.immersive-mode .VPDoc .container {
 }
 
 html.immersive-mode .VPDoc .aside {
-  max-width: 224px !important;
-  padding-left: 36px !important;
+  max-width: 256px !important;
+  margin-left: 24px !important;
+  padding-left: 48px !important;
 }
 
 html.immersive-mode .VPDoc .content-container {
