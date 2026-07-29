@@ -180,6 +180,8 @@ export default defineConfig({
           },
           { text: "React 低代码组件配置页设计", link: "/study/low-code-component-config-page-design" },
           { text: "React 学习路线", link: "/study/react-learning-roadmap" },
+          { text: "React 查漏补缺清单", link: "/study/react-skill-gaps-plan" },
+          { text: "React 低代码进阶系列总规划", link: "/study/react-lowcode-series-plan" },
           {
             text: "React 低代码配置页实战课",
             collapsed: false,
@@ -197,6 +199,38 @@ export default defineConfig({
               { text: "Day 10 自定义 Hook：提取复用逻辑", link: "/study/react-lowcode-course/day-10-custom-hook" },
               { text: "Day 11 useCallback + React.memo 性能优化", link: "/study/react-lowcode-course/day-11-memo-callback" },
               { text: "Day 12 代码整理 + 最终验收", link: "/study/react-lowcode-course/day-12-final-review" }
+            ]
+          },
+          { text: "React 低代码核心补全课 · 设计", link: "/study/react-lowcode-essentials-design" },
+          {
+            text: "React 低代码核心补全课",
+            collapsed: false,
+            items: [
+              { text: "系列首页", link: "/study/react-lowcode-essentials/" },
+              { text: "Day 1 useEffect 入门：配置自动保存", link: "/study/react-lowcode-essentials/day-01-useeffect-autosave" },
+              { text: "Day 2 依赖、清理与防抖保存", link: "/study/react-lowcode-essentials/day-02-useeffect-cleanup-debounce" },
+              { text: "Day 3 useRef：DOM 引用与可变值", link: "/study/react-lowcode-essentials/day-03-useref" },
+              { text: "Day 4 useReducer：收敛配置变更", link: "/study/react-lowcode-essentials/day-04-usereducer" },
+              { text: "Day 5 useContext：消灭 props 透传", link: "/study/react-lowcode-essentials/day-05-usecontext" },
+              { text: "Day 6 React Router：多页面应用", link: "/study/react-lowcode-essentials/day-06-router" },
+              { text: "Day 7 异步数据三态与竞态", link: "/study/react-lowcode-essentials/day-07-async-data" },
+              { text: "Day 8 错误边界与课程收尾", link: "/study/react-lowcode-essentials/day-08-error-boundary-review" }
+            ]
+          },
+          { text: "React 低代码进阶 · 自定义组件设计", link: "/study/react-lowcode-advanced-custom-components-design" },
+          {
+            text: "React 低代码进阶 · 自定义组件动态加载",
+            collapsed: false,
+            items: [
+              { text: "系列首页", link: "/study/react-lowcode-advanced-custom-components/" },
+              { text: "Day 1 组件上传与元数据解析", link: "/study/react-lowcode-advanced-custom-components/day-01-upload-and-meta" },
+              { text: "Day 2 动态编译 React 组件", link: "/study/react-lowcode-advanced-custom-components/day-02-dynamic-compile" },
+              { text: "Day 3 组件注册与实例化", link: "/study/react-lowcode-advanced-custom-components/day-03-register-and-render" },
+              { text: "Day 4 属性面板动态生成", link: "/study/react-lowcode-advanced-custom-components/day-04-dynamic-props-form" },
+              { text: "Day 5 多文件组件支持", link: "/study/react-lowcode-advanced-custom-components/day-05-multi-file-support" },
+              { text: "Day 6 依赖管理与外部库", link: "/study/react-lowcode-advanced-custom-components/day-06-external-dependencies" },
+              { text: "Day 7 沙箱与安全隔离", link: "/study/react-lowcode-advanced-custom-components/day-07-sandbox-isolation" },
+              { text: "Day 8 版本管理与热更新", link: "/study/react-lowcode-advanced-custom-components/day-08-version-and-hmr" }
             ]
           },
           { text: "Go 学习启动计划", link: "/study/go-learning-plan" }
