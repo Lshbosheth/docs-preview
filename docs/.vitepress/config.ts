@@ -334,7 +334,6 @@ export default defineConfig({
           { text: "Python × DeepSeek Agent 课程设计", link: "/study/python-agent-course-design" },
           {
             text: "Python × DeepSeek Agent 实战课",
-            collapsed: false,
             items: [
               { text: "课程首页", link: "/study/python-agent-course/" },
               { text: "Day 1 终端输入与学习记录", link: "/study/python-agent-course/day-01-cli-input" },
@@ -360,7 +359,6 @@ export default defineConfig({
           { text: "React 低代码进阶系列总规划", link: "/study/react-lowcode-series-plan" },
           {
             text: "React 低代码配置页实战课",
-            collapsed: false,
             items: [
               { text: "课程首页", link: "/study/react-lowcode-course/" },
               { text: "Day 1 项目搭建 + 写死卡片", link: "/study/react-lowcode-course/day-01-setup" },
@@ -380,7 +378,6 @@ export default defineConfig({
           { text: "React 低代码核心补全课 · 设计", link: "/study/react-lowcode-essentials-design" },
           {
             text: "React 低代码核心补全课",
-            collapsed: false,
             items: [
               { text: "系列首页", link: "/study/react-lowcode-essentials/" },
               { text: "Day 1 useEffect 入门：配置自动保存", link: "/study/react-lowcode-essentials/day-01-useeffect-autosave" },
@@ -396,7 +393,6 @@ export default defineConfig({
           { text: "React 低代码进阶 · 自定义组件设计", link: "/study/react-lowcode-advanced-custom-components-design" },
           {
             text: "React 低代码进阶 · 自定义组件动态加载",
-            collapsed: false,
             items: [
               { text: "系列首页", link: "/study/react-lowcode-advanced-custom-components/" },
               { text: "Day 1 组件上传与元数据解析", link: "/study/react-lowcode-advanced-custom-components/day-01-upload-and-meta" },
