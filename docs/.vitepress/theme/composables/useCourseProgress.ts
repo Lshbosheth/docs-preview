@@ -23,7 +23,9 @@ async function loadProgress(): Promise<CourseProgress> {
     // 先尝试从 API 加载
     const response = await fetch(API_ENDPOINTS.courseProgress.export);
     if (response.ok) {
-      const data = await response.json();
+      const result = await response.json();
+      // 适配后端统一响应格式 {code, message, data}
+      const data = result.data || result;
       // 同步到 localStorage 作为缓存
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       return data;
