@@ -1,5 +1,5 @@
 // API 配置
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://lshbosheth-nest.vercel.app';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.lshbosheth.cn/api';
 
 export const API_ENDPOINTS = {
   courseProgress: {
