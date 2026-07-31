@@ -294,3 +294,5 @@ Day 2 讲透依赖数组和清理函数，用"防抖"优化自动保存——停
 ---
 
 **基础课最大的窟窿开始补了！`useEffect` 是 React 的分水岭，今天只是开胃，明天更关键。**
+
+<ProgressButton courseId="react-lowcode-essentials" dayId="day-01-useeffect-autosave" />

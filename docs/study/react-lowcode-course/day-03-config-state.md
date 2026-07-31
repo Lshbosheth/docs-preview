@@ -423,3 +423,5 @@ LowCodeConfigPage
   ├─ ConfigPanel（接收 config 和 setConfig）
   └─ PreviewPanel（接收 config）
 ```
+
+<ProgressButton courseId="react-lowcode-course" dayId="day-03-config-state" />

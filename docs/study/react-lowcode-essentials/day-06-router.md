@@ -300,3 +300,5 @@ Day 7 处理**异步数据**：把列表换成 mock API 拉取，认真对付 lo
 ---
 
 **你的项目从"一个页面"长成"一个应用"了。路由是所有真实前端项目的标配，今天这关很重要。**
+
+<ProgressButton courseId="react-lowcode-essentials" dayId="day-06-router" />

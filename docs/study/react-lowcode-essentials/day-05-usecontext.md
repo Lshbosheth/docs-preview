@@ -333,3 +333,5 @@ Day 6 引入 React Router：做"组件列表页 → 配置编辑页"两个页面
 ---
 
 **阶段二（状态升级）完成！reducer + context 这对组合拳，是你从"玩具项目"迈向"真实应用"的关键一跳。**
+
+<ProgressButton courseId="react-lowcode-essentials" dayId="day-05-usecontext" />

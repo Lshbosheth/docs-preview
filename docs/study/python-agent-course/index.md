@@ -5,6 +5,7 @@ title: Python × DeepSeek Agent 实战课
 # Python × DeepSeek Agent 实战课
 
 这是一套 **15 天、约 3 周** 的连续实操课。它不把每天写成互不相关的例子，而是让你每天修改**同一个命令行学习助手**：前一天的产出，就是后一天的输入。
+n<CourseProgressBar courseId="python-agent-course" :totalDays="15" />
 
 > 配套的施工说明见：[Python × DeepSeek Agent 实战课程设计](/study/python-agent-course-design)。本课程的拆分方式、连续项目线和验收标准都来自那份设计。
 

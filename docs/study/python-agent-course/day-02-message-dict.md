@@ -124,3 +124,5 @@ python main.py
 ## 留给明天的接口
 
 留下 `messages` 对话列表（里面至少有一条 `user` 消息）。Day 3 会读取 `messages[0]["content"]` 的文本，按关键词给它分类。
+
+<ProgressButton courseId="python-agent-course" dayId="day-02-message-dict" />

@@ -383,3 +383,5 @@ LowCodeConfigPage
 ```
 
 明天要在 `ConfigPanel` 里加 `FieldConfigList`，处理 `config.fields` 数组的增删改。
+
+<ProgressButton courseId="react-lowcode-course" dayId="day-04-controlled-form" />

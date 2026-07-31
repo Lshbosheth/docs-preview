@@ -357,3 +357,5 @@ Day 3 学 `useRef`：新增字段时自动聚焦到新输入框，还能优雅�
 ---
 
 **`useEffect` 的核心（依赖 + 清理）今天啃完了。这是整门课最硬的地基，后面都建在它上面。**
+
+<ProgressButton courseId="react-lowcode-essentials" dayId="day-02-useeffect-cleanup-debounce" />

@@ -125,3 +125,5 @@ python main.py
 ## 留给明天的接口
 
 留下两个**可导入的函数** `create_message` 和 `classify_message`。Day 5 会把它们搬进 `app/classifier.py`，由 `main.py` 通过 `from app.classifier import ...` 调用。
+
+<ProgressButton courseId="python-agent-course" dayId="day-04-functions" />

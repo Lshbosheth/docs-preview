@@ -353,3 +353,5 @@ Day 5 用 `useContext`：把 `config` 和 `dispatch` 放进 Context，任意深�
 ---
 
 **状态管理升级第一步完成。你现在写的是"能扩展"的代码，不是"能跑就行"的代码。**
+
+<ProgressButton courseId="react-lowcode-essentials" dayId="day-04-usereducer" />

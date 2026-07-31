@@ -204,6 +204,34 @@
   border-radius: 0 3px 3px 0;
 }
 
+/* ===== 课程进度圆点 ===== */
+/* 在课程页侧边栏的 day-XX 链接右侧显示进度状态小圆点 */
+.VPSidebar .VPSidebarItem .link[href*="/day-"]::after {
+  content: "";
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-left: auto;
+  border-radius: 50%;
+  background: var(--vp-c-text-3);
+  opacity: 0.3;
+  transition: background 200ms ease, opacity 200ms ease, box-shadow 200ms ease;
+}
+
+/* 进行中：黄色 + 光晕 */
+.VPSidebar .VPSidebarItem .link[href*="/day-"][data-progress="in-progress"]::after {
+  background: #f59e0b;
+  opacity: 1;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+/* 已完成：绿色 + 光晕 */
+.VPSidebar .VPSidebarItem .link[href*="/day-"][data-progress="completed"]::after {
+  background: #10b981;
+  opacity: 1;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
 /* ===== 导航栏 ===== */
 /* 默认主题把底色挂在 .content-body 上，只铺正文那一段，滚动后会露出一块
    不通宽的白色矩形。这里把分区底色全部清掉，改由 .wrapper 整条通宽出背景，

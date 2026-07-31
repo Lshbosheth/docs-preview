@@ -488,3 +488,5 @@ Day 7 会加沙箱：限制用户组件能访问的 API，恶意代码碰 `windo
 ---
 
 **外部依赖打通！自定义组件终于能用上真正的第三方生态了。**
+
+<ProgressButton courseId="react-lowcode-advanced-custom-components" dayId="day-06-external-dependencies" />

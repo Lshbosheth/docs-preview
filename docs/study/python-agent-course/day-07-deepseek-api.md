@@ -222,3 +222,5 @@ python main.py
 - DeepSeek 多轮对话：<https://api-docs.deepseek.com/guides/multi_round_chat>
 
 > 阶段提示：Day 7～12 是「LLM 应用」阶段——程序能调用模型并取得回复，但还没有「让模型自己决定下一步」的能力。
+
+<ProgressButton courseId="python-agent-course" dayId="day-07-deepseek-api" />

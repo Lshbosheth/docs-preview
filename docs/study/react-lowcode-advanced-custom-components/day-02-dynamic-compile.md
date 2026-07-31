@@ -565,3 +565,5 @@ Day 3 会实现组件的动态实例化和渲染，让自定义组件真正显�
 ---
 
 **核心突破完成！明天就能看到自定义组件在预览区渲染了。**
+
+<ProgressButton courseId="react-lowcode-advanced-custom-components" dayId="day-02-dynamic-compile" />

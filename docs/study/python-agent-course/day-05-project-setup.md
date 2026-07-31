@@ -169,3 +169,5 @@ python main.py
 ## 留给明天的接口
 
 留下一个**稳定的项目结构**：根目录 `main.py` + `app/`（含 `classifier.py`）。Day 6 会在 `app/` 里新增 `storage.py`，提供 `load_messages()` 和 `save_messages()`，把 `messages` 持久化到 `data/conversations.json`。
+
+<ProgressButton courseId="python-agent-course" dayId="day-05-project-setup" />

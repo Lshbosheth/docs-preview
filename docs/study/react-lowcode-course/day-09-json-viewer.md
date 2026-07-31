@@ -340,3 +340,5 @@ const handleUpdateAction = (id, updates) => {
 ```
 
 明天要提取成自定义 Hook，减少重复代码。
+
+<ProgressButton courseId="react-lowcode-course" dayId="day-09-json-viewer" />

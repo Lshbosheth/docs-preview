@@ -282,3 +282,5 @@ python main.py
 - LangGraph Graph API：<https://docs.langchain.com/oss/python/langgraph/graph-api>
 
 > 阶段提示：Day 13～15 是「初级 Agent」阶段。今天你完成了「能让模型选工具、有记忆、状态可观察」的最小 Agent——课程目标达成。
+
+<ProgressButton courseId="python-agent-course" dayId="day-15-state-checkpoint" />

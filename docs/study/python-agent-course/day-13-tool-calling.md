@@ -357,3 +357,5 @@ python main.py
 - DeepSeek Tool Calls：<https://api-docs.deepseek.com/guides/tool_calls>
 
 > 阶段提示：Day 13～15 是「初级 Agent」阶段。模型开始参与决策（选工具），程序负责执行与状态——这正是 Agent 与「纯 LLM 应用」的根本区别。
+
+<ProgressButton courseId="python-agent-course" dayId="day-13-tool-calling" />

@@ -242,3 +242,5 @@ python main.py
 - LangChain Messages：<https://docs.langchain.com/oss/python/langchain/messages>
 
 > 阶段提示：仍在「LLM 应用」阶段。Day 11～12 用 LangChain 让「输入更可控、输出更结构化」。
+
+<ProgressButton courseId="python-agent-course" dayId="day-11-langchain-chat" />

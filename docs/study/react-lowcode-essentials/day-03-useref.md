@@ -283,3 +283,5 @@ Day 4 用 `useReducer` 把所有配置变更收敛到一个 reducer，操作全�
 ---
 
 **阶段一（副作用与引用）完成！`useEffect` + `useRef` 这两个基础课漏掉的核心 Hook，你补齐了。**
+
+<ProgressButton courseId="react-lowcode-essentials" dayId="day-03-useref" />

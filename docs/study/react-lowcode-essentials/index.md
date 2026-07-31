@@ -5,6 +5,7 @@ title: React 低代码核心补全课
 # React 低代码核心补全课
 
 把基础课漏掉的那几块补齐：`useEffect`、`useRef`、`useContext` / `useReducer`、路由、异步数据、错误边界。
+n<CourseProgressBar courseId="react-lowcode-essentials" :totalDays="8" />
 
 不是新开一个项目，是**继续改造你基础课做的那个 InfoCard 配置页**，边加功能边学。
 

@@ -361,3 +361,5 @@ LowCodeConfigPage（主组件）
 ```
 
 明天要在 `LowCodeConfigPage` 里用 `useState` 管理一个 `config` 对象，传给 `InfoCardPreview`。
+
+<ProgressButton courseId="react-lowcode-course" dayId="day-02-components-props" />

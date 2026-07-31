@@ -174,3 +174,5 @@ python main.py
 留下 `data/conversations.json` 以及 `storage.py` 的 `load_messages` / `save_messages`。Day 7 会新增 `app/deepseek_client.py`，把**同一个** `messages` 发给 DeepSeek，把返回的 `assistant` 消息 `append` 之后再 `save_messages`。届时你会发现：今天写的 `messages` 列表，明天就能原封不动地交给模型——这就是连续项目线的关键衔接点。
 
 > 阶段提示：Day 1～6 都是「普通 Python 程序」——我们只做接收、分类、保存。从 Day 7 起进入「LLM 应用」阶段，程序才开始真正和外部模型对话。
+
+<ProgressButton courseId="python-agent-course" dayId="day-06-json-storage" />

@@ -402,3 +402,5 @@ const handleMoveUp = (index: number) => {
 
 - 取消勾选 → `visible: false` → 右侧卡片隐藏该字段
 - 重新勾选 → `visible: true` → 右侧卡片显示该字段
+
+<ProgressButton courseId="react-lowcode-course" dayId="day-05-field-list" />

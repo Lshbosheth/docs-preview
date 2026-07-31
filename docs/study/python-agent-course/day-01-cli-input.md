@@ -99,3 +99,5 @@ python main.py
 ## 留给明天的接口
 
 留下变量 `user_text`（以及 `name`、`topic`）。Day 2 会把这段文本包进一个 `{"role": "user", "content": ...}` 字典，并放进一个 `messages` 列表。
+
+<ProgressButton courseId="python-agent-course" dayId="day-01-cli-input" />

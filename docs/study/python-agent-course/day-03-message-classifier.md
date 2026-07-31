@@ -133,3 +133,5 @@ python main.py
 ## 留给明天的接口
 
 留下一套「可复用的分类规则」：两个关键词列表 + 先查资料、后任务、再兜底的判定顺序。Day 4 会把它搬进 `classify_message()` 函数，并新增 `create_message()` 函数。
+
+<ProgressButton courseId="python-agent-course" dayId="day-03-message-classifier" />

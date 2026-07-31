@@ -441,3 +441,5 @@ className={['card', config.size === 'small' && 'card-small'].filter(Boolean).joi
 `config.actions` 数组目前是写死的，和 `fields` 一样需要增删改。
 
 明天要做 `ActionConfigList`，逻辑和 `FieldConfigList` 几乎一样。
+
+<ProgressButton courseId="react-lowcode-course" dayId="day-07-style-config" />

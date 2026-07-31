@@ -278,3 +278,5 @@ src/
 接下来可以把这个项目加入你的作品集，或者继续挑战更复杂的功能。
 
 继续加油！💪
+
+<ProgressButton courseId="react-lowcode-course" dayId="day-12-final-review" />

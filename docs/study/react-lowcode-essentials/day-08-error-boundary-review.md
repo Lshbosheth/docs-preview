@@ -338,3 +338,5 @@ componentDidCatch(error, info) {
 ---
 
 **🎉 恭喜，笨蛋！《React 低代码核心补全课》全部学完。基础课那几个大窟窿，你亲手补上了。现在的你，已经能写像样的真实 React 应用了——去把 InfoCard 项目跑通，然后骄傲地开下一门课。**
+
+<ProgressButton courseId="react-lowcode-essentials" dayId="day-08-error-boundary-review" />

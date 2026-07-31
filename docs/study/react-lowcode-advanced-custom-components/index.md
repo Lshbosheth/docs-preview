@@ -5,6 +5,7 @@ title: React 低代码进阶 - 自定义组件动态加载
 # React 低代码进阶 - 自定义组件动态加载
 
 让你的低代码平台真正可扩展：开发者上传自己的 React 组件，平台动态编译、注册、渲染。
+n<CourseProgressBar courseId="react-lowcode-advanced-custom-components" :totalDays="8" />
 
 ## 为什么需要这个系列
 

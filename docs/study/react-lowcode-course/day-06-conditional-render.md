@@ -302,3 +302,5 @@ Day 3 就已经加了 `.filter(field => field.visible)`，今天不用改预览�
 `config.layout`、`config.size`、`config.accentColor` 目前还没用上。
 
 明天要做 `StyleConfigForm`，让这三个字段能被配置，卡片样式跟着变化。
+
+<ProgressButton courseId="react-lowcode-course" dayId="day-06-conditional-render" />

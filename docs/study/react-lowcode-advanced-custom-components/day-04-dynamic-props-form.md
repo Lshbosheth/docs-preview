@@ -642,3 +642,5 @@ Day 5 会支持上传整个文件夹，让自定义组件可以拆分成多个�
 ---
 
 **核心功能全部打通！接下来是扩展能力。**
+
+<ProgressButton courseId="react-lowcode-advanced-custom-components" dayId="day-04-dynamic-props-form" />

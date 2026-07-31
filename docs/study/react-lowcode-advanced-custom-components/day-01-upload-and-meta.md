@@ -707,3 +707,5 @@ Day 2 会引入 `@babel/standalone`，把用户上传的 `.tsx` 源码编译成�
 ---
 
 **今天的基础工作做完了，明天开始进入核心：动态编译！**
+
+<ProgressButton courseId="react-lowcode-advanced-custom-components" dayId="day-01-upload-and-meta" />

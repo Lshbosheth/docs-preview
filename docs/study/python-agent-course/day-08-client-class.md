@@ -194,3 +194,5 @@ python main.py
 - DeepSeek 多轮对话：<https://api-docs.deepseek.com/guides/multi_round_chat>
 
 > 阶段提示：仍在「LLM 应用」阶段。我们已经有了一个干净的模型客户端，接下来几天的重点是「让输入输出更结构化、更可靠」。
+
+<ProgressButton courseId="python-agent-course" dayId="day-08-client-class" />

@@ -220,3 +220,5 @@ python main.py
 - LangChain Structured Output：<https://docs.langchain.com/oss/python/langchain/structured-output>
 
 > 阶段提示：Day 12 仍是「LLM 应用」阶段的收尾——模型很能「答」，但还不能「自己决定下一步」。
+
+<ProgressButton courseId="python-agent-course" dayId="day-12-structured-output" />

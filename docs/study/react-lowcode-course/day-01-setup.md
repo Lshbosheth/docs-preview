@@ -379,3 +379,5 @@ export default InfoCardPreview;
 ```
 
 明天要把这些数据提取成一个配置对象，让卡片从配置读取。
+
+<ProgressButton courseId="react-lowcode-course" dayId="day-01-setup" />

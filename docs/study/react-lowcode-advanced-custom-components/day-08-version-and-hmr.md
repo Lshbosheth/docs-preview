@@ -502,3 +502,5 @@ switchVersion(name, version) {
 ---
 
 **恭喜你，笨蛋，啃完了整个进阶系列！这块搞明白，你对低代码平台的理解就不只是"会搭业务"了，而是真懂它底下怎么转的。**
+
+<ProgressButton courseId="react-lowcode-advanced-custom-components" dayId="day-08-version-and-hmr" />

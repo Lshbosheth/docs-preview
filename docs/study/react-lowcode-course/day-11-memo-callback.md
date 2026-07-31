@@ -256,3 +256,5 @@ const Child = memo(function Child({ onClick }) { ... });
 - 检查每个组件的职责是否清晰
 - 提取重复的 inline style 到常量
 - 最终验收项目
+
+<ProgressButton courseId="react-lowcode-course" dayId="day-11-memo-callback" />

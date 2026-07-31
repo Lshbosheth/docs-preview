@@ -413,3 +413,5 @@ Day 8（最后一天）会做版本管理和热更新：同一个组件保留多
 ---
 
 **安全防线搭起来了！虽然是教学级，但你已经理解了浏览器端沙箱的核心原理。**
+
+<ProgressButton courseId="react-lowcode-advanced-custom-components" dayId="day-07-sandbox-isolation" />

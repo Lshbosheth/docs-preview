@@ -212,3 +212,5 @@ priority
 - Python typing 标准库：<https://docs.python.org/3/library/typing.html>
 
 > 阶段提示：仍在「LLM 应用」阶段。今天我们让数据「有形状」，明天让调用「更可靠」。
+
+<ProgressButton courseId="python-agent-course" dayId="day-09-types-pydantic" />

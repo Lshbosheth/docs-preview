@@ -560,3 +560,5 @@ Day 4 会根据组件的 meta.props 自动生成配置表单，这样就能修�
 ---
 
 **自定义组件已经能渲染了！明天加上动态配置表单，就彻底打通了。**
+
+<ProgressButton courseId="react-lowcode-advanced-custom-components" dayId="day-03-register-and-render" />

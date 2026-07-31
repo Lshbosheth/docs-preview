@@ -6,6 +6,8 @@ title: React 低代码配置页实战课
 
 用一个真实项目学 React。从零搭到能用，不背 API，做出来才算学会。
 
+<CourseProgressBar courseId="react-lowcode-course" :totalDays="12" />
+
 ## 最终效果
 
 做一个「InfoCard 信息卡片配置页」，三栏布局：

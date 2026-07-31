@@ -511,3 +511,5 @@ function useLocalStorage<T>(key: string, initialValue: T) {
 当前每次 `config` 变化，所有子组件都会重新渲染，即使它们的 props 没变。
 
 明天要用 `React.memo` + `useCallback` 优化性能。
+
+<ProgressButton courseId="react-lowcode-course" dayId="day-10-custom-hook" />

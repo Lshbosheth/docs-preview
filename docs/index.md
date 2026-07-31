@@ -4,6 +4,7 @@ layout: home
 
 <script setup>
 import { useData } from "vitepress";
+import CourseProgressBar from "./.vitepress/theme/components/CourseProgressBar.vue";
 
 const { theme } = useData();
 const home = theme.value.home;
@@ -92,6 +93,7 @@ const home = theme.value.home;
       <span class="home-rail-body">
         <strong>{{ course.text }}</strong>
         <span>{{ course.note }}</span>
+        <CourseProgressBar :courseId="course.dir" :totalDays="course.days" />
       </span>
       <span class="home-rail-days">{{ course.days }} 天</span>
     </a>

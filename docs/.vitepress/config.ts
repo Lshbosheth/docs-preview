@@ -240,6 +240,7 @@ const homeData = {
     })),
   courses: courseMeta.map((course, index) => ({
     index: String(index + 1).padStart(2, "0"),
+    dir: course.dir,
     text: course.text,
     link: course.link,
     note: course.note,

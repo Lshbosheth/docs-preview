@@ -780,3 +780,5 @@ Day 6 会预置常用库（React、lodash、antd），让用户组件能 `import
 ---
 
 **多文件组件支持完成！自定义组件的能力大大增强了。**
+
+<ProgressButton courseId="react-lowcode-advanced-custom-components" dayId="day-05-multi-file-support" />

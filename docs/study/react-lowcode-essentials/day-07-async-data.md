@@ -427,3 +427,5 @@ Day 8（最后一课）学 **Error Boundary**：给预览区加错误边界，�
 ---
 
 **四态处理是"前端工程素养"的直接体现。会不会写 loading/error/empty，一眼就能看出是新手还是熟手。你现在会了。**
+
+<ProgressButton courseId="react-lowcode-essentials" dayId="day-07-async-data" />

@@ -226,3 +226,5 @@ python main.py
 - OpenAI Python 库错误处理：<https://platform.openai.com/docs/guides/error-codes>
 
 > 阶段提示：仍在「LLM 应用」阶段。Day 10 收尾了「可靠调用」，下一站开始引入 LangChain / LangGraph 这一层封装。
+
+<ProgressButton courseId="python-agent-course" dayId="day-10-errors-logging" />

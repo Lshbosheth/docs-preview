@@ -332,3 +332,5 @@ onChange({ ...config, type: e.target.value as InfoCardAction['type'] });
 ## 留给明天的接口
 
 现在 `config` 已经能被完整配置了，下一步要在右侧下方加一个区域，实时显示当前配置的 JSON。
+
+<ProgressButton courseId="react-lowcode-course" dayId="day-08-action-buttons" />
