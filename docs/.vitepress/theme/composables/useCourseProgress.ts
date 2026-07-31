@@ -12,6 +12,7 @@ const STORAGE_KEY = 'docs-preview-course-progress';
 
 // 全局状态
 const progressData = ref<CourseProgress>({});
+let isInitialized = false;
 
 // 初始化：从 localStorage 加载
 function loadProgress(): CourseProgress {
@@ -36,12 +37,18 @@ function saveProgress(data: CourseProgress): void {
   }
 }
 
-// 初始化数据
-if (typeof window !== 'undefined') {
-  progressData.value = loadProgress();
+// 确保初始化
+function ensureInitialized(): void {
+  if (!isInitialized && typeof window !== 'undefined') {
+    progressData.value = loadProgress();
+    isInitialized = true;
+  }
 }
 
 export function useCourseProgress() {
+  // 确保数据已初始化
+  ensureInitialized();
+
   // 获取某个课程某一天的状态
   const getStatus = (courseId: string, dayId: string): ProgressStatus => {
     return progressData.value[courseId]?.[dayId] ?? 'not-started';
