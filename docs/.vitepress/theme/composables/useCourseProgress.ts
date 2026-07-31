@@ -14,6 +14,7 @@ const STORAGE_KEY = 'docs-preview-course-progress';
 // 全局状态
 const progressData = ref<CourseProgress>({});
 let isInitialized = false;
+let initPromise: Promise<void> | null = null; // 防止重复初始化
 
 // 初始化：优先从 API 加载，失败则从 localStorage 加载
 async function loadProgress(): Promise<CourseProgress> {
@@ -66,12 +67,18 @@ async function saveProgress(data: CourseProgress): Promise<void> {
   }
 }
 
-// 确保初始化
+// 确保初始化（只执行一次）
 async function ensureInitialized(): Promise<void> {
-  if (!isInitialized && typeof window !== 'undefined') {
-    progressData.value = await loadProgress();
-    isInitialized = true;
+  if (isInitialized) return;
+
+  if (!initPromise && typeof window !== 'undefined') {
+    initPromise = loadProgress().then(data => {
+      progressData.value = data;
+      isInitialized = true;
+    });
   }
+
+  await initPromise;
 }
 
 export function useCourseProgress() {
