@@ -155,6 +155,17 @@ function countMarkdownFiles(dir: string): number {
   return total;
 }
 
+/* 构建机基本都跑在 UTC，直接 new Date() 取日期会在北京时间凌晨那几个小时差一天。
+   这里手动偏 8 小时，按北京时间算"今天"。 */
+function getBeijingToday(): string {
+  const now = new Date();
+  const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+  const year = beijingTime.getUTCFullYear();
+  const month = String(beijingTime.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(beijingTime.getUTCDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 function formatLessonDate(date: string): string {
   const match = date.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   return match ? `${Number(match[2])} 月 ${Number(match[3])} 日` : date;
@@ -208,6 +219,8 @@ const homeData = {
     ? {
         link: `/ai-agent/${latestAiAgentLesson}`,
         date: formatLessonDate(latestAiAgentLesson),
+        /* 断更的时候最新一篇不是今天的，标签就别硬说"今天这篇" */
+        label: latestAiAgentLesson === getBeijingToday() ? "今天这篇" : "最近一篇",
         title: getMarkdownTitle(path.join(aiAgentDir, `${latestAiAgentLesson}.md`), latestAiAgentLesson)
       }
     : null,
