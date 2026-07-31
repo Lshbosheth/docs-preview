@@ -137,18 +137,181 @@ function getAiAgentDailyItems(): SidebarItem[] {
 
 const latestAiAgentLesson = getAiAgentLessonDates()[0] ?? "";
 
+function countMarkdownFiles(dir: string): number {
+  const target = path.join(docsDir, dir);
+  if (!fs.existsSync(target)) {
+    return 0;
+  }
+
+  let total = 0;
+  for (const entry of fs.readdirSync(target, { withFileTypes: true })) {
+    if (entry.isDirectory()) {
+      total += countMarkdownFiles(path.join(dir, entry.name));
+    } else if (entry.name.endsWith(".md")) {
+      total += 1;
+    }
+  }
+
+  return total;
+}
+
+function formatLessonDate(date: string): string {
+  const match = date.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return match ? `${Number(match[2])} 月 ${Number(match[3])} 日` : date;
+}
+
+function formatShortDate(date: string): string {
+  const match = date.match(/^\d{4}-(\d{2}-\d{2})$/);
+  return match ? match[1] : date;
+}
+
+function countCourseDays(dir: string): number {
+  const target = path.join(docsDir, "study", dir);
+  if (!fs.existsSync(target)) {
+    return 0;
+  }
+
+  return fs.readdirSync(target).filter((name) => /^day-\d+.*\.md$/.test(name)).length;
+}
+
+const courseMeta = [
+  {
+    dir: "react-lowcode-course",
+    text: "低代码配置页实战课",
+    link: "/study/react-lowcode-course/",
+    note: "从写死一张卡片开始，一路做到 useMemo 和 React.memo。"
+  },
+  {
+    dir: "react-lowcode-essentials",
+    text: "核心补全课",
+    link: "/study/react-lowcode-essentials/",
+    note: "useEffect、useRef、useReducer、Context，绕过去的都捡回来。"
+  },
+  {
+    dir: "react-lowcode-advanced-custom-components",
+    text: "自定义组件动态加载",
+    link: "/study/react-lowcode-advanced-custom-components/",
+    note: "上传、编译、注册、沙箱隔离，把低代码做到能收外部组件。"
+  },
+  {
+    dir: "python-agent-course",
+    text: "Python × DeepSeek Agent",
+    link: "/study/python-agent-course/",
+    note: "从终端输入练到 LangGraph 条件路由与会话状态。"
+  }
+];
+
+const homeData = {
+  latestEnglish: `/english/${latestEnglishLesson}`,
+  latestAiAgent: latestAiAgentLesson ? `/ai-agent/${latestAiAgentLesson}` : "/ai-agent/",
+  today: latestAiAgentLesson
+    ? {
+        link: `/ai-agent/${latestAiAgentLesson}`,
+        date: formatLessonDate(latestAiAgentLesson),
+        title: getMarkdownTitle(path.join(aiAgentDir, `${latestAiAgentLesson}.md`), latestAiAgentLesson)
+      }
+    : null,
+  aiAgentRecent: getAiAgentLessonDates()
+    .slice(1, 5)
+    .map((date) => ({
+      date: formatShortDate(date),
+      link: `/ai-agent/${date}`,
+      title: getMarkdownTitle(path.join(aiAgentDir, `${date}.md`), date)
+    })),
+  englishRecent: getEnglishLessonDates()
+    .slice(0, 4)
+    .map((date) => ({
+      date: formatShortDate(date),
+      link: `/english/${date}`,
+      title: getEnglishLessonTitle(date)
+    })),
+  courses: courseMeta.map((course, index) => ({
+    index: String(index + 1).padStart(2, "0"),
+    text: course.text,
+    link: course.link,
+    note: course.note,
+    days: countCourseDays(course.dir)
+  })),
+  stats: [
+    { label: "每日英语", value: `${getEnglishLessonDates().length} 篇` },
+    { label: "AI Agent 每日一课", value: `${getAiAgentLessonDates().length} 篇` },
+    { label: "学习计划与课程", value: `${countMarkdownFiles("study")} 篇` },
+    {
+      label: "最近更新",
+      value: latestAiAgentLesson ? formatLessonDate(latestAiAgentLesson) : "—"
+    }
+  ]
+};
+
 export default defineConfig({
-  title: "lshbosheth 文档",
-  description: "学习计划、技术英语、项目记录",
+  title: "过境笔记",
+  description: "学习计划、技术英语、AI Agent 每日一课与系统记录",
   lang: "zh-CN",
   cleanUrls: true,
+  head: [
+    ["link", { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
+    ["meta", { name: "theme-color", content: "#0b63ce" }]
+  ],
   themeConfig: {
+    home: homeData,
     nav: [
-      { text: "首页", link: "/" },
-      { text: "English Daily", link: `/english/${latestEnglishLesson}` },
-      { text: "AI Agent Daily", link: latestAiAgentLesson ? `/ai-agent/${latestAiAgentLesson}` : "/ai-agent/" },
-      { text: "学习", link: "/study/python-agent-learning-plan" },
-      { text: "记忆系统", link: "/memory/zvec-memory-plan" }
+      { text: "每日一课", link: homeData.latestAiAgent, activeMatch: "^/ai-agent/" },
+      { text: "每日英语", link: homeData.latestEnglish, activeMatch: "^/english/" },
+      {
+        text: "学习",
+        activeMatch: "^/study/",
+        items: [
+          {
+            text: "React 低代码",
+            items: [
+              { text: "系列总规划", link: "/study/react-lowcode-series-plan" },
+              { text: "配置页实战课", link: "/study/react-lowcode-course/" },
+              { text: "核心补全课", link: "/study/react-lowcode-essentials/" },
+              { text: "自定义组件动态加载", link: "/study/react-lowcode-advanced-custom-components/" }
+            ]
+          },
+          {
+            text: "Python 与 Agent",
+            items: [
+              { text: "15 天计划", link: "/study/python-agent-learning-plan" },
+              { text: "DeepSeek Agent 实战课", link: "/study/python-agent-course/" }
+            ]
+          },
+          {
+            text: "其他",
+            items: [
+              { text: "React 学习路线", link: "/study/react-learning-roadmap" },
+              { text: "React 查漏补缺清单", link: "/study/react-skill-gaps-plan" },
+              { text: "Go 学习启动计划", link: "/study/go-learning-plan" }
+            ]
+          }
+        ]
+      },
+      {
+        text: "系统",
+        activeMatch: "^/(memory|personal-context-layer|wx-agent-bridge)/",
+        items: [
+          {
+            text: "主线",
+            items: [{ text: "Personal Context Layer", link: "/personal-context-layer/" }]
+          },
+          {
+            text: "记忆系统",
+            items: [
+              { text: "RAG 名词地图", link: "/memory/rag-learning-map" },
+              { text: "zvec 记忆检索改造", link: "/memory/zvec-memory-plan" },
+              { text: "text-embedding-v4 接入", link: "/memory/dashscope-embedding-v4-guide" }
+            ]
+          },
+          {
+            text: "归档",
+            items: [
+              { text: "微信 Agent Bridge", link: "/wx-agent-bridge/" },
+              { text: "Markdown 文档站方案", link: "/markdown-preview-site-plan" }
+            ]
+          }
+        ]
+      }
     ],
     sidebar: [
       {
@@ -248,8 +411,7 @@ export default defineConfig({
         text: "文档站",
         items: [
           { text: "Ranran GSAP 迁移计划", link: "/ranran-gsap-migration" },
-          { text: "Markdown 文档站方案", link: "/markdown-preview-site-plan" },
-          { text: "文档站界面升级方案", link: "/docs-ui-refresh-plan" }
+          { text: "Markdown 文档站方案", link: "/markdown-preview-site-plan" }
         ]
       },
       {
@@ -265,20 +427,6 @@ export default defineConfig({
     outline: {
       level: [2, 3],
       label: "页面导航"
-    },
-    search: {
-      provider: "local",
-      options: {
-        translations: {
-          button: { buttonText: "搜索", buttonAriaLabel: "搜索" },
-          modal: {
-            noResultsText: "没有找到结果",
-            resetButtonTitle: "清除",
-            backButtonTitle: "返回",
-            footer: { selectText: "选择", navigateText: "切换", closeText: "关闭" }
-          }
-        }
-      }
     },
     docFooter: {
       prev: "上一篇",

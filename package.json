@@ -4,9 +4,9 @@
   "type": "module",
   "scripts": {
     "tts:generate": "node scripts/generate-tts.mjs",
-    "docs:dev": "vitepress dev docs",
+    "docs:dev": "vitepress dev docs --host 0.0.0.0",
     "docs:build": "npm run tts:generate && vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs --host 0.0.0.0"
   },
   "devDependencies": {
     "vitepress": "latest"
