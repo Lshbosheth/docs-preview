@@ -43,7 +43,7 @@ const home = theme.value.home;
 </div>
 
 <a v-if="home.today" class="home-feature" :href="home.today.link">
-  <span class="home-feature-tag">今天这篇 · {{ home.today.date }}</span>
+  <span class="home-feature-tag">{{ home.today.label }} · {{ home.today.date }}</span>
   <strong>{{ home.today.title }}</strong>
   <span class="home-feature-go">继续读</span>
 </a>
