@@ -124,6 +124,7 @@ function getAiAgentDailyItems(): SidebarItem[] {
 
   return [
     { text: "总览", link: "/ai-agent/" },
+    { text: "年度学习检查表", link: "/ai-agent/checklist" },
     ...lessons.map((date) => {
       const title = getMarkdownTitle(path.join(aiAgentDir, `${date}.md`), date);
 
