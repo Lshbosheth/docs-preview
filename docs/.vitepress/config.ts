@@ -295,6 +295,7 @@ export default defineConfig({
           {
             text: "其他",
             items: [
+              { text: "河南师大马理论考研 8 月计划", link: "/study/henan-normal-university-marxism-2026-08-plan" },
               { text: "React 学习路线", link: "/study/react-learning-roadmap" },
               { text: "React 查漏补缺清单", link: "/study/react-skill-gaps-plan" },
               { text: "Go 学习启动计划", link: "/study/go-learning-plan" }
@@ -332,6 +333,7 @@ export default defineConfig({
       {
         text: "学习",
         items: [
+          { text: "河南师大马理论考研 8 月计划", link: "/study/henan-normal-university-marxism-2026-08-plan" },
           { text: "Python × AI Agent 15 天计划", link: "/study/python-agent-learning-plan" },
           { text: "Python × DeepSeek Agent 课程设计", link: "/study/python-agent-course-design" },
           {

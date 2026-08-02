@@ -102,6 +102,7 @@ const home = theme.value.home;
 
 <div class="home-inline">
   <span>相关：</span>
+  <a href="/study/henan-normal-university-marxism-2026-08-plan">河南师大马理论考研 8 月计划</a>
   <a href="/study/python-agent-learning-plan">Python × AI Agent 15 天</a>
   <a href="/study/react-learning-roadmap">React 学习路线</a>
   <a href="/study/react-skill-gaps-plan">查漏补缺清单</a>
