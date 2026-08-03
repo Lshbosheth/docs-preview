@@ -177,6 +177,27 @@ function formatShortDate(date: string): string {
   return match ? match[1] : date;
 }
 
+function getLatestCourseDayLink(dir: string, fallback: string): string {
+  const target = path.join(docsDir, "study", dir);
+  if (!fs.existsSync(target)) {
+    return fallback;
+  }
+
+  const days = fs
+    .readdirSync(target)
+    .filter((name) => /^day-\d+.*\.md$/.test(name))
+    .sort((a, b) => {
+      const na = parseInt(a.match(/^day-(\d+)/)?.[1] ?? "0");
+      const nb = parseInt(b.match(/^day-(\d+)/)?.[1] ?? "0");
+      return nb - na;
+    });
+
+  if (days.length === 0) return fallback;
+
+  const latest = days[0].replace(/\.md$/, "");
+  return `/study/${dir}/${latest}`;
+}
+
 function countCourseDays(dir: string): number {
   const target = path.join(docsDir, "study", dir);
   if (!fs.existsSync(target)) {
@@ -190,25 +211,21 @@ const courseMeta = [
   {
     dir: "react-lowcode-course",
     text: "低代码配置页实战课",
-    link: "/study/react-lowcode-course/",
     note: "从写死一张卡片开始，一路做到 useMemo 和 React.memo。"
   },
   {
     dir: "react-lowcode-essentials",
     text: "核心补全课",
-    link: "/study/react-lowcode-essentials/",
     note: "useEffect、useRef、useReducer、Context，绕过去的都捡回来。"
   },
   {
     dir: "react-lowcode-advanced-custom-components",
     text: "自定义组件动态加载",
-    link: "/study/react-lowcode-advanced-custom-components/",
     note: "上传、编译、注册、沙箱隔离，把低代码做到能收外部组件。"
   },
   {
     dir: "python-agent-course",
     text: "Python × DeepSeek Agent",
-    link: "/study/python-agent-course/",
     note: "从终端输入练到 LangGraph 条件路由与会话状态。"
   }
 ];
@@ -243,7 +260,7 @@ const homeData = {
     index: String(index + 1).padStart(2, "0"),
     dir: course.dir,
     text: course.text,
-    link: course.link,
+    link: getLatestCourseDayLink(course.dir, `/study/${course.dir}/`),
     note: course.note,
     days: countCourseDays(course.dir)
   })),

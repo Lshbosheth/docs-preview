@@ -173,12 +173,37 @@ export function useCourseProgress() {
     }
   };
 
+  // 获取下一节要学习的课程链接
+  const getNextLessonLink = (courseId: string, courseDir: string, totalDays: number): string => {
+    const course = progressData.value[courseId] || {};
+
+    // 找第一个 in-progress 的
+    for (let i = 1; i <= totalDays; i++) {
+      const dayId = `day-${i}`;
+      if (course[dayId] === 'in-progress') {
+        return `/study/${courseDir}/day-${String(i).padStart(2, '0')}`;
+      }
+    }
+
+    // 找第一个 not-started 的
+    for (let i = 1; i <= totalDays; i++) {
+      const dayId = `day-${i}`;
+      if (!course[dayId] || course[dayId] === 'not-started') {
+        return `/study/${courseDir}/day-${String(i).padStart(2, '0')}`;
+      }
+    }
+
+    // 都学完了，返回最后一节
+    return `/study/${courseDir}/day-${String(totalDays).padStart(2, '0')}`;
+  };
+
   return {
     progressData: computed(() => progressData.value),
     getStatus,
     setStatus,
     cycleStatus,
     getCourseStats,
+    getNextLessonLink,
     resetCourse,
     resetAll,
     exportProgress,

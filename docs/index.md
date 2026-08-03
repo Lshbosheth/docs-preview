@@ -4,10 +4,22 @@ layout: home
 
 <script setup>
 import { useData } from "vitepress";
+import { computed } from "vue";
 import CourseProgressBar from "./.vitepress/theme/components/CourseProgressBar.vue";
+import { useCourseProgress } from "./.vitepress/theme/composables/useCourseProgress";
 
 const { theme } = useData();
 const home = theme.value.home;
+
+const { getNextLessonLink } = useCourseProgress();
+
+// 动态计算每个课程的"下一节要学习的"链接
+const coursesWithDynamicLinks = computed(() => {
+  return home.courses.map(course => ({
+    ...course,
+    link: getNextLessonLink(course.dir, course.dir, course.days)
+  }));
+});
 </script>
 
 <div class="home">
@@ -87,7 +99,7 @@ const home = theme.value.home;
 </div>
 
 <ol class="home-rail">
-  <li v-for="course in home.courses" :key="course.link">
+  <li v-for="course in coursesWithDynamicLinks" :key="course.link">
     <a :href="course.link">
       <span class="home-rail-index">{{ course.index }}</span>
       <span class="home-rail-body">
