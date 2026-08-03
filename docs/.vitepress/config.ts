@@ -207,6 +207,23 @@ function countCourseDays(dir: string): number {
   return fs.readdirSync(target).filter((name) => /^day-\d+.*\.md$/.test(name)).length;
 }
 
+function getCoursedayFiles(dir: string): string[] {
+  const target = path.join(docsDir, "study", dir);
+  if (!fs.existsSync(target)) {
+    return [];
+  }
+
+  return fs
+    .readdirSync(target)
+    .filter((name) => /^day-\d+.*\.md$/.test(name))
+    .map((name) => name.replace(/\.md$/, ""))
+    .sort((a, b) => {
+      const na = parseInt(a.match(/^day-(\d+)/)?.[1] ?? "0");
+      const nb = parseInt(b.match(/^day-(\d+)/)?.[1] ?? "0");
+      return na - nb;
+    });
+}
+
 const courseMeta = [
   {
     dir: "react-lowcode-course",
@@ -262,7 +279,8 @@ const homeData = {
     text: course.text,
     link: getLatestCourseDayLink(course.dir, `/study/${course.dir}/`),
     note: course.note,
-    days: countCourseDays(course.dir)
+    days: countCourseDays(course.dir),
+    dayFiles: getCoursedayFiles(course.dir)
   })),
   stats: [
     { label: "每日英语", value: `${getEnglishLessonDates().length} 篇` },

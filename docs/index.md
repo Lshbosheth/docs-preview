@@ -17,7 +17,7 @@ const { getNextLessonLink } = useCourseProgress();
 const coursesWithDynamicLinks = computed(() => {
   return home.courses.map(course => ({
     ...course,
-    link: getNextLessonLink(course.dir, course.dir, course.days)
+    link: getNextLessonLink(course.dir, course.dir, course.dayFiles || [])
   }));
 });
 </script>
