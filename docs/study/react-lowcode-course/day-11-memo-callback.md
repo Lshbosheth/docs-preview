@@ -10,6 +10,8 @@ title: Day 11 - useCallback + React.memo 性能优化
 2. 用 `React.memo` 包裹子组件，避免无效渲染
 3. 用 `useCallback` 稳定回调函数引用
 
+今天不追求“把所有组件都包一层 memo”，而是学会先找出真正的重复渲染，再让 `memo` 和 `useCallback` 形成一条完整的数据链。
+
 ## 接在昨天哪里
 
 昨天提取了自定义 Hook，代码更简洁了。
@@ -42,7 +44,9 @@ LowCodeConfigPage（config 变了，重新渲染）
 用 `React.memo` 包裹组件后，只有 props 真正变化时才重新渲染：
 
 ```tsx
-const ComponentSidebar = React.memo(function ComponentSidebar() {
+import { memo } from 'react';
+
+const ComponentSidebar = memo(function ComponentSidebar() {
   return <div>...</div>;
 });
 ```
@@ -51,7 +55,7 @@ const ComponentSidebar = React.memo(function ComponentSidebar() {
 
 ```tsx
 function ComponentSidebar() { ... }
-export default React.memo(ComponentSidebar);
+export default memo(ComponentSidebar);
 ```
 
 ### React.memo 如何比较 props
@@ -71,6 +75,8 @@ function LowCodeConfigPage() {
   return <ConfigPanel onChange={handleChange} />;
 }
 ```
+
+`React.memo` 只比较 props。组件自己的 state 变化、读取的 Context 变化，仍然会触发它重新渲染；它也不会阻止父组件本身重新渲染。
 
 即使 `ConfigPanel` 用了 `React.memo`，因为 `handleChange` 每次都是新函数，props 比较时引用不同，还是会重新渲染。
 
@@ -132,11 +138,12 @@ export default memo(ComponentSidebar);
 修改 `src/components/LowCodeConfigPage.tsx`：
 
 ```tsx
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
+import type { InfoCardConfig } from '../types/config';
 import ComponentSidebar from './ComponentSidebar';
 import ConfigPanel from './ConfigPanel';
 import PreviewPanel from './PreviewPanel';
-import { InfoCardConfig, initialInfoCardConfig } from '../types/config';
+import { initialInfoCardConfig } from '../types/config';
 
 function LowCodeConfigPage() {
   const [config, setConfig] = useState<InfoCardConfig>(initialInfoCardConfig);
@@ -170,6 +177,12 @@ export default LowCodeConfigPage;
 
 优化后：`ComponentSidebar` 不再跟着渲染。
 
+验证时要注意：开发环境的 Strict Mode 可能让初次渲染出现两次日志，这不是 `memo` 失效。真正要观察的是修改配置后，`ComponentSidebar` 是否还会重复输出。
+
+### 为什么这里没有给所有组件加 memo
+
+`memo` 不是“组件更高级”的标记。只有当组件经常因为父组件更新而重复渲染、同时 props 又大多保持不变时，它才可能带来收益。表单本身需要跟着输入变化，强行包上 `memo` 不会让它停止更新。
+
 ### 什么时候用 useCallback 的简化版
 
 如果只是 `setConfig` 的直接包裹，其实可以更简单：
@@ -199,13 +212,17 @@ const handler = useCallback((field) => {
 }, [config]);
 ```
 
-### 2. 到处加 React.memo 反而更慢
+### 2. 把 useCallback 当成“让函数更快”
+
+`useCallback` 主要稳定的是函数引用，不会自动让函数执行更快。只有当这个函数作为 props 传给 `memo` 子组件，或者作为其他 Hook 的依赖时，稳定引用才有实际意义。
+
+### 3. 到处加 React.memo 反而更慢
 
 每次渲染都需要做 props 浅比较，如果 props 每次都变（比如传了新对象），比较本身也有开销。
 
 原则：**先测量，再优化**。
 
-### 3. 误以为 React.memo 解决了所有重渲染
+### 4. 误以为 React.memo 解决了所有重渲染
 
 ```tsx
 // ❌ 误区：用了 memo 就一定不重渲染
@@ -224,6 +241,8 @@ const Child = memo(function Child({ onClick }) { ... });
 2. 修改一下配置表单，观察控制台输出
 3. 用 `memo` 包裹后再试，验证它真的不重渲染了
 
+再做一个小实验：给 `ComponentSidebar` 增加一个普通字符串 prop，并在父组件中每次渲染时拼出相同内容。观察它仍然可以跳过渲染；然后把这个 prop 改成每次新建的对象，再观察浅比较为什么失效。
+
 ## 验收清单
 
 - [ ] `ComponentSidebar` 用了 `memo` 包裹
@@ -232,6 +251,16 @@ const Child = memo(function Child({ onClick }) { ... });
 - [ ] 能解释 `React.memo` 如何比较 props
 - [ ] 能解释为什么 `useCallback` 要配合 `React.memo` 使用
 - [ ] 能说出什么时候不需要 `useCallback`
+
+## 今天真正要记住的一条链
+
+```text
+父组件重新渲染
+→ memo 检查子组件 props
+→ 基本值相同可以跳过
+→ 对象 / 函数要先保证引用稳定
+→ useCallback 只解决函数引用，不负责业务状态
+```
 
 ## 今日记录
 

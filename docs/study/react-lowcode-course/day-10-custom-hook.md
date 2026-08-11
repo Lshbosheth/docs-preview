@@ -50,7 +50,7 @@ function App() {
 - 必须以 `use` 开头：`useXxx`
 - 驼峰命名：`useConfigArrayUpdater`
 
-这样 React 才能识别它是 Hook，才能在里面调用其他 Hook。
+以 `use` 开头是自定义 Hook 的约定，便于人和 lint 工具识别调用规则；真正的自定义 Hook 通常还会在内部调用 `useState`、`useEffect` 等 React Hook。
 
 ### 自定义 Hook 的参数和返回值
 
@@ -63,7 +63,7 @@ function useSomething(param1, param2) {
 }
 ```
 
-就是普通函数，没有特殊限制。
+参数和返回值没有固定格式；但如果函数内部调用了 React Hook，调用位置仍必须遵守 Hook 规则。
 
 ## 动手实现
 
@@ -72,42 +72,26 @@ function useSomething(param1, param2) {
 新建 `src/hooks/useConfigArrayUpdater.ts`：
 
 ```tsx
-import { InfoCardConfig } from '../types/config';
-
-type ArrayKey = 'fields' | 'actions';
-
 export function useConfigArrayUpdater<T extends { id: string }>(
-  config: InfoCardConfig,
-  onChange: (config: InfoCardConfig) => void,
-  arrayKey: ArrayKey
+  items: T[],
+  onChange: (items: T[]) => void
 ) {
-  const array = config[arrayKey] as T[];
-
   const handleAdd = (newItem: T) => {
-    onChange({
-      ...config,
-      [arrayKey]: [...array, newItem]
-    });
+    onChange([...items, newItem]);
   };
 
   const handleDelete = (id: string) => {
-    onChange({
-      ...config,
-      [arrayKey]: array.filter(item => item.id !== id)
-    });
+    onChange(items.filter(item => item.id !== id));
   };
 
   const handleUpdate = (id: string, updates: Partial<T>) => {
-    onChange({
-      ...config,
-      [arrayKey]: array.map(item =>
-        item.id === id ? { ...item, ...updates } : item
-      )
-    });
+    onChange(items.map(item =>
+      item.id === id ? { ...item, ...updates } : item
+    ));
   };
 
   return {
-    items: array,
+    items,
     handleAdd,
     handleDelete,
     handleUpdate
@@ -115,12 +99,31 @@ export function useConfigArrayUpdater<T extends { id: string }>(
 }
 ```
 
+### 这版参数为什么这样设计
+
+这次只把“数组怎么增删改”交给复用逻辑，`InfoCardConfig` 仍由页面负责保存：
+
+```text
+LowCodeConfigPage 持有 config
+        ↓ config.fields / config.actions
+数组更新逻辑只处理 T[]
+        ↓ onChange(nextItems)
+FieldConfigList / ActionConfigList 把数组放回 config
+```
+
+这样做有两个好处：
+
+- `T` 就是当前传入数组的元素类型，不需要额外类型断言。
+- 更新逻辑不认识 `InfoCardConfig` 的其他字段，不会误改标题、样式或另一组数组。
+
+严格说，这个版本的 `useConfigArrayUpdater` 没有调用 React 内置 Hook，更接近“带 `use` 命名的可复用逻辑函数”。下面的 `useLocalStorage` 才是会调用 `useState` 和 `useEffect` 的标准自定义 Hook。先把这两个概念分清，比机械地给所有工具函数加 `use` 更重要。
+
 ### 第 2 步：用 Hook 简化 FieldConfigList
 
 修改 `src/features/infocard-config/FieldConfigList.tsx`：
 
 ```tsx
-import { InfoCardConfig, InfoCardField } from '../../types/config';
+import type { InfoCardConfig, InfoCardField } from '../../types/config';
 import { useConfigArrayUpdater } from '../../hooks/useConfigArrayUpdater';
 
 type FieldConfigListProps = {
@@ -130,7 +133,9 @@ type FieldConfigListProps = {
 
 function FieldConfigList({ config, onChange }: FieldConfigListProps) {
   const { items: fields, handleAdd, handleDelete, handleUpdate } =
-    useConfigArrayUpdater<InfoCardField>(config, onChange, 'fields');
+    useConfigArrayUpdater<InfoCardField>(config.fields, (fields) => {
+      onChange({ ...config, fields });
+    });
 
   const handleAddField = () => {
     const newField: InfoCardField = {
@@ -254,7 +259,7 @@ export default FieldConfigList;
 修改 `src/features/infocard-config/ActionConfigList.tsx`：
 
 ```tsx
-import { InfoCardAction, InfoCardConfig } from '../../types/config';
+import type { InfoCardAction, InfoCardConfig } from '../../types/config';
 import { useConfigArrayUpdater } from '../../hooks/useConfigArrayUpdater';
 
 type ActionConfigListProps = {
@@ -264,7 +269,9 @@ type ActionConfigListProps = {
 
 function ActionConfigList({ config, onChange }: ActionConfigListProps) {
   const { items: actions, handleAdd, handleDelete, handleUpdate } =
-    useConfigArrayUpdater<InfoCardAction>(config, onChange, 'actions');
+    useConfigArrayUpdater<InfoCardAction>(config.actions, (actions) => {
+      onChange({ ...config, actions });
+    });
 
   const handleAddAction = () => {
     const newAction: InfoCardAction = {
@@ -416,13 +423,23 @@ src/
 
 ## 常见错误
 
+### 0. 不要用 `as unknown as` 绕过类型错误
+
+旧写法把整个 `config` 和一个字符串 `arrayKey` 传进来，再写：
+
+```tsx
+const array = config[arrayKey] as unknown as T[];
+```
+
+这只是压掉 TypeScript 的检查，而且允许把 `fields` 当成 `actions` 使用。现在让 Hook 直接接收 `T[]`，组件负责把更新后的数组放回配置对象，类型关系就不会丢。
+
 ### 1. Hook 名字不以 use 开头
 
 ```tsx
-// ❌ 错误：React 不认为它是 Hook
+// 如果函数内部要调用 React Hook，就必须遵守 use 开头的命名约定
 function configArrayUpdater() { ... }
 
-// ✅ 正确
+// ✅ 正确：可以安全地在里面调用其他 Hook
 function useConfigArrayUpdater() { ... }
 ```
 
@@ -464,13 +481,23 @@ Hook 必须在组件顶层调用，不能在 if / for / 普通函数里。
 2. 把 `config` 自动保存到 `localStorage`
 3. 刷新页面后能恢复上次的配置
 
+完成后再补一个边界测试：当 `localStorage` 里没有这个 key 时使用初始值；当存储内容不是合法 JSON 时，不要让整个页面白屏，可以先捕获解析错误并回退到初始值。
+
 提示：
 
 ```tsx
+import { useEffect, useState } from 'react';
+
 function useLocalStorage<T>(key: string, initialValue: T) {
   const [value, setValue] = useState<T>(() => {
     const stored = localStorage.getItem(key);
-    return stored ? JSON.parse(stored) : initialValue;
+    if (!stored) return initialValue;
+
+    try {
+      return JSON.parse(stored) as T;
+    } catch {
+      return initialValue;
+    }
   });
 
   useEffect(() => {

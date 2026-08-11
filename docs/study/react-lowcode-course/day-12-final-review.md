@@ -10,6 +10,8 @@ title: Day 12 - 代码整理 + 最终验收
 2. 提取重复的样式常量
 3. 最终项目验收
 
+今天不是把代码“擦得漂亮”就算结束，而是确认这 12 天拼起来的功能、数据流和类型检查真的闭环。整理只服务于可读性，不能为了抽象而抽象。
+
 ## 接在昨天哪里
 
 昨天完成了性能优化，功能已经全部实现了。
@@ -21,6 +23,8 @@ title: Day 12 - 代码整理 + 最终验收
 ### 1. 提取样式常量
 
 当前很多 inline style 是重复的，可以提取出来。
+
+先只提取重复出现、含义稳定的值；一次性出现的布局细节可以继续留在组件里。这样不会把所有样式都搬到一个难以查找的“大字典”里。
 
 新建 `src/styles/tokens.ts`：
 
@@ -37,7 +41,7 @@ export const colors = {
   text: '#333',
   textLight: '#666',
   textMuted: '#999'
-};
+} as const;
 
 export const spacing = {
   xs: '4px',
@@ -46,7 +50,7 @@ export const spacing = {
   lg: '16px',
   xl: '20px',
   xxl: '24px'
-};
+} as const;
 
 export const fontSize = {
   xs: '11px',
@@ -54,12 +58,12 @@ export const fontSize = {
   base: '14px',
   lg: '16px',
   xl: '18px'
-};
+} as const;
 
 export const borderRadius = {
   sm: '4px',
   md: '8px'
-};
+} as const;
 ```
 
 然后在组件里引用：
@@ -100,15 +104,12 @@ import { colors, spacing, fontSize } from '../styles/tokens';
 
 ```tsx
 /**
- * 自定义 Hook：管理 config 中数组字段的增删改
- * @param config 配置对象
- * @param onChange 更新配置的回调
- * @param arrayKey 数组字段名（'fields' 或 'actions'）
+ * 复用带 id 数组的增删改逻辑。
+ * 组件负责把更新后的数组放回自己的配置对象。
  */
 export function useConfigArrayUpdater<T extends { id: string }>(
-  config: InfoCardConfig,
-  onChange: (config: InfoCardConfig) => void,
-  arrayKey: ArrayKey
+  items: T[],
+  onChange: (items: T[]) => void
 ) {
   // ...
 }
@@ -136,7 +137,7 @@ export function useConfigArrayUpdater<T extends { id: string }>(
 
 ## 技术栈
 
-- React 18
+- React（具体版本以项目 `package.json` 为准）
 - TypeScript
 - Vite
 
@@ -169,24 +170,43 @@ src/
 
 ## 最终验收清单
 
+先不要直接把下面的项目全部打勾。每一项都要在当前代码里实际操作或运行命令后再确认。
+
 ### 功能完整性
 
-- [x] 能配置标题、副标题、状态文案、状态类型、边框
-- [x] 能增删改字段，控制字段显隐
-- [x] 能配置布局（纵向/紧凑）、尺寸（小/中）、强调色
-- [x] 能增删改按钮，控制按钮显隐、类型
-- [x] 右侧预览实时同步
-- [x] JSON 预览和复制
+- [ ] 能配置标题、副标题、状态文案、状态类型、边框
+- [ ] 能增删改字段，控制字段显隐
+- [ ] 能配置布局（纵向/紧凑）、尺寸（小/中）、强调色
+- [ ] 能增删改按钮，控制按钮显隐、类型
+- [ ] 右侧预览实时同步
+- [ ] JSON 预览和复制
 
 ### 代码质量
 
-- [x] 每个组件职责清晰，不超过 150 行
-- [x] 没有直接修改 state（所有更新都用 `{ ...prev }`）
-- [x] 数组操作用 map/filter，不用 push/splice
-- [x] 列表渲染都有 key，且 key 不是索引
-- [x] 所有 props 有类型定义
-- [x] 提取了自定义 Hook 复用逻辑
-- [x] 用了 React.memo + useCallback 优化性能
+- [ ] 每个组件职责清晰，不超过 150 行
+- [ ] 没有直接修改 state（所有更新都用 `{ ...prev }`）
+- [ ] 数组操作用 map/filter，不用 push/splice
+- [ ] 列表渲染都有 key，且 key 不是索引
+- [ ] 所有 props 有类型定义
+- [ ] 提取了可复用的数组更新逻辑
+- [ ] 只在有证据的地方使用 React.memo + useCallback
+
+### 推荐验收顺序
+
+1. 运行 `npm run build`，先确认 TypeScript 和生产构建都能通过。
+2. 运行 `npm run dev`，逐项修改标题、状态、字段、按钮和样式，确认预览同步。
+3. 删除一条字段、隐藏一条字段、修改按钮类型，再刷新页面，确认没有控制台报错或 React key 警告。
+4. 打开 JSON 预览，复制内容；再用一份合法 JSON 导入，确认配置能整体替换。
+5. 故意导入非法 JSON，确认页面保留原配置，并给出明确错误提示。
+6. 打开 React DevTools Profiler，只记录一次实际观察到的优化结果，不凭感觉宣称“性能变好了”。
+
+### 验收时要区分的三件事
+
+- **功能通过**：用户操作后界面和配置数据都正确。
+- **类型通过**：`npm run build` 没有 TypeScript 错误，不靠 `as unknown as` 压制问题。
+- **结构通过**：组件职责和数据流能用自己的话讲清楚，而不是只记住目录结构。
+
+如果某一项暂时没实现，就保留未勾选并写下缺口。最终验收不是把清单涂满，而是知道项目现在真实完成到哪里。
 
 ### 学习目标
 
