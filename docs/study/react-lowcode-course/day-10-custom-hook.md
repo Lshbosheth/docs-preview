@@ -6,17 +6,17 @@ title: Day 10 - 自定义 Hook：提取复用逻辑
 
 ## 今天完成什么
 
-1. 提取 `useConfigArrayUpdater` 自定义 Hook
+1. 提取 `useInfoCardConfigEditor` 自定义 Hook
 2. 简化 `FieldConfigList` 和 `ActionConfigList`
-3. 理解自定义 Hook 的命名和复用规则
+3. 区分自定义 Hook 和普通工具函数
 
 ## 接在昨天哪里
 
 昨天完成了 JSON 预览，现在功能已经全部实现了。
 
-但代码里有重复：`FieldConfigList` 和 `ActionConfigList` 里的增删改逻辑几乎一样。
+但代码里有两层重复：`FieldConfigList` 和 `ActionConfigList` 都在做数组增删改，也都要把新数组写回 `InfoCardConfig`。
 
-今天要提取成自定义 Hook。
+今天把通用数组算法留在普通函数里，再用自定义 Hook 组合成 InfoCard 配置编辑能力。
 
 ## 概念解释
 
@@ -42,15 +42,15 @@ function App() {
 
 把重复逻辑封装起来，多个组件可以复用：
 
-- **不用 Hook：** 每个组件都写一遍增删改逻辑
-- **用 Hook：** 增删改逻辑写一次，多个组件调用
+- **普通函数：** 复用与 React 无关的数组增删改算法
+- **自定义 Hook：** 调用 React Hook，组合 `InfoCardConfig` 的状态相关逻辑
 
 ### 命名规则
 
 - 必须以 `use` 开头：`useXxx`
-- 驼峰命名：`useConfigArrayUpdater`
+- 驼峰命名：`useInfoCardConfigEditor`
 
-以 `use` 开头是自定义 Hook 的约定，便于人和 lint 工具识别调用规则；真正的自定义 Hook 通常还会在内部调用 `useState`、`useEffect` 等 React Hook。
+以 `use` 开头是自定义 Hook 的约定，便于 React lint 工具检查调用规则。反过来，如果一个函数不调用任何 Hook，就不要只为了“看起来像 Hook”而加 `use` 前缀。
 
 ### 自定义 Hook 的参数和返回值
 
@@ -67,56 +67,87 @@ function useSomething(param1, param2) {
 
 ## 动手实现
 
-### 第 1 步：提取自定义 Hook
+### 第 1 步：提取普通数组编辑器和自定义 Hook
 
-新建 `src/hooks/useConfigArrayUpdater.ts`：
+新建 `src/hooks/useInfoCardConfigEditor.ts`：
 
 ```tsx
-export function useConfigArrayUpdater<T extends { id: string }>(
+import { useMemo } from 'react';
+import type {
+  InfoCardAction,
+  InfoCardConfig,
+  InfoCardField
+} from '../types/config';
+
+type ConfigItem = { id: string };
+
+type ArrayEditor<T extends ConfigItem> = {
+  items: T[];
+  handleAdd: (newItem: T) => void;
+  handleDelete: (id: string) => void;
+  handleUpdate: (id: string, updates: Partial<T>) => void;
+};
+
+function createArrayEditor<T extends ConfigItem>(
   items: T[],
   onChange: (items: T[]) => void
-) {
-  const handleAdd = (newItem: T) => {
-    onChange([...items, newItem]);
-  };
-
-  const handleDelete = (id: string) => {
-    onChange(items.filter(item => item.id !== id));
-  };
-
-  const handleUpdate = (id: string, updates: Partial<T>) => {
-    onChange(items.map(item =>
-      item.id === id ? { ...item, ...updates } : item
-    ));
-  };
-
+): ArrayEditor<T> {
   return {
     items,
-    handleAdd,
-    handleDelete,
-    handleUpdate
+    handleAdd: (newItem) => onChange([...items, newItem]),
+    handleDelete: (id) => {
+      onChange(items.filter(item => item.id !== id));
+    },
+    handleUpdate: (id, updates) => {
+      onChange(items.map(item =>
+        item.id === id ? { ...item, ...updates } : item
+      ));
+    }
   };
+}
+
+type InfoCardConfigEditor = {
+  fields: ArrayEditor<InfoCardField>;
+  actions: ArrayEditor<InfoCardAction>;
+};
+
+export function useInfoCardConfigEditor(
+  config: InfoCardConfig,
+  onChange: (config: InfoCardConfig) => void
+): InfoCardConfigEditor {
+  return useMemo(() => ({
+    fields: createArrayEditor(config.fields, (fields) => {
+      onChange({ ...config, fields });
+    }),
+    actions: createArrayEditor(config.actions, (actions) => {
+      onChange({ ...config, actions });
+    })
+  }), [config, onChange]);
 }
 ```
 
 ### 这版参数为什么这样设计
 
-这次只把“数组怎么增删改”交给复用逻辑，`InfoCardConfig` 仍由页面负责保存：
+这里故意分成两层：
 
 ```text
-LowCodeConfigPage 持有 config
-        ↓ config.fields / config.actions
-数组更新逻辑只处理 T[]
-        ↓ onChange(nextItems)
-FieldConfigList / ActionConfigList 把数组放回 config
+createArrayEditor
+  └─ 只处理带 id 的数组，是普通 TypeScript 函数
+
+useInfoCardConfigEditor
+  ├─ 直接接收 InfoCardConfig
+  ├─ 调用 useMemo，是一个真正的自定义 Hook
+  └─ 负责把 fields / actions 写回正确的配置属性
 ```
 
-这样做有两个好处：
+这样既保留了项目关系，也没有牺牲类型安全：
 
-- `T` 就是当前传入数组的元素类型，不需要额外类型断言。
-- 更新逻辑不认识 `InfoCardConfig` 的其他字段，不会误改标题、样式或另一组数组。
+- `fields` 编辑器只能接收 `InfoCardField`。
+- `actions` 编辑器只能接收 `InfoCardAction`。
+- 没有 `as unknown as T[]`，也不能拿字符串 key 把两种数组串起来。
+- Hook 返回值由 `useMemo` 组合；当 `config` 和 `onChange` 都没变时，可以复用同一个编辑器对象。
 
-严格说，这个版本的 `useConfigArrayUpdater` 没有调用 React 内置 Hook，更接近“带 `use` 命名的可复用逻辑函数”。下面的 `useLocalStorage` 才是会调用 `useState` 和 `useEffect` 的标准自定义 Hook。先把这两个概念分清，比机械地给所有工具函数加 `use` 更重要。
+`createArrayEditor` 不以 `use` 开头，因为它不调用任何 Hook；`useInfoCardConfigEditor` 才承担 React 层的组合职责。这个边界比把所有复用函数都包装成 Hook 更重要。
 
 ### 第 2 步：用 Hook 简化 FieldConfigList
 
@@ -124,7 +155,7 @@ FieldConfigList / ActionConfigList 把数组放回 config
 
 ```tsx
 import type { InfoCardConfig, InfoCardField } from '../../types/config';
-import { useConfigArrayUpdater } from '../../hooks/useConfigArrayUpdater';
+import { useInfoCardConfigEditor } from '../../hooks/useInfoCardConfigEditor';
 
 type FieldConfigListProps = {
   config: InfoCardConfig;
@@ -132,10 +163,13 @@ type FieldConfigListProps = {
 };
 
 function FieldConfigList({ config, onChange }: FieldConfigListProps) {
-  const { items: fields, handleAdd, handleDelete, handleUpdate } =
-    useConfigArrayUpdater<InfoCardField>(config.fields, (fields) => {
-      onChange({ ...config, fields });
-    });
+  const { fields: fieldEditor } = useInfoCardConfigEditor(config, onChange);
+  const {
+    items: fields,
+    handleAdd,
+    handleDelete,
+    handleUpdate
+  } = fieldEditor;
 
   const handleAddField = () => {
     const newField: InfoCardField = {
@@ -260,7 +294,7 @@ export default FieldConfigList;
 
 ```tsx
 import type { InfoCardAction, InfoCardConfig } from '../../types/config';
-import { useConfigArrayUpdater } from '../../hooks/useConfigArrayUpdater';
+import { useInfoCardConfigEditor } from '../../hooks/useInfoCardConfigEditor';
 
 type ActionConfigListProps = {
   config: InfoCardConfig;
@@ -268,10 +302,13 @@ type ActionConfigListProps = {
 };
 
 function ActionConfigList({ config, onChange }: ActionConfigListProps) {
-  const { items: actions, handleAdd, handleDelete, handleUpdate } =
-    useConfigArrayUpdater<InfoCardAction>(config.actions, (actions) => {
-      onChange({ ...config, actions });
-    });
+  const { actions: actionEditor } = useInfoCardConfigEditor(config, onChange);
+  const {
+    items: actions,
+    handleAdd,
+    handleDelete,
+    handleUpdate
+  } = actionEditor;
 
   const handleAddAction = () => {
     const newAction: InfoCardAction = {
@@ -399,7 +436,7 @@ export default ActionConfigList;
 src/
 ├─ types/config.ts
 ├─ hooks/
-│  └─ useConfigArrayUpdater.ts
+│  └─ useInfoCardConfigEditor.ts
 ├─ components/
 │  ├─ LowCodeConfigPage.tsx
 │  ├─ ComponentSidebar.tsx
@@ -419,7 +456,7 @@ src/
 
 保存后刷新，功能和之前一模一样，但代码更简洁了。
 
-两个组件的增删改逻辑都复用了同一个 Hook。
+两个组件都通过 `useInfoCardConfigEditor` 修改配置，字段和按钮的类型不会串，JSON 预览仍会跟着完整 `InfoCardConfig` 更新。
 
 ## 常见错误
 
@@ -431,7 +468,7 @@ src/
 const array = config[arrayKey] as unknown as T[];
 ```
 
-这只是压掉 TypeScript 的检查，而且允许把 `fields` 当成 `actions` 使用。现在让 Hook 直接接收 `T[]`，组件负责把更新后的数组放回配置对象，类型关系就不会丢。
+这只是压掉 TypeScript 的检查，而且允许把 `fields` 当成 `actions` 使用。现在由 `useInfoCardConfigEditor` 明确创建 `fields` 和 `actions` 两个编辑器，类型关系不会丢，Hook 也仍然围绕 `InfoCardConfig` 工作。
 
 ### 1. Hook 名字不以 use 开头
 
@@ -439,8 +476,8 @@ const array = config[arrayKey] as unknown as T[];
 // 如果函数内部要调用 React Hook，就必须遵守 use 开头的命名约定
 function configArrayUpdater() { ... }
 
-// ✅ 正确：可以安全地在里面调用其他 Hook
-function useConfigArrayUpdater() { ... }
+// ✅ 正确：内部调用了 useMemo
+function useInfoCardConfigEditor() { ... }
 ```
 
 ### 2. 在普通函数里调用 Hook
@@ -511,9 +548,11 @@ function useLocalStorage<T>(key: string, initialValue: T) {
 ## 验收清单
 
 - [ ] 功能和之前一样，没有破坏
-- [ ] `FieldConfigList` 用了 Hook
-- [ ] `ActionConfigList` 用了 Hook
+- [ ] `FieldConfigList` 使用 `fields` 编辑器
+- [ ] `ActionConfigList` 使用 `actions` 编辑器
 - [ ] 两个组件代码更简洁了
+- [ ] 能解释 `createArrayEditor` 为什么不是 Hook
+- [ ] 能解释 Hook 为什么仍然和 `InfoCardConfig` 有关
 - [ ] 能解释自定义 Hook 的命名规则
 - [ ] 能解释 Hook 调用的限制
 - [ ] 完成「动手改一改」的练习
@@ -521,11 +560,12 @@ function useLocalStorage<T>(key: string, initialValue: T) {
 ## 今日记录
 
 **今天跑通：**
-- 自定义 Hook 提取复用逻辑
-- 泛型 Hook（`useConfigArrayUpdater<T>`）
+- `useInfoCardConfigEditor` 组合 InfoCard 配置编辑逻辑
+- 泛型普通函数 `createArrayEditor<T>` 复用数组算法
 
 **现在能解释：**
 - 自定义 Hook 为什么要 `use` 开头
+- 普通工具函数和自定义 Hook 的职责边界
 - Hook 为什么不能在条件里调用
 - 如何判断一段逻辑该不该提取成 Hook
 

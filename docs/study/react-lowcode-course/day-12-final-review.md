@@ -104,12 +104,12 @@ import { colors, spacing, fontSize } from '../styles/tokens';
 
 ```tsx
 /**
- * 复用带 id 数组的增删改逻辑。
- * 组件负责把更新后的数组放回自己的配置对象。
+ * 组合 InfoCard 字段和按钮的编辑能力。
+ * 通用数组算法留给普通函数，Hook 负责连接 React 和 InfoCardConfig。
  */
-export function useConfigArrayUpdater<T extends { id: string }>(
-  items: T[],
-  onChange: (items: T[]) => void
+export function useInfoCardConfigEditor(
+  config: InfoCardConfig,
+  onChange: (config: InfoCardConfig) => void
 ) {
   // ...
 }
