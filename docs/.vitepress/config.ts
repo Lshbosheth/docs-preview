@@ -345,7 +345,12 @@ export default defineConfig({
         items: [
           {
             text: "主线",
-            items: [{ text: "Personal Context Layer", link: "/personal-context-layer/" }]
+            items: [
+              { text: "Personal Context Layer", link: "/personal-context-layer/" },
+              { text: "自研微信链路交付路线图", link: "/wx-agent-bridge/delivery-roadmap/" },
+              { text: "现有链路兼容基线", link: "/wx-agent-bridge/cc-connect-compatibility-baseline" },
+              { text: "切换与回滚手册", link: "/wx-agent-bridge/delivery-roadmap/cutover-playbook" }
+            ]
           },
           {
             text: "记忆系统",
@@ -466,6 +471,25 @@ export default defineConfig({
         items: [
           { text: "Ranran GSAP 迁移计划", link: "/ranran-gsap-migration" },
           { text: "Markdown 文档站方案", link: "/markdown-preview-site-plan" }
+        ]
+      },
+      {
+        text: "自研微信链路",
+        collapsed: false,
+        items: [
+          { text: "交付路线图总览", link: "/wx-agent-bridge/delivery-roadmap/" },
+          { text: "Phase 0 · 工程地基", link: "/wx-agent-bridge/delivery-roadmap/phase-0-foundation" },
+          { text: "Phase 1 · 微信与可靠会话", link: "/wx-agent-bridge/delivery-roadmap/phase-1-weixin-conversation" },
+          { text: "Phase 2 · Memory MVP", link: "/wx-agent-bridge/delivery-roadmap/phase-2-memory-mvp" },
+          { text: "Phase 3 · 人话回复层", link: "/wx-agent-bridge/delivery-roadmap/phase-3-humanized-response" },
+          { text: "Phase 4 · Handoff 人工闭环", link: "/wx-agent-bridge/delivery-roadmap/phase-4-handoff-draft" },
+          { text: "Phase 5 · 上下文披露", link: "/wx-agent-bridge/delivery-roadmap/phase-5-context-disclosure" },
+          { text: "Phase 6 · Admin Web", link: "/wx-agent-bridge/delivery-roadmap/phase-6-admin-web" },
+          { text: "Phase 7 · 外部 Agent 适配", link: "/wx-agent-bridge/delivery-roadmap/phase-7-external-agent-adapter" },
+          { text: "现有链路兼容基线", link: "/wx-agent-bridge/cc-connect-compatibility-baseline" },
+          { text: "风险台账", link: "/wx-agent-bridge/delivery-roadmap/risk-register" },
+          { text: "切换与回滚手册", link: "/wx-agent-bridge/delivery-roadmap/cutover-playbook" },
+          { text: "工作项模板", link: "/wx-agent-bridge/delivery-roadmap/work-item-template" }
         ]
       },
       {

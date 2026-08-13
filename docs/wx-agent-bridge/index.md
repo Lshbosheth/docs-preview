@@ -9,6 +9,8 @@
 > - [实施路线图](/personal-context-layer/implementation-roadmap)
 > - [Agent Handoff 协议](/personal-context-layer/handoff-protocol)
 > - [MVP 范围](/personal-context-layer/mvp-scope)
+> - [自研微信链路交付路线图](/wx-agent-bridge/delivery-roadmap/)
+> - [现有微信链路兼容基线](/wx-agent-bridge/cc-connect-compatibility-baseline)
 > - [wx-agent-bridge 代码学习导览](/wx-agent-bridge/code-learning-map)
 
 ## 项目目标
@@ -115,4 +117,8 @@ Day 11 长期记忆接入工具权限策略
 4. /personal-context-layer/handoff-protocol
 5. /personal-context-layer/context-disclosure-policy
 6. /personal-context-layer/legacy-docs-migration
+7. /wx-agent-bridge/delivery-roadmap/
+8. /wx-agent-bridge/delivery-roadmap/phase-1-weixin-conversation
+9. /wx-agent-bridge/cc-connect-compatibility-baseline
+10. /wx-agent-bridge/delivery-roadmap/cutover-playbook
 ```

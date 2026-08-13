@@ -1,120 +1,41 @@
 # wx-agent-bridge 实施路线图
 
-> Direction changed: 原路线图里的 Runtime / Tool Router phase 已经被 Handoff phase 替代。  
-> 新主线详见 [Personal Context Layer 路线图](/personal-context-layer/implementation-roadmap)。
+> 本页保留为兼容入口。实施主线已经拆到独立目录：[进入自研微信链路交付路线图](/wx-agent-bridge/delivery-roadmap/)。
 
-## 总原则
+## 两层路线图
+
+- [Personal Context Layer 路线图](/personal-context-layer/implementation-roadmap)定义产品方向和能力演进。
+- [自研微信链路交付路线图](/wx-agent-bridge/delivery-roadmap/)定义阶段依赖、工作包、验收、风险、切换和回滚。
+
+两者共同遵守：
 
 ```text
 Context first, Runtime later if necessary.
 ```
 
-先做上下文、记忆、意图识别和 Agent Handoff。不要继续把 Bridge 扩展成完整命令行 Runtime。
+Bridge 近期主线是微信入口、会话上下文、记忆、意图识别、人话回复和 Agent Handoff，不再扩张成完整命令行 Runtime。
 
-## Phase 0: 文档和定位修正
+## 分期入口
 
-目标：
+| 阶段 | 主题 |
+| --- | --- |
+| [Phase 0](/wx-agent-bridge/delivery-roadmap/phase-0-foundation) | 方向收敛、契约、状态机和测试地基 |
+| [Phase 1](/wx-agent-bridge/delivery-roadmap/phase-1-weixin-conversation) | 微信入口、可靠会话和 10 月前迁移门禁 |
+| [Phase 2](/wx-agent-bridge/delivery-roadmap/phase-2-memory-mvp) | Memory MVP |
+| [Phase 3](/wx-agent-bridge/delivery-roadmap/phase-3-humanized-response) | 符合人设且状态真实的人话回复 |
+| [Phase 4](/wx-agent-bridge/delivery-roadmap/phase-4-handoff-draft) | Handoff 草稿和人工闭环 |
+| [Phase 5](/wx-agent-bridge/delivery-roadmap/phase-5-context-disclosure) | 上下文披露、脱敏、确认和审计 |
+| [Phase 6](/wx-agent-bridge/delivery-roadmap/phase-6-admin-web) | Admin Web 重排 |
+| [Phase 7](/wx-agent-bridge/delivery-roadmap/phase-7-external-agent-adapter) | 外部 Agent 适配和自动闭环 |
 
-```text
-README 改口径
-旧 Runtime 文档降级
-Personal Context Layer 文档成体系
-MVP 范围收紧
-```
+## 切换硬约束
 
-## Phase 1: 微信入口和会话上下文
+当前 `微信 -> cc-connect -> Codex` 链路已经完成的优化，在自研链路切换时不得回退。验收、风险和操作顺序分别见：
 
-目标：
+- [现有链路兼容基线](/wx-agent-bridge/cc-connect-compatibility-baseline)
+- [主线风险台账](/wx-agent-bridge/delivery-roadmap/risk-register)
+- [切换与回滚手册](/wx-agent-bridge/delivery-roadmap/cutover-playbook)
 
-```text
-微信 / iLink 接入稳定
-消息归一化
-保存用户消息和助手回复
-按 chatId 注入最近上下文
-后台查看 conversations
-```
+## 历史能力处理
 
-## Phase 2: Memory MVP
-
-目标：
-
-```text
-User Memory
-Session Memory
-Project Memory
-Agent Runtime Summary
-Memory Candidate Extractor
-Memory Retrieval
-Memory Audit
-```
-
-## Phase 3: 说人话
-
-目标：
-
-```text
-回复不再像工具日志
-能承接上下文
-能解释外部 Agent 结果
-能按用户偏好控制长短和语气
-```
-
-## Phase 4: Agent Handoff
-
-目标：
-
-```text
-ContextPackage
-HandoffRequest
-HandoffEvent
-Handoff Audit
-Codex / Qwen Code / Claude Code 目标适配
-```
-
-第一版可以只生成 handoff JSON 或后台任务卡。
-
-## Phase 5: Context Disclosure Policy
-
-目标：
-
-```text
-判断哪些记忆能交给外部 Agent
-敏感信息脱敏
-高敏上下文确认
-记录上下文披露审计
-```
-
-## Phase 6: Admin Web 重排
-
-主导航优先级：
-
-```text
-1. Conversations
-2. Memory
-3. Handoff
-4. Config
-5. Audit
-```
-
-降级：
-
-```text
-Agent Tools
-Tool Audit
-Permission Rules
-```
-
-## 不再作为近期主线
-
-```text
-完整 Tool Router
-完整 Agent Runtime
-write_file
-apply_patch
-run_command
-git_commit
-git_push
-微信高风险工具确认流
-```
-
-这些能力可以保留为历史参考或未来 P4 之后的补充能力。
+完整 Tool Router、完整 Agent Runtime、`write_file`、`apply_patch`、`run_command` 和 Git 操作不再作为近期主线。旧 `Day N`、Runtime 和工具权限文档保留作历史参考，不作为排期和验收依据。
