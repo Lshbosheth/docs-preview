@@ -47,6 +47,11 @@ WeChat / iLink
        -> memory_update
        -> project_discussion
        -> agent_handoff
+  -> Proactive Loop
+       -> Candidate Planner
+       -> Persistent Scheduler
+       -> Due-time Evaluator
+       -> Outbound Message
   -> Handoff Layer
        -> Context Package
        -> Context Disclosure Policy
@@ -74,6 +79,7 @@ Bridge 负责：
 上下文披露策略
 Agent Handoff
 结果人话总结
+受约束的提醒、跟进和主动互动
 ```
 
 外部 Agent 负责：
@@ -119,6 +125,7 @@ Day 11 长期记忆接入工具权限策略
 6. /personal-context-layer/legacy-docs-migration
 7. /wx-agent-bridge/delivery-roadmap/
 8. /wx-agent-bridge/delivery-roadmap/phase-1-weixin-conversation
-9. /wx-agent-bridge/cc-connect-compatibility-baseline
-10. /wx-agent-bridge/delivery-roadmap/cutover-playbook
+9. /wx-agent-bridge/delivery-roadmap/phase-3-5-proactive-loop
+10. /wx-agent-bridge/cc-connect-compatibility-baseline
+11. /wx-agent-bridge/delivery-roadmap/cutover-playbook
 ```

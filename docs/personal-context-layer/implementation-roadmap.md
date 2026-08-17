@@ -104,6 +104,24 @@ result summary policy
 clarification policy
 ```
 
+## Phase 3.5: Proactive Loop
+
+目标：
+
+```text
+从明确提醒、近期会话和有效 OpenLoop 生成主动行动候选
+持久化调度提醒、跟进和受约束的主动互动
+到点读取最新上下文，决定发送、延期或跳过
+根据用户回应更新任务和 OpenLoop 状态
+支持静默时段、冷却、每日预算、分类开关和完整审计
+```
+
+`OpenLoop` 只表示尚未闭环的事项，不能直接等同于可发送任务。模型负责提出候选和生成文案，确定性策略负责调度、权限、幂等和反打扰。
+
+第一版按 shadow、明确提醒、上下文跟进、主动互动逐级放量；任何外部副作用仍进入确认或 Handoff。
+
+详细设计见 [Phase 3.5：Proactive Loop](/wx-agent-bridge/delivery-roadmap/phase-3-5-proactive-loop)。
+
 ## Phase 4: Agent Handoff
 
 目标：

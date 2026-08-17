@@ -15,6 +15,8 @@ Agent Handoff Request
 Context Disclosure Policy
 Handoff Audit
 后台查看 Conversations / Memory / Handoff / Config / Audit
+主动链路 shadow 模式
+用户明确设置的确定提醒
 ```
 
 ## MVP 砍掉
@@ -31,6 +33,7 @@ git_push
 复杂 RBAC
 向量数据库
 多 Agent 自动调度
+基于推断的自动执行和外部副作用
 ```
 
 ## MVP 可以保留但降级
@@ -45,6 +48,12 @@ permission rules
 ```
 
 这些只作为内部诊断和历史兼容能力，不作为产品主线继续扩展。
+
+## 主动链路范围
+
+MVP 只要求主动链路以 shadow 模式验证候选质量，并可靠执行用户明确设置的提醒。上下文跟进和随机互动属于后续灰度能力，必须在静默时段、冷却、每日预算、到点复核和关闭开关完成后才能启用。
+
+`OpenLoop` 不直接等于计划任务；未确认推断不能自动执行有外部副作用的动作。
 
 ## Admin Web 优先级
 

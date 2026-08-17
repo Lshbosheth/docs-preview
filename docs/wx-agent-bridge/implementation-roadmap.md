@@ -23,6 +23,7 @@ Bridge 近期主线是微信入口、会话上下文、记忆、意图识别、�
 | [Phase 1](/wx-agent-bridge/delivery-roadmap/phase-1-weixin-conversation) | 微信入口、可靠会话和 10 月前迁移门禁 |
 | [Phase 2](/wx-agent-bridge/delivery-roadmap/phase-2-memory-mvp) | Memory MVP |
 | [Phase 3](/wx-agent-bridge/delivery-roadmap/phase-3-humanized-response) | 符合人设且状态真实的人话回复 |
+| [Phase 3.5](/wx-agent-bridge/delivery-roadmap/phase-3-5-proactive-loop) | 提醒、跟进和主动互动的受约束闭环 |
 | [Phase 4](/wx-agent-bridge/delivery-roadmap/phase-4-handoff-draft) | Handoff 草稿和人工闭环 |
 | [Phase 5](/wx-agent-bridge/delivery-roadmap/phase-5-context-disclosure) | 上下文披露、脱敏、确认和审计 |
 | [Phase 6](/wx-agent-bridge/delivery-roadmap/phase-6-admin-web) | Admin Web 重排 |

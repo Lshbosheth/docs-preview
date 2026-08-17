@@ -179,6 +179,32 @@ function getAiAgentDateNav(): Record<string, DateNavItem> {
 
 const aiAgentDateNav = getAiAgentDateNav();
 
+/* 与 AI Agent 同理：English Daily 侧边栏倒序，footer 翻页改按日期正序 */
+function getEnglishDateNav(): Record<string, DateNavItem> {
+  const dates = getEnglishLessonDates()
+    .slice()
+    .sort((a, b) => a.localeCompare(b)); // 升序：旧 → 新
+
+  const nav: Record<string, DateNavItem> = {};
+
+  dates.forEach((date, i) => {
+    const prevDate = dates[i - 1];
+    const nextDate = dates[i + 1];
+    nav[`${date}.md`] = {
+      prev: prevDate
+        ? { text: getEnglishLessonTitle(prevDate), link: `/english/${prevDate}` }
+        : false,
+      next: nextDate
+        ? { text: getEnglishLessonTitle(nextDate), link: `/english/${nextDate}` }
+        : false
+    };
+  });
+
+  return nav;
+}
+
+const englishDateNav = getEnglishDateNav();
+
 function countMarkdownFiles(dir: string): number {
   const target = path.join(docsDir, dir);
   if (!fs.existsSync(target)) {
@@ -340,11 +366,20 @@ export default defineConfig({
   lang: "zh-CN",
   cleanUrls: true,
   transformPageData(pageData) {
-    // 每日一课：用按日期排序的 prev/next 覆盖侧边栏（倒序）带来的错误翻页
+    // 每日一课 / English Daily：用按日期排序的 prev/next 覆盖侧边栏（倒序）带来的错误翻页
     // 边界（最早/最晚一篇）显式设为 false，避免回退到侧边栏的相反顺序
-    const m = pageData.relativePath.match(/^ai-agent\/(\d{4}-\d{2}-\d{2})\.md$/);
-    if (m) {
-      const item = aiAgentDateNav[`${m[1]}.md`];
+    const aiM = pageData.relativePath.match(/^ai-agent\/(\d{4}-\d{2}-\d{2})\.md$/);
+    if (aiM) {
+      const item = aiAgentDateNav[`${aiM[1]}.md`];
+      if (item) {
+        pageData.frontmatter.prev = item.prev;
+        pageData.frontmatter.next = item.next;
+      }
+    }
+
+    const enM = pageData.relativePath.match(/^english\/(\d{4}-\d{2}-\d{2})\.md$/);
+    if (enM) {
+      const item = englishDateNav[`${enM[1]}.md`];
       if (item) {
         pageData.frontmatter.prev = item.prev;
         pageData.frontmatter.next = item.next;
