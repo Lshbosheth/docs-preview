@@ -138,6 +138,47 @@ function getAiAgentDailyItems(): SidebarItem[] {
 
 const latestAiAgentLesson = getAiAgentLessonDates()[0] ?? "";
 
+/* 上/下一篇按日期正序：侧边栏是倒序（新→旧），但翻页应顺着日期走。
+   VitePress 的 footer 翻页默认跟随侧边栏顺序，所以用 transformPageData
+   给每日一课页面显式注入「按日期排序」的 prev/next，覆盖侧边栏顺序。
+   边界（最早/最晚一篇）显式设为 false，避免回退到侧边栏的相反顺序。 */
+type DateNavLink = { text: string; link: string };
+type DateNavItem = {
+  prev: false | DateNavLink;
+  next: false | DateNavLink;
+};
+
+function getAiAgentDateNav(): Record<string, DateNavItem> {
+  const dates = getAiAgentLessonDates()
+    .slice()
+    .sort((a, b) => a.localeCompare(b)); // 升序：旧 → 新
+
+  const nav: Record<string, DateNavItem> = {};
+
+  dates.forEach((date, i) => {
+    const prevDate = dates[i - 1];
+    const nextDate = dates[i + 1];
+    nav[`${date}.md`] = {
+      prev: prevDate
+        ? {
+            text: getMarkdownTitle(path.join(aiAgentDir, `${prevDate}.md`), prevDate),
+            link: `/ai-agent/${prevDate}`
+          }
+        : false,
+      next: nextDate
+        ? {
+            text: getMarkdownTitle(path.join(aiAgentDir, `${nextDate}.md`), nextDate),
+            link: `/ai-agent/${nextDate}`
+          }
+        : false
+    };
+  });
+
+  return nav;
+}
+
+const aiAgentDateNav = getAiAgentDateNav();
+
 function countMarkdownFiles(dir: string): number {
   const target = path.join(docsDir, dir);
   if (!fs.existsSync(target)) {
@@ -298,6 +339,18 @@ export default defineConfig({
   description: "学习计划、技术英语、AI Agent 每日一课与系统记录",
   lang: "zh-CN",
   cleanUrls: true,
+  transformPageData(pageData) {
+    // 每日一课：用按日期排序的 prev/next 覆盖侧边栏（倒序）带来的错误翻页
+    // 边界（最早/最晚一篇）显式设为 false，避免回退到侧边栏的相反顺序
+    const m = pageData.relativePath.match(/^ai-agent\/(\d{4}-\d{2}-\d{2})\.md$/);
+    if (m) {
+      const item = aiAgentDateNav[`${m[1]}.md`];
+      if (item) {
+        pageData.frontmatter.prev = item.prev;
+        pageData.frontmatter.next = item.next;
+      }
+    }
+  },
   head: [
     ["link", { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
     ["meta", { name: "theme-color", content: "#0b63ce" }]
@@ -356,6 +409,7 @@ export default defineConfig({
             text: "记忆系统",
             items: [
               { text: "RAG 名词地图", link: "/memory/rag-learning-map" },
+              { text: "记忆检索演进方案", link: "/memory/memory-retrieval-evolution-plan" },
               { text: "zvec 记忆检索改造", link: "/memory/zvec-memory-plan" },
               { text: "text-embedding-v4 接入", link: "/memory/dashscope-embedding-v4-guide" }
             ]
@@ -482,6 +536,7 @@ export default defineConfig({
           { text: "Phase 1 · 微信与可靠会话", link: "/wx-agent-bridge/delivery-roadmap/phase-1-weixin-conversation" },
           { text: "Phase 2 · Memory MVP", link: "/wx-agent-bridge/delivery-roadmap/phase-2-memory-mvp" },
           { text: "Phase 3 · 人话回复层", link: "/wx-agent-bridge/delivery-roadmap/phase-3-humanized-response" },
+          { text: "Phase 3.5 · Proactive Loop", link: "/wx-agent-bridge/delivery-roadmap/phase-3-5-proactive-loop" },
           { text: "Phase 4 · Handoff 人工闭环", link: "/wx-agent-bridge/delivery-roadmap/phase-4-handoff-draft" },
           { text: "Phase 5 · 上下文披露", link: "/wx-agent-bridge/delivery-roadmap/phase-5-context-disclosure" },
           { text: "Phase 6 · Admin Web", link: "/wx-agent-bridge/delivery-roadmap/phase-6-admin-web" },
@@ -496,6 +551,7 @@ export default defineConfig({
         text: "记忆系统",
         items: [
           { text: "RAG 常用技术路线和名词地图", link: "/memory/rag-learning-map" },
+          { text: "记忆检索演进方案", link: "/memory/memory-retrieval-evolution-plan" },
           { text: "zvec 记忆检索改造方案", link: "/memory/zvec-memory-plan" },
           { text: "阿里 text-embedding-v4 接入指南", link: "/memory/dashscope-embedding-v4-guide" }
         ]
